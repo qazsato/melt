@@ -1,8 +1,8 @@
 {
   "name": "melt",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A markdown editor in which the brain melts.",
+  "main": "main.js",
   "dependencies": {
     "ace-builds": "1.2.9"
   },
@@ -10,10 +10,12 @@
     "electron": "1.7.10"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "markdown",
+    "editor"
+  ],
+  "author": "qazsato",
   "license": "MIT"
 }
