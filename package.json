@@ -4,13 +4,17 @@
   "description": "A markdown editor in which the brain melts.",
   "main": "main.js",
   "dependencies": {
-    "ace-builds": "1.2.9"
+    "ace-builds": "1.2.9",
+    "vue": "2.5.13",
+    "vue-loader": "13.6.1"
   },
   "devDependencies": {
-    "electron": "1.7.10"
+    "electron": "1.7.10",
+    "webpack": "3.10.0"
   },
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "webpack --watch"
   },
   "keywords": [
     "markdown",
