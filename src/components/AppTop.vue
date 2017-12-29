@@ -1,15 +1,33 @@
 <template>
   <div id="screen">
     <section id="toolbar">
-      <i class="material-icons">insert_link</i>
-      <i class="material-icons">insert_photo</i>
-      <i class="material-icons">format_bold</i>
-      <i class="material-icons">format_italic</i>
-      <i class="material-icons">format_quote</i>
-      <i class="material-icons">code</i>
-      <i class="material-icons">format_list_bulleted</i>
-      <i class="material-icons">format_list_numbered</i>
-      <i class="material-icons">publish</i>
+      <button @click="insertLink">
+        <i class="material-icons">insert_link</i>
+      </button>
+      <button @click="insertImage">
+        <i class="material-icons">insert_photo</i>
+      </button>
+      <button @click="insertBold">
+        <i class="material-icons">format_bold</i>
+      </button>
+      <button @click="insertItalic">
+        <i class="material-icons">format_italic</i>
+      </button>
+      <button @click="insertQuote">
+        <i class="material-icons">format_quote</i>
+      </button>
+      <button @click="insertCode">
+        <i class="material-icons">code</i>
+      </button>
+      <button @click="insertBulleted">
+        <i class="material-icons">format_list_bulleted</i>
+      </button>
+      <button @click="insertNumbered">
+        <i class="material-icons">format_list_numbered</i>
+      </button>
+      <button @click="clickPublish">
+        <i class="material-icons">publish</i>
+      </button>
     </section>
     <main>
       <div id="editor"></div>
@@ -23,16 +41,58 @@ import 'github-markdown-css';
 import marked from 'marked';
 
 export default {
+  data() {
+    return {
+      editor: null
+    };
+  },
+  methods: {
+    insertLink() {
+      this.editor.insert(`[](${this.editor.getCopyText()})`);
+      this.editor.focus();
+    },
+    insertImage() {
+      this.editor.insert(`![](${this.editor.getCopyText()})`);
+      this.editor.focus();
+    },
+    insertBold() {
+      this.editor.insert(`**${this.editor.getCopyText()}**`);
+      this.editor.focus();
+    },
+    insertItalic() {
+      this.editor.insert(`_${this.editor.getCopyText()}_`);
+      this.editor.focus();
+    },
+    insertQuote() {
+      this.editor.insert(`> ${this.editor.getCopyText()}`);
+      this.editor.focus();
+    },
+    insertCode() {
+      this.editor.insert(`\`${this.editor.getCopyText()}\``);
+      this.editor.focus();
+    },
+    insertBulleted() {
+      this.editor.insert(`* ${this.editor.getCopyText()}`);
+      this.editor.focus();
+    },
+    insertNumbered() {
+      this.editor.insert(`1. ${this.editor.getCopyText()}`);
+      this.editor.focus();
+    },
+    clickPublish() {
+      this.editor.focus();
+    }
+  },
   mounted() {
-    const editor = ace.edit('editor');
-    editor.setFontSize(14);
-    editor.focus();
-    editor.getSession().setUseWrapMode(true);
-    editor.getSession().setTabSize(2);
-    editor.setTheme('ace/theme/monokai');
-    editor.getSession().setMode('ace/mode/markdown');
-    editor.getSession().on('change', () => {
-      const text = editor.getValue();
+    this.editor = ace.edit('editor');
+    this.editor.setFontSize(14);
+    this.editor.focus();
+    this.editor.getSession().setUseWrapMode(true);
+    this.editor.getSession().setTabSize(2);
+    this.editor.setTheme('ace/theme/monokai');
+    this.editor.getSession().setMode('ace/mode/markdown');
+    this.editor.getSession().on('change', () => {
+      const text = this.editor.getValue();
       document.getElementById('preview').innerHTML = marked(text);
     });
   }
@@ -59,6 +119,7 @@ export default {
 
   #toolbar {
     height: 50px;
+    background-color: #4a4a4a;
   }
 
   main {
@@ -77,6 +138,21 @@ export default {
   }
 
   .material-icons {
-    margin: 10px;
+    margin: 8px;
+  }
+
+  button {
+    margin: 5px 3px;
+    padding: 0;
+    border: none;
+    color: #ddd;
+    cursor: pointer;
+    background: none;
+    -webkit-appearance: none;
+  }
+
+  button:hover {
+    color: #fff;
+    background: #313131;
   }
 </style>
