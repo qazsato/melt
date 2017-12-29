@@ -29,6 +29,8 @@ export default {
     editor.focus();
     editor.getSession().setUseWrapMode(true);
     editor.getSession().setTabSize(2);
+    editor.setTheme('ace/theme/monokai');
+    editor.getSession().setMode('ace/mode/markdown');
     editor.getSession().on('change', () => {
       const text = editor.getValue();
       document.getElementById('preview').innerHTML = marked(text);
