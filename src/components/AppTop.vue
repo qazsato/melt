@@ -26,6 +26,7 @@ export default {
   mounted() {
     const editor = ace.edit('editor');
     editor.setFontSize(14);
+    editor.focus();
     editor.getSession().setUseWrapMode(true);
     editor.getSession().setTabSize(2);
     editor.getSession().on('change', () => {
