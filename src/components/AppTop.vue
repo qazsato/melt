@@ -19,12 +19,18 @@
 </template>
 
 <script>
+import marked from 'marked';
+
 export default {
   mounted() {
     const editor = ace.edit('editor');
     editor.setFontSize(14);
     editor.getSession().setUseWrapMode(true);
     editor.getSession().setTabSize(2);
+    editor.getSession().on('change', () => {
+      const text = editor.getValue();
+      document.getElementById('preview').innerHTML = marked(text);
+    });
   }
 }
 </script>
