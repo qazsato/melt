@@ -70,6 +70,10 @@ export default {
     width: 50%;
   }
 
+  #preview {
+    overflow-y: scroll;
+  }
+
   .material-icons {
     margin: 10px;
   }
