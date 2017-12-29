@@ -13,12 +13,13 @@
     </section>
     <main>
       <div id="editor"></div>
-      <div id="preview"></div>
+      <article id="preview" class="markdown-body"></article>
     </main>
   </div>
 </template>
 
 <script>
+import 'github-markdown-css';
 import marked from 'marked';
 
 export default {
