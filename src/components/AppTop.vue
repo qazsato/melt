@@ -13,6 +13,9 @@
       <button @click="insertItalic">
         <i class="material-icons">format_italic</i>
       </button>
+      <button @click="insertStrikethrough">
+        <i class="material-icons">format_strikethrough</i>
+      </button>
       <button @click="insertQuote">
         <i class="material-icons">format_quote</i>
       </button>
@@ -61,6 +64,10 @@ export default {
     },
     insertItalic() {
       this.editor.insert(`_${this.editor.getCopyText()}_`);
+      this.editor.focus();
+    },
+    insertStrikethrough() {
+      this.editor.insert(`~~${this.editor.getCopyText()}~~`);
       this.editor.focus();
     },
     insertQuote() {
