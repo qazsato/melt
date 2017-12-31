@@ -91,11 +91,13 @@ export default {
       this.editor.focus();
     },
     insertBulleted() {
-      this.editor.insert(`* ${this.editor.getCopyText()}`);
+      const pos = this.editor.getCursorPosition();
+      this.editor.session.insert({row: pos.row, column: 0}, `* `);
       this.editor.focus();
     },
     insertNumbered() {
-      this.editor.insert(`1. ${this.editor.getCopyText()}`);
+      const pos = this.editor.getCursorPosition();
+      this.editor.session.insert({row: pos.row, column: 0}, `1. `);
       this.editor.focus();
     },
     clickPublish() {
