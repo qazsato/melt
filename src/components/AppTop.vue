@@ -52,22 +52,32 @@ export default {
   methods: {
     insertLink() {
       this.editor.insert(`[](${this.editor.getCopyText()})`);
+      const pos = this.editor.getCursorPosition();
+      this.editor.gotoLine(pos.row + 1, pos.column - 1);
       this.editor.focus();
     },
     insertImage() {
       this.editor.insert(`![](${this.editor.getCopyText()})`);
+      const pos = this.editor.getCursorPosition();
+      this.editor.gotoLine(pos.row + 1, pos.column - 1);
       this.editor.focus();
     },
     insertBold() {
       this.editor.insert(`**${this.editor.getCopyText()}**`);
+      const pos = this.editor.getCursorPosition();
+      this.editor.gotoLine(pos.row + 1, pos.column - 2);
       this.editor.focus();
     },
     insertItalic() {
       this.editor.insert(`_${this.editor.getCopyText()}_`);
+      const pos = this.editor.getCursorPosition();
+      this.editor.gotoLine(pos.row + 1, pos.column - 1);
       this.editor.focus();
     },
     insertStrikethrough() {
       this.editor.insert(`~~${this.editor.getCopyText()}~~`);
+      const pos = this.editor.getCursorPosition();
+      this.editor.gotoLine(pos.row + 1, pos.column - 2);
       this.editor.focus();
     },
     insertQuote() {
@@ -76,6 +86,8 @@ export default {
     },
     insertCode() {
       this.editor.insert(`\`${this.editor.getCopyText()}\``);
+      const pos = this.editor.getCursorPosition();
+      this.editor.gotoLine(pos.row + 1, pos.column - 1);
       this.editor.focus();
     },
     insertBulleted() {
