@@ -41,7 +41,7 @@
 
 <script>
 import 'github-markdown-css';
-import 'highlight.js/styles/default.css';
+import 'highlight.js/styles/github.css';
 
 import marked from 'marked';
 marked.setOptions({
