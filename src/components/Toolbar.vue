@@ -27,9 +27,6 @@
     <button @click="insertNumbered">
       <i class="material-icons">format_list_numbered</i>
     </button>
-    <button @click="clickPublish">
-      <i class="material-icons">publish</i>
-    </button>
   </section>
 </template>
 
@@ -85,9 +82,6 @@ export default {
     insertNumbered() {
       const pos = this.editor.getCursorPosition();
       this.editor.session.insert({row: pos.row, column: 0}, `1. `);
-      this.editor.focus();
-    },
-    clickPublish() {
       this.editor.focus();
     }
   }

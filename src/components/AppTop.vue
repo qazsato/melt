@@ -5,6 +5,7 @@
       <editor @mountEditor="mountEditor" @changeText="changeText"></editor>
       <preview :text="text"></preview>
     </main>
+    <publish-button></publish-button>
   </div>
 </template>
 
@@ -12,12 +13,14 @@
 import toolbar from './Toolbar.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
+import publishButton from './PublishButton.vue';
 
 export default {
   components: {
     toolbar,
     editor,
-    preview
+    preview,
+    publishButton
   },
   data() {
     return {
