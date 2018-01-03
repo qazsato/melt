@@ -1,31 +1,31 @@
 <template>
   <section id="toolbar">
     <button @click="insertLink">
-      <i class="material-icons">insert_link</i>
+      <i class="icon-link"></i>
     </button>
     <button @click="insertImage">
-      <i class="material-icons">insert_photo</i>
+      <i class="icon-photo"></i>
     </button>
     <button @click="insertBold">
-      <i class="material-icons">format_bold</i>
+      <i class="icon-bold"></i>
     </button>
     <button @click="insertItalic">
-      <i class="material-icons">format_italic</i>
+      <i class="icon-italic"></i>
     </button>
     <button @click="insertStrikethrough">
-      <i class="material-icons">format_strikethrough</i>
+      <i class="icon-strikethrough"></i>
     </button>
     <button @click="insertQuote">
-      <i class="material-icons">format_quote</i>
+      <i class="icon-quote"></i>
     </button>
     <button @click="insertCode">
-      <i class="material-icons">code</i>
+      <i class="icon-code"></i>
     </button>
     <button @click="insertBulleted">
-      <i class="material-icons">format_list_bulleted</i>
+      <i class="icon-list_bulleted"></i>
     </button>
     <button @click="insertNumbered">
-      <i class="material-icons">format_list_numbered</i>
+      <i class="icon-list_numbered"></i>
     </button>
   </section>
 </template>
@@ -86,8 +86,11 @@ export default {
     background-color: #4a4a4a;
   }
 
-  .material-icons {
+  [class^="icon-"],
+  [class*=" icon-"] {
+    display: inline-block;
     margin: 8px;
+    font-size: 24px;
   }
 
   button {

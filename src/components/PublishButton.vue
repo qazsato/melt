@@ -1,6 +1,6 @@
 <template>
   <button @click="uploadText">
-    <i class="material-icons">cloud_upload</i>
+    <i class="icon-upload"></i>
     <div class="text">共有する</div>
   </button>
 </template>
@@ -35,7 +35,8 @@ export default {
     font-size: 13px;
   }
 
-  .material-icons {
+  .icon-upload {
+    display: inline-block;
     font-size: 32px;
   }
 </style>
