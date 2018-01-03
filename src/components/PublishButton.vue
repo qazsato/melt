@@ -26,13 +26,9 @@ export default {
     border: none;
     border-radius: 50%;
     color: #fff;
-    background-color: #ff5555;
+    background-color: #00b1b3;
     box-shadow: 0px 0px 26px -8px rgba(0, 0, 0, 0.7);
     cursor: pointer;
-  }
-
-  button:hover {
-    background-color: #ff2222;
   }
 
   .text {
