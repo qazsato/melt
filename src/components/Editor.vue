@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import Editor from '../scripts/Editor';
 export default {
   data() {
     return {
@@ -10,16 +11,9 @@ export default {
     };
   },
   mounted() {
-    this.editor = ace.edit('editor');
-    this.editor.setFontSize(14);
+    this.editor = new Editor('editor');
     this.editor.focus();
-    this.editor.getSession().setUseWrapMode(true);
-    this.editor.getSession().setTabSize(2);
-    this.editor.setTheme('ace/theme/monokai');
-    this.editor.getSession().setMode('ace/mode/markdown');
-    this.editor.getSession().on('change', () => {
-      this.$emit('changeText', this.editor.getValue());
-    });
+    this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
     this.$emit('mountEditor', this.editor);
   }
 }
