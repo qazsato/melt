@@ -27,12 +27,18 @@
     <button @click="insertNumbered">
       <i class="icon-list_numbered"></i>
     </button>
+    <el-switch class="switch-preview" v-model="visiblePreview" @change="togglePreview"></el-switch>
   </section>
 </template>
 
 <script>
 export default {
   props: ['editor'],
+  data() {
+    return {
+      visiblePreview: true
+    };
+  },
   methods: {
     insertLink() {
       this.editor.insert(`[](${this.editor.getCopyText()})`);
@@ -75,6 +81,9 @@ export default {
     insertNumbered() {
       this.editor.insertPrefix(`1. `);
       this.editor.focus();
+    },
+    togglePreview() {
+      this.$emit('visiblePreview', this.visiblePreview);
     }
   }
 }
@@ -106,5 +115,11 @@ export default {
   button:hover {
     color: #fff;
     background: #313131;
+  }
+
+  .switch-preview {
+    position: absolute;
+    top: 15px;
+    right: 15px;
   }
 </style>

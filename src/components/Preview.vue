@@ -1,6 +1,7 @@
 <template>
-  <article id="preview">
+  <article id="preview" v-show="visible">
     <div v-html="markedText" class="markdown-body"></div>
+    <publish-button></publish-button>
   </article>
 </template>
 
@@ -9,9 +10,13 @@ import marked from 'marked';
 import highlight from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import 'github-markdown-css';
+import publishButton from './PublishButton.vue';
 
 export default {
-  props: ['text'],
+  props: ['text', 'visible'],
+  components: {
+    publishButton
+  },
   mounted() {
     marked.setOptions({
       highlight: (code) => {

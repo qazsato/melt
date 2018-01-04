@@ -1,11 +1,10 @@
 <template>
   <div id="screen">
-    <toolbar :editor="editor"></toolbar>
+    <toolbar :editor="editor" @visiblePreview="visiblePreview"></toolbar>
     <main>
       <editor @mountEditor="mountEditor" @changeText="changeText"></editor>
-      <preview :text="text"></preview>
+      <preview :text="text" :visible="visible"></preview>
     </main>
-    <publish-button></publish-button>
   </div>
 </template>
 
@@ -13,19 +12,18 @@
 import toolbar from './Toolbar.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
-import publishButton from './PublishButton.vue';
 
 export default {
   components: {
     toolbar,
     editor,
-    preview,
-    publishButton
+    preview
   },
   data() {
     return {
       editor: null,
-      text: ''
+      text: '',
+      visible: true
     };
   },
   methods: {
@@ -34,6 +32,9 @@ export default {
     },
     changeText(text) {
       this.text = text;
+    },
+    visiblePreview(visible) {
+      this.visible = visible;
     }
   }
 }
