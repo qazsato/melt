@@ -3,6 +3,7 @@ class MarkdownEditor {
     const CodeMirror = require('codemirror');
     this.editor = CodeMirror(document.getElementById(id), {
       mode: 'markdown',
+      theme: 'base16-light',
       lineWrapping: true,
       autofocus: true
     });

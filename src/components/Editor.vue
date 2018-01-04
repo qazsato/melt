@@ -6,6 +6,7 @@
 
 <script>
 import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/base16-light.css';
 import '../styles/MarkdownEditor.css';
 import 'codemirror/mode/markdown/markdown.js';
 import Editor from '../scripts/MarkdownEditor';
