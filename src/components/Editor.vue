@@ -1,5 +1,7 @@
 <template>
-  <div id="editor"></div>
+  <div class="editor-area">
+    <div id="editor"></div>
+  </div>
 </template>
 
 <script>
@@ -20,9 +22,16 @@ export default {
 </script>
 
 <style scoped>
-  #editor {
+  .editor-area {
     width: 100%;
     height: 100%;
+    background-color: #fafafa;
+  }
+
+  #editor {
+    margin: 15px;
+    width: calc(100% - 30px);
+    height: calc(100% - 30px);
     background-color: #fafafa;
   }
 </style>
