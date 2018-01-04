@@ -15,11 +15,11 @@
     <button @click="insertStrikethrough">
       <i class="icon-strikethrough"></i>
     </button>
-    <button @click="insertQuote">
-      <i class="icon-quote"></i>
-    </button>
     <button @click="insertCode">
       <i class="icon-code"></i>
+    </button>
+    <button @click="insertQuote">
+      <i class="icon-quote"></i>
     </button>
     <button @click="insertBulleted">
       <i class="icon-list_bulleted"></i>
@@ -59,13 +59,13 @@ export default {
       this.editor.moveCursorPosition(-2, 0);
       this.editor.focus();
     },
-    insertQuote() {
-      this.editor.insert(`> ${this.editor.getCopyText()}`);
-      this.editor.focus();
-    },
     insertCode() {
       this.editor.insert(`\`${this.editor.getCopyText()}\``);
       this.editor.moveCursorPosition(-1, 0);
+      this.editor.focus();
+    },
+    insertQuote() {
+      this.editor.insertPrefix(`> `);
       this.editor.focus();
     },
     insertBulleted() {
