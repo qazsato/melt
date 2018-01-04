@@ -30,6 +30,10 @@ export default {
     cursor: pointer;
   }
 
+  button:hover {
+    background-color: #007f80;
+  }
+
   .icon-upload {
     display: inline-block;
     font-size: 32px;
