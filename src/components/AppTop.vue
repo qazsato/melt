@@ -35,6 +35,8 @@ export default {
     },
     visiblePreview(visible) {
       this.visible = visible;
+      // NOTE エディタの表示領域を補正するためリサイズイベントを発火させる
+      setTimeout(() => window.dispatchEvent(new Event('resize')));
     }
   }
 }
