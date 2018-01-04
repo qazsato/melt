@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Editor from '../scripts/Editor';
+import Editor from '../scripts/MarkdownEditor';
 export default {
   data() {
     return {
@@ -23,5 +23,6 @@ export default {
   #editor {
     width: 100%;
     height: 100%;
+    background-color: #fafafa;
   }
 </style>

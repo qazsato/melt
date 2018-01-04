@@ -1,8 +1,11 @@
-class Editor {
+class MarkdownEditor {
   constructor(id) {
     this.editor = ace.edit(id);
     this.editor.setFontSize(14);
-    this.editor.setTheme('ace/theme/monokai');
+    this.editor.setTheme('ace/theme/github');
+    this.editor.renderer.setShowGutter(false);
+    this.editor.setOption('showPrintMargin', false);
+    this.editor.setOption('highlightActiveLine', false);
     this.session = this.editor.getSession();
     this.session.setUseWrapMode(true);
     this.session.setTabSize(2);
@@ -60,4 +63,4 @@ class Editor {
   }
 }
 
-module.exports = Editor;
+module.exports = MarkdownEditor;
