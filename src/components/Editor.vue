@@ -5,6 +5,9 @@
 </template>
 
 <script>
+import 'codemirror/lib/codemirror.css';
+import '../styles/MarkdownEditor.css';
+import 'codemirror/mode/markdown/markdown.js';
 import Editor from '../scripts/MarkdownEditor';
 export default {
   data() {
@@ -14,7 +17,6 @@ export default {
   },
   mounted() {
     this.editor = new Editor('editor');
-    this.editor.focus();
     this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
     this.$emit('mountEditor', this.editor);
   }
@@ -23,15 +25,15 @@ export default {
 
 <style scoped>
   .editor-area {
-    width: 100%;
+    flex: 1;
+    min-width: 50%;
     height: 100%;
     background-color: #fafafa;
   }
 
   #editor {
-    margin: 15px;
-    width: calc(100% - 30px);
-    height: calc(100% - 30px);
+    width: 100%;
+    height: 100%;
     background-color: #fafafa;
   }
 </style>

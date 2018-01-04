@@ -41,32 +41,32 @@ export default {
   },
   methods: {
     insertLink() {
-      this.editor.insert(`[](${this.editor.getCopyText()})`);
+      this.editor.insert(`[](${this.editor.getSelection()})`);
       this.editor.moveCursorPosition(-1, 0);
       this.editor.focus();
     },
     insertImage() {
-      this.editor.insert(`![](${this.editor.getCopyText()})`);
+      this.editor.insert(`![](${this.editor.getSelection()})`);
       this.editor.moveCursorPosition(-1, 0);
       this.editor.focus();
     },
     insertBold() {
-      this.editor.insert(`**${this.editor.getCopyText()}**`);
+      this.editor.insert(`**${this.editor.getSelection()}**`);
       this.editor.moveCursorPosition(-2, 0);
       this.editor.focus();
     },
     insertItalic() {
-      this.editor.insert(`_${this.editor.getCopyText()}_`);
+      this.editor.insert(`_${this.editor.getSelection()}_`);
       this.editor.moveCursorPosition(-1, 0);
       this.editor.focus();
     },
     insertStrikethrough() {
-      this.editor.insert(`~~${this.editor.getCopyText()}~~`);
+      this.editor.insert(`~~${this.editor.getSelection()}~~`);
       this.editor.moveCursorPosition(-2, 0);
       this.editor.focus();
     },
     insertCode() {
-      this.editor.insert(`\`${this.editor.getCopyText()}\``);
+      this.editor.insert(`\`${this.editor.getSelection()}\``);
       this.editor.moveCursorPosition(-1, 0);
       this.editor.focus();
     },

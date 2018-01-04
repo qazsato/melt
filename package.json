@@ -4,7 +4,7 @@
   "description": "A markdown editor in which the brain melts.",
   "main": "main.js",
   "dependencies": {
-    "ace-builds": "1.2.9",
+    "codemirror": "5.33.0",
     "element-ui": "2.0.10",
     "github-markdown-css": "2.9.0",
     "highlight.js": "9.12.0",

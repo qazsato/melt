@@ -1,0 +1,10 @@
+.CodeMirror {
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  font-size: 14px;
+}
+
+.CodeMirror-scroll {
+  padding: 15px;
+}

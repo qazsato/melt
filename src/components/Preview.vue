@@ -34,7 +34,8 @@ export default {
 
 <style scoped>
   #preview {
-    width: 100%;
+    flex: 1;
+    min-width: 50%;
     height: 100%;
     overflow-y: scroll;
   }
