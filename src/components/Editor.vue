@@ -1,6 +1,6 @@
 <template>
   <div class="editor-area">
-    <div id="editor"></div>
+    <textarea id="editor"></textarea>
   </div>
 </template>
 

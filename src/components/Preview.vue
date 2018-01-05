@@ -1,8 +1,8 @@
 <template>
-  <article id="preview" v-show="visible">
-    <div v-html="markedText" class="markdown-body"></div>
+  <div class="preview-area" v-show="visible">
+    <article class="markdown-body" v-html="markedText"></article>
     <publish-button></publish-button>
-  </article>
+  </div>
 </template>
 
 <script>
@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style scoped>
-  #preview {
+  .preview-area {
     flex: 1;
     min-width: 50%;
     height: 100%;

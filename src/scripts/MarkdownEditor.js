@@ -1,7 +1,7 @@
 class MarkdownEditor {
   constructor(id) {
     const CodeMirror = require('codemirror');
-    this.editor = CodeMirror(document.getElementById(id), {
+    this.editor = CodeMirror.fromTextArea(document.getElementById(id), {
       mode: 'gfm',
       theme: 'base16-light',
       lineWrapping: true,
