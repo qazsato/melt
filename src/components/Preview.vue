@@ -7,6 +7,7 @@
 
 <script>
 import marked from 'marked';
+import emoji from 'node-emoji';
 import highlight from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import 'github-markdown-css';
@@ -26,7 +27,8 @@ export default {
   },
   computed: {
     markedText() {
-      return marked(this.text);
+      const text = emoji.emojify(this.text);
+      return marked(text);
     }
   }
 }
