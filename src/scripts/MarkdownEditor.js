@@ -34,7 +34,7 @@ class MarkdownEditor {
   }
   /**
    * 行の先頭に任意の文字を挿入します。
-   * @param {*} text
+   * @param {string} text
    */
   insertPrefix(text) {
     const pos = this.editor.getCursor();
