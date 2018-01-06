@@ -3,6 +3,7 @@
   width: 100%;
   background: transparent;
   font-size: 14px;
+  font-family: "Source Sans Pro", Helvetica, Arial, 游ゴシック体, YuGothic, メイリオ, Meiryo, sans-serif;
 }
 
 .CodeMirror-scroll {
