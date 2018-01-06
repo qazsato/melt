@@ -6,6 +6,8 @@ class MarkdownEditor {
       theme: 'base16-light',
       lineWrapping: true,
       autofocus: true,
+      indentUnit: 4,
+      indentWithTabs: true,
       extraKeys: {'Enter': 'newlineAndIndentContinueMarkdownList'}
     });
   }
