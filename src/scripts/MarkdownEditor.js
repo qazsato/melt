@@ -5,7 +5,8 @@ class MarkdownEditor {
       mode: 'gfm',
       theme: 'base16-light',
       lineWrapping: true,
-      autofocus: true
+      autofocus: true,
+      extraKeys: {'Enter': 'newlineAndIndentContinueMarkdownList'}
     });
   }
   /**

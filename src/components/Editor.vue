@@ -9,6 +9,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/base16-light.css';
 import '../styles/MarkdownEditor.css';
 import 'codemirror/mode/gfm/gfm.js';
+import 'codemirror/addon/edit/continuelist.js';
 import Editor from '../scripts/MarkdownEditor';
 export default {
   data() {
