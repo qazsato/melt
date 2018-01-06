@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-area">
+  <div class="editor-area" v-show="mode === 'editor' || mode === 'multi'">
     <textarea id="editor"></textarea>
   </div>
 </template>
@@ -12,6 +12,7 @@ import 'codemirror/mode/gfm/gfm.js';
 import 'codemirror/addon/edit/continuelist.js';
 import Editor from '../scripts/MarkdownEditor';
 export default {
+  props: ['mode'],
   data() {
     return {
       editor: null

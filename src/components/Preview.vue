@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-area" v-show="visible">
+  <div class="preview-area" v-show="mode === 'preview' || mode === 'multi'">
     <article class="markdown-body" v-html="markedText"></article>
     <publish-button></publish-button>
   </div>
@@ -14,7 +14,7 @@ import 'github-markdown-css';
 import publishButton from './PublishButton.vue';
 
 export default {
-  props: ['text', 'visible'],
+  props: ['mode', 'text'],
   components: {
     publishButton
   },

@@ -1,9 +1,9 @@
 <template>
   <div id="screen">
-    <toolbar :editor="editor" @visiblePreview="visiblePreview"></toolbar>
+    <toolbar :editor="editor" @changeViewMode="changeViewMode"></toolbar>
     <main>
-      <editor @mountEditor="mountEditor" @changeText="changeText"></editor>
-      <preview :text="text" :visible="visible"></preview>
+      <editor :mode="mode" @mountEditor="mountEditor" @changeText="changeText"></editor>
+      <preview :mode="mode" :text="text"></preview>
     </main>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
     return {
       editor: null,
       text: '',
-      visible: true
+      mode: 'multi'
     };
   },
   methods: {
@@ -33,8 +33,8 @@ export default {
     changeText(text) {
       this.text = text;
     },
-    visiblePreview(visible) {
-      this.visible = visible;
+    changeViewMode(mode) {
+      this.mode = mode;
     }
   }
 }

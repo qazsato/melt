@@ -27,7 +27,11 @@
     <button @click="insertNumbered">
       <i class="icon-list_numbered"></i>
     </button>
-    <el-switch class="switch-preview" v-model="visiblePreview" @change="togglePreview"></el-switch>
+    <el-radio-group @change="changeViewMode" v-model="viewMode" size="mini" fill="#00b1b3" class="checkbox-mode">
+      <el-radio-button label="multi">A</el-radio-button>
+      <el-radio-button label="editor">B</el-radio-button>
+      <el-radio-button label="preview">C</el-radio-button>
+    </el-radio-group>
   </section>
 </template>
 
@@ -36,7 +40,7 @@ export default {
   props: ['editor'],
   data() {
     return {
-      visiblePreview: true
+      viewMode: 'multi'
     };
   },
   methods: {
@@ -82,12 +86,20 @@ export default {
       this.editor.insertPrefix(`1. `);
       this.editor.focus();
     },
-    togglePreview() {
-      this.$emit('visiblePreview', this.visiblePreview);
+    changeViewMode() {
+      this.$emit('changeViewMode', this.viewMode);
     }
   }
 }
 </script>
+
+<style>
+  .el-radio-button__inner,
+  .el-radio-button__inner:hover {
+    color: inherit;
+  }
+</style>
+
 
 <style scoped>
   #toolbar {
@@ -117,9 +129,9 @@ export default {
     background: #313131;
   }
 
-  .switch-preview {
+  .checkbox-mode {
     position: absolute;
-    top: 15px;
+    top: 11px;
     right: 15px;
   }
 </style>
