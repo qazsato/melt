@@ -21,11 +21,14 @@
     <button @click="insertQuote">
       <i class="icon-quote"></i>
     </button>
-    <button @click="insertBulleted">
+    <button @click="insertListBulleted">
       <i class="icon-list_bulleted"></i>
     </button>
-    <button @click="insertNumbered">
+    <button @click="insertListNumbered">
       <i class="icon-list_numbered"></i>
+    </button>
+    <button @click="insertListChecked">
+      <i class="icon-list_checked"></i>
     </button>
     <el-radio-group @change="changeViewMode" v-model="viewMode" size="mini" fill="#00b1b3" class="checkbox-mode">
       <el-radio-button label="multi">A</el-radio-button>
@@ -78,12 +81,16 @@ export default {
       this.editor.insertPrefix(`> `);
       this.editor.focus();
     },
-    insertBulleted() {
+    insertListBulleted() {
       this.editor.insertPrefix(`- `);
       this.editor.focus();
     },
-    insertNumbered() {
+    insertListNumbered() {
       this.editor.insertPrefix(`1. `);
+      this.editor.focus();
+    },
+    insertListChecked() {
+      this.editor.insertPrefix(`- [ ] `);
       this.editor.focus();
     },
     changeViewMode() {
