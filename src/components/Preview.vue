@@ -27,7 +27,9 @@ export default {
   },
   computed: {
     markedText() {
-      const text = emoji.emojify(this.text);
+      let text = emoji.emojify(this.text);
+      text = text.replace(/\[x\]/gi, '<input type="checkbox" disabled checked>');
+      text = text.replace(/\[ \]/gi, '<input type="checkbox" disabled>');
       return marked(text);
     }
   }
