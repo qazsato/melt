@@ -1,51 +1,51 @@
 <template>
   <section id="toolbar">
-    <el-tooltip content="Hyperlink (⌘K)" open-delay="500">
+    <el-tooltip content="Hyperlink (⌘K)" :open-delay="500">
       <button @click="insertLink">
         <i class="icon-link"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Image (⌘G)" open-delay="500">
+    <el-tooltip content="Image (⌘G)" :open-delay="500">
       <button @click="insertImage">
         <i class="icon-photo"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Bold (⌘B)" open-delay="500">
+    <el-tooltip content="Bold (⌘B)" :open-delay="500">
       <button @click="insertBold">
         <i class="icon-bold"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Italic (⌘I)" open-delay="500">
+    <el-tooltip content="Italic (⌘I)" :open-delay="500">
       <button @click="insertItalic">
         <i class="icon-italic"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Strikethrough (⌘+Shift+X)" open-delay="500">
+    <el-tooltip content="Strikethrough (⌘+Shift+X)" :open-delay="500">
       <button @click="insertStrikethrough">
         <i class="icon-strikethrough"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Code (⌘+K)" open-delay="500">
+    <el-tooltip content="Code (⌘+K)" :open-delay="500">
       <button @click="insertCode">
         <i class="icon-code"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Quote (⌘+I)" open-delay="500">
+    <el-tooltip content="Quote (⌘+I)" :open-delay="500">
       <button @click="insertQuote">
         <i class="icon-quote"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Bulleted List (⌘+O)" open-delay="500">
+    <el-tooltip content="Bulleted List (⌘+O)" :open-delay="500">
       <button @click="insertListBulleted">
         <i class="icon-list_bulleted"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Numbered List (⌘+U)" open-delay="500">
+    <el-tooltip content="Numbered List (⌘+U)" :open-delay="500">
       <button @click="insertListNumbered">
         <i class="icon-list_numbered"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Checked List (⌘+Y)" open-delay="500">
+    <el-tooltip content="Checked List (⌘+Y)" :open-delay="500">
       <button @click="insertListChecked">
         <i class="icon-list_checked"></i>
       </button>
