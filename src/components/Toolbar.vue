@@ -1,6 +1,6 @@
 <template>
   <section id="toolbar">
-    <el-tooltip content="Hyperlink (⌘K)" :open-delay="500">
+    <el-tooltip content="Hyperlink (⌘H)" :open-delay="500">
       <button @click="insertLink">
         <i class="icon-link"></i>
       </button>
