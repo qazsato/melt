@@ -1,6 +1,6 @@
 <template>
   <section id="toolbar">
-    <el-tooltip content="Hyperlink (⌘H)" :open-delay="500">
+    <el-tooltip content="Hyperlink (⌘L)" :open-delay="500">
       <button @click="insertLink">
         <i class="icon-link"></i>
       </button>
@@ -36,17 +36,17 @@
       </button>
     </el-tooltip>
     <el-tooltip content="Bulleted List (⌘+O)" :open-delay="500">
-      <button @click="insertListBulleted">
+      <button @click="insertBulletedList">
         <i class="icon-list_bulleted"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Numbered List (⌘+U)" :open-delay="500">
-      <button @click="insertListNumbered">
+      <button @click="insertNumberedList">
         <i class="icon-list_numbered"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Checked List (⌘+Y)" :open-delay="500">
-      <button @click="insertListChecked">
+      <button @click="insertCheckedList">
         <i class="icon-list_checked"></i>
       </button>
     </el-tooltip>
@@ -68,49 +68,43 @@ export default {
   },
   methods: {
     insertLink() {
-      this.editor.insert(`[](${this.editor.getSelection()})`);
-      this.editor.moveCursorPosition(-1, 0);
+      this.editor.insertLink();
       this.editor.focus();
     },
     insertImage() {
-      this.editor.insert(`![](${this.editor.getSelection()})`);
-      this.editor.moveCursorPosition(-1, 0);
+      this.editor.insertImage();
       this.editor.focus();
     },
     insertBold() {
-      this.editor.insert(`**${this.editor.getSelection()}**`);
-      this.editor.moveCursorPosition(-2, 0);
+      this.editor.insertBold();
       this.editor.focus();
     },
     insertItalic() {
-      this.editor.insert(`_${this.editor.getSelection()}_`);
-      this.editor.moveCursorPosition(-1, 0);
+      this.editor.insertItalic();
       this.editor.focus();
     },
     insertStrikethrough() {
-      this.editor.insert(`~~${this.editor.getSelection()}~~`);
-      this.editor.moveCursorPosition(-2, 0);
+      this.editor.insertStrikethrough();
       this.editor.focus();
     },
     insertCode() {
-      this.editor.insert(`\`${this.editor.getSelection()}\``);
-      this.editor.moveCursorPosition(-1, 0);
+      this.editor.insertCode();
       this.editor.focus();
     },
     insertQuote() {
-      this.editor.insertPrefix(`> `);
+      this.editor.insertQuote();
       this.editor.focus();
     },
-    insertListBulleted() {
-      this.editor.insertPrefix(`- `);
+    insertBulletedList() {
+      this.editor.insertBulletedList();
       this.editor.focus();
     },
-    insertListNumbered() {
-      this.editor.insertPrefix(`1. `);
+    insertNumberedList() {
+      this.editor.insertNumberedList();
       this.editor.focus();
     },
-    insertListChecked() {
-      this.editor.insertPrefix(`- [ ] `);
+    insertCheckedList() {
+      this.editor.insertCheckedList();
       this.editor.focus();
     },
     changeViewMode() {

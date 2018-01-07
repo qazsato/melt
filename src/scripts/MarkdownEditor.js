@@ -10,6 +10,17 @@ class MarkdownEditor {
       indentWithTabs: true,
       extraKeys: {'Enter': 'newlineAndIndentContinueMarkdownList'}
     });
+    this.editor.addKeyMap({
+      'Cmd-L': () => this.insertLink(),
+      'Cmd-G': () => this.insertImage(),
+      'Cmd-B': () => this.insertBold(),
+      'Cmd-I': () => this.insertItalic(),
+      'Shift-Cmd-X': () => this.insertStrikethrough(),
+      'Cmd-K': () => this.insertCode(),
+      'Cmd-O': () => this.insertBulletedList(),
+      'Cmd-U': () => this.insertNumberedList(),
+      'Cmd-Y': () => this.insertCheckedList()
+    });
   }
   /**
    * イベントを紐付けます。
@@ -60,6 +71,42 @@ class MarkdownEditor {
   moveCursorPosition(x = 0, y = 0) {
     const pos = this.editor.getCursor();
     this.editor.setCursor({line: pos.line + y, ch: pos.ch + x});
+  }
+  insertLink() {
+    this.insert(`[](${this.getSelection()})`);
+    this.moveCursorPosition(-1, 0);
+  }
+  insertImage() {
+    this.insert(`![](${this.getSelection()})`);
+    this.moveCursorPosition(-1, 0);
+  }
+  insertBold() {
+    this.insert(`**${this.getSelection()}**`);
+    this.moveCursorPosition(-2, 0);
+  }
+  insertItalic() {
+    this.insert(`_${this.getSelection()}_`);
+    this.moveCursorPosition(-1, 0);
+  }
+  insertStrikethrough() {
+    this.insert(`~~${this.getSelection()}~~`);
+    this.moveCursorPosition(-2, 0);
+  }
+  insertCode() {
+    this.insert(`\`${this.getSelection()}\``);
+    this.moveCursorPosition(-1, 0);
+  }
+  insertQuote() {
+    this.insertPrefix(`> `);
+  }
+  insertBulletedList() {
+    this.insertPrefix(`- `);
+  }
+  insertNumberedList() {
+    this.insertPrefix(`1. `);
+  }
+  insertCheckedList() {
+    this.insertPrefix(`- [ ] `);
   }
 }
 
