@@ -10,17 +10,13 @@ class MarkdownEditor {
       indentWithTabs: true,
       extraKeys: {'Enter': 'newlineAndIndentContinueMarkdownList'}
     });
-    this.editor.addKeyMap({
-      'Cmd-L': () => this.insertLink(),
-      'Cmd-G': () => this.insertImage(),
-      'Cmd-B': () => this.insertBold(),
-      'Cmd-I': () => this.insertItalic(),
-      'Shift-Cmd-X': () => this.insertStrikethrough(),
-      'Cmd-K': () => this.insertCode(),
-      'Cmd-O': () => this.insertBulletedList(),
-      'Cmd-U': () => this.insertNumberedList(),
-      'Cmd-Y': () => this.insertCheckedList()
-    });
+  }
+  /**
+   * キーバインドを登録します。
+   * @param {Object} map
+   */
+  addKeyMap(map) {
+    this.editor.addKeyMap(map);
   }
   /**
    * イベントを紐付けます。
@@ -72,39 +68,55 @@ class MarkdownEditor {
     const pos = this.editor.getCursor();
     this.editor.setCursor({line: pos.line + y, ch: pos.ch + x});
   }
-  insertLink() {
-    this.insert(`[](${this.getSelection()})`);
-    this.moveCursorPosition(-1, 0);
-  }
-  insertImage() {
-    this.insert(`![](${this.getSelection()})`);
-    this.moveCursorPosition(-1, 0);
-  }
+  /**
+   * 太字を挿入します。
+   */
   insertBold() {
     this.insert(`**${this.getSelection()}**`);
     this.moveCursorPosition(-2, 0);
   }
+  /**
+   * 斜体を挿入します。
+   */
   insertItalic() {
     this.insert(`_${this.getSelection()}_`);
     this.moveCursorPosition(-1, 0);
   }
+  /**
+   * 打ち消し線を挿入します。
+   */
   insertStrikethrough() {
     this.insert(`~~${this.getSelection()}~~`);
     this.moveCursorPosition(-2, 0);
   }
+  /**
+   * コードを挿入します。
+   */
   insertCode() {
     this.insert(`\`${this.getSelection()}\``);
     this.moveCursorPosition(-1, 0);
   }
+  /**
+   * 引用を挿入します。
+   */
   insertQuote() {
     this.insertPrefix(`> `);
   }
+  /**
+   * 箇条書きリストを挿入します。
+   */
   insertBulletedList() {
     this.insertPrefix(`- `);
   }
+  /**
+   * 番号付きリストを挿入します。
+   */
   insertNumberedList() {
     this.insertPrefix(`1. `);
   }
+  /**
+   * チェックリストを挿入します。
+   */
   insertCheckedList() {
     this.insertPrefix(`- [ ] `);
   }
