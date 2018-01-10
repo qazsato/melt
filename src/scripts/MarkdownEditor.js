@@ -97,57 +97,25 @@ class MarkdownEditor {
    * 太字を挿入します。
    */
   insertBold() {
-    const pos = this.getSelectionPosition();
-    const startX = pos.start.x;
-    const startY = pos.start.y;
-    const endX = pos.end.x;
-    const endY = pos.end.y;
-    if (startY === endY) {  // 単一行
-      this.editor.replaceSelection(`**${this.getSelection()}**`);
-      if (startX === endX) {
-        this.moveCursorPosition(-2, 0); // NOTE 未選択時の場合は入力のしやすさを考慮しカーソル移動する。
-      }
-    } else {  // 複数行
-      let lineText = '';
-      for (let i = startY; i <= endY; i++) {
-        const line = this.editor.getLine(i);
-        if (line.trim() !== '') {
-          if (i === startY && startX !== 0) {
-            lineText += `**${line.slice(startX, line.length)}**`;
-          } else if (i === endY && endX !== line.length) {
-            lineText += `**${line.slice(0, endX)}**`;
-          } else {
-            lineText += `**${line}**`;
-          }
-        }
-        if (i !== endY) {
-          lineText += '\n';
-        }
-      }
-      this.editor.replaceSelection('');
-      this.insert(lineText, {line: startY, ch: startX});
-    }
+    this.putMarkInSelection('**');
   }
   /**
    * 斜体を挿入します。
    */
   insertItalic() {
-    this.insert(`_${this.getSelection()}_`);
-    this.moveCursorPosition(-1, 0);
+    this.putMarkInSelection('_');
   }
   /**
    * 打ち消し線を挿入します。
    */
   insertStrikethrough() {
-    this.insert(`~~${this.getSelection()}~~`);
-    this.moveCursorPosition(-2, 0);
+    this.putMarkInSelection('~~');
   }
   /**
    * コードを挿入します。
    */
   insertCode() {
-    this.insert(`\`${this.getSelection()}\``);
-    this.moveCursorPosition(-1, 0);
+    this.putMarkInSelection('`');
   }
   /**
    * 引用を挿入します。
@@ -172,6 +140,42 @@ class MarkdownEditor {
    */
   insertCheckedList() {
     this.insertPrefix(`- [ ] `);
+  }
+  /**
+   * 任意の文字列を選択されたテキストの前後に挿入します。
+   * @param {string} mark
+   */
+  putMarkInSelection(mark) {
+    const pos = this.getSelectionPosition();
+    const startX = pos.start.x;
+    const startY = pos.start.y;
+    const endX = pos.end.x;
+    const endY = pos.end.y;
+    if (startY === endY) {  // 単一行
+      this.editor.replaceSelection(`${mark}${this.getSelection()}${mark}`);
+      if (startX === endX) {
+        this.moveCursorPosition(-1 * mark.length, 0); // NOTE 未選択時の場合は入力のしやすさを考慮しカーソル移動する。
+      }
+    } else {  // 複数行
+      let lineText = '';
+      for (let i = startY; i <= endY; i++) {
+        const line = this.editor.getLine(i);
+        if (line.trim() !== '') {
+          if (i === startY && startX !== 0) {
+            lineText += ` ${mark}${line.slice(startX, line.length)}${mark}`;
+          } else if (i === endY && endX !== line.length) {
+            lineText += `${mark}${line.slice(0, endX)}${mark} `;
+          } else {
+            lineText += `${mark}${line}${mark}`;
+          }
+        }
+        if (i !== endY) {
+          lineText += '\n';
+        }
+      }
+      this.editor.replaceSelection('');
+      this.insert(lineText, {line: startY, ch: startX});
+    }
   }
 }
 
