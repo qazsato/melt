@@ -35,9 +35,13 @@ class MarkdownEditor {
   /**
    * 任意の文字を挿入します。
    * @param {string} text
+   * @param {object} pos
    */
-  insert(text) {
-    this.editor.replaceSelection(text);
+  insert(text, pos) {
+    if (!pos) {
+      pos = this.editor.getCursor();
+    }
+    this.editor.replaceRange(text, pos);
   }
   /**
    * 行の先頭に任意の文字を挿入します。
@@ -60,6 +64,27 @@ class MarkdownEditor {
     return this.editor.getSelection();
   }
   /**
+   * 選択中の文字の開始位置と終了位置を返却します。
+   */
+  getSelectionPosition() {
+    const selection = this.editor.listSelections()[0];
+    const head = selection.head;
+    const anchor = selection.anchor;
+    // NOTE 三平方の定理でエディタの起点(0,0)からの距離を求め、start/endの判定を行う。
+    const headDist = Math.sqrt(Math.pow(head.line, 2) + Math.pow(head.ch, 2));
+    const anchorDist = Math.sqrt(Math.pow(anchor.line, 2) + Math.pow(anchor.ch, 2));
+    let start;
+    let end;
+    if (headDist < anchorDist) {
+      start = {x: head.ch, y: head.line};
+      end = {x: anchor.ch, y: anchor.line};
+    } else {
+      start = {x: anchor.ch, y: anchor.line};
+      end = {x: head.ch, y: head.line};
+    }
+    return {start, end};
+  }
+  /**
    * 任意の位置にカーソルを移動します。
    * @param {number} x X座標の相対値
    * @param {number} y Y座標の相対値
@@ -72,8 +97,36 @@ class MarkdownEditor {
    * 太字を挿入します。
    */
   insertBold() {
-    this.insert(`**${this.getSelection()}**`);
-    this.moveCursorPosition(-2, 0);
+    const pos = this.getSelectionPosition();
+    const startX = pos.start.x;
+    const startY = pos.start.y;
+    const endX = pos.end.x;
+    const endY = pos.end.y;
+    if (startY === endY) {  // 単一行
+      this.editor.replaceSelection(`**${this.getSelection()}**`);
+      if (startX === endX) {
+        this.moveCursorPosition(-2, 0); // NOTE 未選択時の場合は入力のしやすさを考慮しカーソル移動する。
+      }
+    } else {  // 複数行
+      let lineText = '';
+      for (let i = startY; i <= endY; i++) {
+        const line = this.editor.getLine(i);
+        if (line.trim() !== '') {
+          if (i === startY && startX !== 0) {
+            lineText += `**${line.slice(startX, line.length)}**`;
+          } else if (i === endY && endX !== line.length) {
+            lineText += `**${line.slice(0, endX)}**`;
+          } else {
+            lineText += `**${line}**`;
+          }
+        }
+        if (i !== endY) {
+          lineText += '\n';
+        }
+      }
+      this.editor.replaceSelection('');
+      this.insert(lineText, {line: startY, ch: startX});
+    }
   }
   /**
    * 斜体を挿入します。
