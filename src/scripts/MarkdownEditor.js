@@ -62,6 +62,13 @@ class MarkdownEditor extends Editor {
     this.insertPrefix(`- [ ] `);
   }
   /**
+   * テーブルを挿入します。
+   */
+  insertTable() {
+    const table = `  |  |  \n:-|:-|:-\n  |  |  `;
+    this.insert(table);
+  }
+  /**
    * 任意の文字列を選択されたテキストの前後に挿入します。
    * @param {string} mark
    */

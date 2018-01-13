@@ -64,7 +64,8 @@ export default {
       'Cmd-K': () => this.editor.insertCode(),
       'Cmd-O': () => this.editor.insertBulletedList(),
       'Cmd-U': () => this.editor.insertNumberedList(),
-      'Cmd-Y': () => this.editor.insertCheckedList()
+      'Cmd-Y': () => this.editor.insertCheckedList(),
+      'Cmd-T': () => this.editor.insertTable()
     });
     this.$emit('mountEditor', this.editor);
   },

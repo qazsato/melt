@@ -50,6 +50,11 @@
         <i class="icon-list_checked"></i>
       </button>
     </el-tooltip>
+    <el-tooltip content="Table (⌘+T)" :open-delay="500">
+      <button @click="insertTable">
+        <i class="icon-table"></i>
+      </button>
+    </el-tooltip>
     <el-radio-group @change="changeViewMode" v-model="viewMode" size="mini" fill="#00b1b3" class="checkbox-mode">
       <el-radio-button label="multi">A</el-radio-button>
       <el-radio-button label="editor">B</el-radio-button>
@@ -105,6 +110,10 @@ export default {
     },
     insertCheckedList() {
       this.editor.insertCheckedList();
+      this.editor.focus();
+    },
+    insertTable() {
+      this.editor.insertTable();
       this.editor.focus();
     },
     changeViewMode() {
