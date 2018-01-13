@@ -47,19 +47,19 @@ class MarkdownEditor extends Editor {
    * 箇条書きリストを挿入します。
    */
   insertBulletedList() {
-    this.insertPrefix(`- `);
+    this.insertList('bullet');
   }
   /**
    * 番号付きリストを挿入します。
    */
   insertNumberedList() {
-    this.insertPrefix(`1. `);
+    this.insertList('number');
   }
   /**
    * チェックリストを挿入します。
    */
   insertCheckedList() {
-    this.insertPrefix(`- [ ] `);
+    this.insertList('check');
   }
   /**
    * テーブルを挿入します。
@@ -102,6 +102,44 @@ class MarkdownEditor extends Editor {
       }
       this.editor.replaceSelection('');
       this.insert(lineText, {line: startY, ch: startX});
+    }
+  }
+  /**
+   * リストを挿入します。
+   * @param {string} type
+   */
+  insertList(type) {
+    const pos = this.getSelectionPosition();
+    if (pos.start.x === pos.end.y) {  // 単一行
+      const prefix = this.getListPrefix(type);
+      this.insertPrefix(prefix);
+    } else {  // 複数行
+      let lineText = '';
+      for (let i = pos.start.y; i <= pos.end.y; i++) {
+        const line = this.editor.getLine(i);
+        const number = i - pos.start.y + 1;
+        const prefix = this.getListPrefix(type, number);
+        lineText += `${prefix}${line}`;
+        if (i !== pos.end.y) {
+          lineText += '\n';
+        }
+      }
+      this.editor.replaceSelection('');
+      this.insert(lineText, {line: pos.start.y, ch: pos.start.x});
+    }
+  }
+  /**
+   * リストの種別毎のプレフィックスを返却します。
+   * @param {string} type
+   * @param {number} number
+   */
+  getListPrefix(type, number = 1) {
+    if (type === 'bullet') {
+      return `- `;
+    } else if (type === 'number') {
+      return `${number}. `;
+    } else if (type === 'check') {
+      return `- [ ] `;
     }
   }
 }
