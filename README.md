@@ -18,3 +18,4 @@ My Markdown Editor.
 | Bulleted List | ⌘+O		| 
 | Numbered List | ⌘+U		| 
 | Checked List 	| ⌘+Y		| 
+| Table        	| ⌘+T		| 
