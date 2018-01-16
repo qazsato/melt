@@ -2,6 +2,9 @@ class Editor {
   constructor(id, option) {
     const CodeMirror = require('codemirror');
     this.editor = CodeMirror.fromTextArea(document.getElementById(id), option);
+    this.focused = false;
+    this.editor.on('focus', () => this.focused = true);
+    this.editor.on('blur', () => this.focused = false);
   }
   /**
    * キーバインドを登録します。
@@ -84,6 +87,12 @@ class Editor {
   moveCursorPosition(x = 0, y = 0) {
     const pos = this.editor.getCursor();
     this.editor.setCursor({line: pos.line + y, ch: pos.ch + x});
+  }
+  /**
+   * エディタがフォーカス中か否かを返却します。
+   */
+  isFocus() {
+    return this.focused;
   }
 }
 
