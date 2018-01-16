@@ -1,57 +1,57 @@
 <template>
   <section id="toolbar">
     <el-tooltip content="Hyperlink (⌘L)" :open-delay="500">
-      <button @click="insertLink">
+      <button @click="insertLink" :disabled="mode === 'preview'">
         <i class="icon-link"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Image (⌘G)" :open-delay="500">
-      <button @click="insertImage">
+      <button @click="insertImage" :disabled="mode === 'preview'">
         <i class="icon-photo"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Bold (⌘B)" :open-delay="500">
-      <button @click="insertBold">
+      <button @click="insertBold" :disabled="mode === 'preview'">
         <i class="icon-bold"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Italic (⌘I)" :open-delay="500">
-      <button @click="insertItalic">
+      <button @click="insertItalic" :disabled="mode === 'preview'">
         <i class="icon-italic"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Strikethrough (⌘+Shift+X)" :open-delay="500">
-      <button @click="insertStrikethrough">
+      <button @click="insertStrikethrough" :disabled="mode === 'preview'">
         <i class="icon-strikethrough"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Code (⌘+K)" :open-delay="500">
-      <button @click="insertCode">
+      <button @click="insertCode" :disabled="mode === 'preview'">
         <i class="icon-code"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Quote (⌘+I)" :open-delay="500">
-      <button @click="insertQuote">
+      <button @click="insertQuote" :disabled="mode === 'preview'">
         <i class="icon-quote"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Bulleted List (⌘+O)" :open-delay="500">
-      <button @click="insertBulletedList">
+      <button @click="insertBulletedList" :disabled="mode === 'preview'">
         <i class="icon-list_bulleted"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Numbered List (⌘+U)" :open-delay="500">
-      <button @click="insertNumberedList">
+      <button @click="insertNumberedList" :disabled="mode === 'preview'">
         <i class="icon-list_numbered"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Checked List (⌘+Y)" :open-delay="500">
-      <button @click="insertCheckedList">
+      <button @click="insertCheckedList" :disabled="mode === 'preview'">
         <i class="icon-list_checked"></i>
       </button>
     </el-tooltip>
     <el-tooltip content="Table (⌘+T)" :open-delay="500">
-      <button @click="insertTable">
+      <button @click="insertTable" :disabled="mode === 'preview'">
         <i class="icon-table"></i>
       </button>
     </el-tooltip>
