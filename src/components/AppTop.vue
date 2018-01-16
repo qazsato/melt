@@ -1,9 +1,9 @@
 <template>
   <div id="screen">
-    <toolbar :editor="editor" @changeViewMode="changeViewMode"></toolbar>
+    <toolbar></toolbar>
     <main>
-      <editor :mode="mode" @mountEditor="mountEditor" @changeText="changeText"></editor>
-      <preview :mode="mode" :text="text"></preview>
+      <editor @changeText="changeText"></editor>
+      <preview :text="text"></preview>
     </main>
   </div>
 </template>
@@ -21,20 +21,12 @@ export default {
   },
   data() {
     return {
-      editor: null,
-      text: '',
-      mode: 'multi'
+      text: ''
     };
   },
   methods: {
-    mountEditor(editor) {
-      this.editor = editor;
-    },
     changeText(text) {
       this.text = text;
-    },
-    changeViewMode(mode) {
-      this.mode = mode;
     }
   }
 }

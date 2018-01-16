@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-area" v-show="mode === 'editor' || mode === 'multi'">
+  <div class="editor-area" v-show="this.$store.state.mode === 'editor' || this.$store.state.mode === 'multi'">
     <textarea id="editor"></textarea>
     <el-dialog title="Hyperlink" :visible.sync="linkDialogVisible">
       <el-form label-width="45px">
@@ -40,7 +40,6 @@ import 'codemirror/mode/gfm/gfm.js';
 import 'codemirror/addon/edit/continuelist.js';
 import Editor from '../scripts/MarkdownEditor';
 export default {
-  props: ['mode'],
   data() {
     return {
       editor: null,
@@ -67,7 +66,7 @@ export default {
       'Cmd-Y': () => this.editor.insertCheckedList(),
       'Cmd-T': () => this.editor.insertTable()
     });
-    this.$emit('mountEditor', this.editor);
+    this.$store.commit('setEditor', this.editor);
   },
   methods: {
     insertLink() {

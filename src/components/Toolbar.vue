@@ -55,7 +55,7 @@
         <i class="icon-table"></i>
       </button>
     </el-tooltip>
-    <el-radio-group @change="changeViewMode" v-model="viewMode" size="mini" fill="#00b1b3" class="checkbox-mode">
+    <el-radio-group @change="changeViewMode" v-model="mode" size="mini" fill="#00b1b3" class="checkbox-mode">
       <el-radio-button label="multi">A</el-radio-button>
       <el-radio-button label="editor">B</el-radio-button>
       <el-radio-button label="preview">C</el-radio-button>
@@ -65,59 +65,58 @@
 
 <script>
 export default {
-  props: ['editor'],
   data() {
     return {
-      viewMode: 'multi'
+      mode: this.$store.state.mode
     };
   },
   methods: {
     insertLink() {
-      this.editor.insertLink();
-      this.editor.focus();
+      this.$store.state.editor.insertLink();
+      this.$store.state.editor.focus();
     },
     insertImage() {
-      this.editor.insertImage();
-      this.editor.focus();
+      this.$store.state.editor.insertImage();
+      this.$store.state.editor.focus();
     },
     insertBold() {
-      this.editor.insertBold();
-      this.editor.focus();
+      this.$store.state.editor.insertBold();
+      this.$store.state.editor.focus();
     },
     insertItalic() {
-      this.editor.insertItalic();
-      this.editor.focus();
+      this.$store.state.editor.insertItalic();
+      this.$store.state.editor.focus();
     },
     insertStrikethrough() {
-      this.editor.insertStrikethrough();
-      this.editor.focus();
+      this.$store.state.editor.insertStrikethrough();
+      this.$store.state.editor.focus();
     },
     insertCode() {
-      this.editor.insertCode();
-      this.editor.focus();
+      this.$store.state.editor.insertCode();
+      this.$store.state.editor.focus();
     },
     insertQuote() {
-      this.editor.insertQuote();
-      this.editor.focus();
+      this.$store.state.editor.insertQuote();
+      this.$store.state.editor.focus();
     },
     insertBulletedList() {
-      this.editor.insertBulletedList();
-      this.editor.focus();
+      this.$store.state.editor.insertBulletedList();
+      this.$store.state.editor.focus();
     },
     insertNumberedList() {
-      this.editor.insertNumberedList();
-      this.editor.focus();
+      this.$store.state.editor.insertNumberedList();
+      this.$store.state.editor.focus();
     },
     insertCheckedList() {
-      this.editor.insertCheckedList();
-      this.editor.focus();
+      this.$store.state.editor.insertCheckedList();
+      this.$store.state.editor.focus();
     },
     insertTable() {
-      this.editor.insertTable();
-      this.editor.focus();
+      this.$store.state.editor.insertTable();
+      this.$store.state.editor.focus();
     },
     changeViewMode() {
-      this.$emit('changeViewMode', this.viewMode);
+      this.$store.commit('changeMode', this.mode);
     }
   }
 }
