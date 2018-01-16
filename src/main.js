@@ -15,7 +15,9 @@ Vue.use(Element, {locale});
 const store = new Vuex.Store({
   state: {
     mode: 'multi',
-    editor: null
+    editor: null,
+    linkDialogVisible: false,
+    imageDialogVisible: false
   },
   mutations: {
     changeMode(state, mode) {
@@ -23,6 +25,12 @@ const store = new Vuex.Store({
     },
     setEditor(state, editor) {
       state.editor = editor;
+    },
+    visualizeLinkDialog(state, visible) {
+      state.linkDialogVisible = visible;
+    },
+    visualizeImageDialog(state, visible) {
+      state.imageDialogVisible = visible;
     }
   }
 });

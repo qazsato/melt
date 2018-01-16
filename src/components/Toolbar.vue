@@ -72,12 +72,10 @@ export default {
   },
   methods: {
     insertLink() {
-      this.$store.state.editor.insertLink();
-      this.$store.state.editor.focus();
+      this.$store.commit('visualizeLinkDialog', true);
     },
     insertImage() {
-      this.$store.state.editor.insertImage();
-      this.$store.state.editor.focus();
+      this.$store.commit('visualizeImageDialog', true);
     },
     insertBold() {
       this.$store.state.editor.insertBold();
