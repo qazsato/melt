@@ -17,7 +17,8 @@ const store = new Vuex.Store({
     mode: 'multi',
     editor: null,
     linkDialogVisible: false,
-    imageDialogVisible: false
+    imageDialogVisible: false,
+    tableDialogVisible: false
   },
   mutations: {
     changeMode(state, mode) {
@@ -31,6 +32,9 @@ const store = new Vuex.Store({
     },
     visualizeImageDialog(state, visible) {
       state.imageDialogVisible = visible;
+    },
+    visualizeTableDialog(state, visible) {
+      state.tableDialogVisible = visible;
     }
   }
 });

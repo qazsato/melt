@@ -64,8 +64,24 @@ class MarkdownEditor extends Editor {
   /**
    * テーブルを挿入します。
    */
-  insertTable() {
-    const table = `  |  |  \n:-|:-|:-\n  |  |  `;
+  insertTable(row = 3, column = 3) {
+    let tr = '';
+    let th = '';
+    for (let i = 0; i < row - 1; i++) {
+      if (i === 0) {
+        tr+= ' ';
+        th+= ':-';
+      }
+      tr += ' | ';
+      th += '|:-';
+    }
+    tr += '\n';
+    th += '\n';
+
+    let table = tr + th;
+    for (let i = 0; i < column - 1; i++) {
+      table += tr;
+    }
     this.insert(table);
   }
   /**

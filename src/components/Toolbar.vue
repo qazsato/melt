@@ -110,8 +110,7 @@ export default {
       this.$store.state.editor.focus();
     },
     insertTable() {
-      this.$store.state.editor.insertTable();
-      this.$store.state.editor.focus();
+      this.$store.commit('visualizeTableDialog', true);
     },
     changeViewMode() {
       this.$store.commit('changeMode', this.mode);

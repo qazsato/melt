@@ -29,6 +29,20 @@
         <el-button @click="closeImageDialog">Cancel</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="Table" :visible.sync="this.$store.state.tableDialogVisible" :show-close="false" :close-on-click-modal="false">
+       <el-form label-width="45px">
+        <el-form-item label="Row">
+          <el-input-number v-model="tableRow" :min="1" :max="10"></el-input-number>
+        </el-form-item>
+        <el-form-item label="Col">
+          <el-input-number v-model="tableColumn" :min="1" :max="10"></el-input-number>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="insertTable">Insert</el-button>
+        <el-button @click="closeTableDialog">Cancel</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -47,6 +61,8 @@ export default {
       linkUrl: '',
       imageAlt: '',
       imageUrl: '',
+      tableRow: 3,
+      tableColumn: 3
     };
   },
   mounted() {
@@ -62,7 +78,7 @@ export default {
       'Cmd-O': () => this.editor.insertBulletedList(),
       'Cmd-U': () => this.editor.insertNumberedList(),
       'Cmd-Y': () => this.editor.insertCheckedList(),
-      'Cmd-T': () => this.editor.insertTable()
+      'Cmd-T': () => this.openTableDialog()
     });
     this.$store.commit('setEditor', this.editor);
   },
@@ -74,6 +90,10 @@ export default {
     insertImage() {
       this.editor.insert(`![${this.imageAlt}](${this.imageUrl})`);
       this.closeImageDialog();
+    },
+    insertTable() {
+      this.editor.insertTable(this.tableRow, this.tableColumn);
+      this.closeTableDialog();
     },
     openLinkDialog() {
       const text = this.editor.getSelection();
@@ -106,7 +126,15 @@ export default {
       this.imageUrl = '';
       this.editor.focus();
       this.$store.commit('visualizeImageDialog', false);
-    }
+    },
+    openTableDialog() {
+      this.$store.commit('visualizeTableDialog', true);
+    },
+    closeTableDialog() {
+      this.tableRow = 3;
+      this.tableColumn = 3;
+      this.$store.commit('visualizeTableDialog', false);
+    },
   }
 }
 </script>
