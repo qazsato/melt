@@ -126,7 +126,7 @@ class MarkdownEditor extends Editor {
    */
   insertList(type) {
     const pos = this.getSelectionPosition();
-    if (pos.start.x === pos.end.y) {  // 単一行
+    if (pos.start.y === pos.end.y) {  // 単一行
       const prefix = this.getListPrefix(type);
       this.insertPrefix(prefix);
     } else {  // 複数行
