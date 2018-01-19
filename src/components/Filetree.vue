@@ -81,7 +81,7 @@ export default {
     width: 100%;
     height: 100%;
     background-color: #4a4a4a;
-    border-top: 1px solid #24292e;
+    border-top: 1px solid #313131;
   }
 
   .filter-input {
