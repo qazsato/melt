@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
-    <el-tree class="file-tree" :data="data" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree">></el-tree>
+    <el-tree class="file-tree" :data="data" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
   </div>
 </template>
 
@@ -71,6 +71,10 @@ export default {
 <style>
   .el-tree-node:focus>.el-tree-node__content,
   .el-tree-node__content:hover {
+    background-color: inherit;
+  }
+
+  .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
     background-color: inherit;
     opacity: 0.4;
   }
