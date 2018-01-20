@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
+  target: "electron-main",
   entry: {
     main: './src/main.js'
   },
