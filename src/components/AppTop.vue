@@ -1,15 +1,15 @@
 <template>
   <div id="screen">
-    <toolbar></toolbar>
-    <section>
-      <aside>
-        <filetree></filetree>
-      </aside>
-      <main>
+    <aside>
+      <filetree></filetree>
+    </aside>
+    <main>
+      <toolbar></toolbar>
+      <section>
         <editor @changeText="changeText"></editor>
         <preview :text="text"></preview>
-      </main>
-    </section>
+      </section>
+    </main>
   </div>
 </template>
 
@@ -41,10 +41,6 @@ export default {
 
 <style scoped>
   #screen {
-    height: 100%;
-  }
-
-  section {
     display: flex;
     height: 100%;
   }
@@ -54,8 +50,12 @@ export default {
   }
 
   main {
-    display: flex;
     flex: 1;
     height: calc(100% - 50px);
+  }
+
+  main > section {
+    display: flex;
+    height: 100%;
   }
 </style>
