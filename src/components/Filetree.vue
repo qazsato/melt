@@ -1,16 +1,22 @@
 <template>
   <div class="container">
     <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
-    <el-tree class="file-tree" :data="data" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
+    <el-tree class="file-tree" :data="treeDatas" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
   </div>
 </template>
 
 <script>
+import FileUtil from '../scripts/FileUtil';
+
 export default {
   watch: {
     filterText(val) {
       this.$refs.filetree.filter(val);
     }
+  },
+  mounted() {
+    const dir = '/Users/kazuki-sato/Dropbox/notes';
+    FileUtil.readTree(dir).then((t) => this.treeDatas = t);
   },
   methods: {
     handleNodeClick(data) {
@@ -24,45 +30,7 @@ export default {
   data() {
     return {
       filterText: '',
-      data: [{
-        label: 'Level one 1',
-        children: [{
-          label: 'Level two 1-1',
-          children: [{
-            label: 'Level three 1-1-1'
-          }]
-        }]
-      }, {
-        label: 'Level one 2',
-        children: [{
-          label: 'Level two 2-1',
-          children: [{
-            label: 'Level three 2-1-1'
-          }]
-        }, {
-          label: 'Level two 2-2',
-          children: [{
-            label: 'Level three 2-2-1'
-          }]
-        }]
-      }, {
-        label: 'Level one 3',
-        children: [{
-          label: 'Level two 3-1',
-          children: [{
-            label: 'Level three 3-1-1'
-          }]
-        }, {
-          label: 'Level two 3-2',
-          children: [{
-            label: 'Level three 3-2-1'
-          }]
-        }]
-      }],
-      defaultProps: {
-        children: 'children',
-        label: 'label'
-      }
+      treeDatas: []
     };
   }
 }
