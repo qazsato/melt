@@ -1,7 +1,11 @@
 <template>
   <div class="container">
-    <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
-    <el-tree class="file-tree" :data="treeDatas" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
+    <div class="input-area">
+      <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
+    </div>
+    <div class="tree-area">
+      <el-tree class="file-tree" :data="treeDatas" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
+    </div>
   </div>
 </template>
 
@@ -57,8 +61,17 @@ export default {
     background-color: #4a4a4a;
   }
 
+  .input-area {
+    height: 90px;
+  }
+
+  .tree-area {
+    height: calc(100% - 90px);
+    overflow-y: auto;
+  }
+
   .filter-input {
-    margin: 10px;
+    margin: 50px 10px 10px 10px;
     width: calc(100% - 20px);
   }
 

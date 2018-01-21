@@ -50,12 +50,12 @@ export default {
   }
 
   main {
-    flex: 1;
-    height: calc(100% - 50px);
+    width: calc(100% - 250px);
+    height: 100%;
   }
 
   main > section {
     display: flex;
-    height: 100%;
+    height: calc(100% - 50px);
   }
 </style>
