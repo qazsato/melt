@@ -13,12 +13,19 @@ class FileUtil {
         files.map((file) => path.join(p, file))
             .filter((file) => {
               if(fs.statSync(file).isDirectory()) scanDirectory(file, (err, res) => { //ディレクトリだったら再帰
-                results.push({label:path.basename(file), children:res}); //子ディレクトリをchildrenインデックス配下に保存
+                results.push({
+                  label:path.basename(file),
+                  path: file,
+                  children:res
+                });
                 if (!--pending) callback(null, results);
               });
               return fs.statSync(file).isFile();
             }).forEach((file) => { //ファイル名を保存
-              results.push({label:path.basename(file)});
+              results.push({
+                label:path.basename(file),
+                path: file
+              });
               if (!--pending) callback(null, results);
             });
       }

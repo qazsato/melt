@@ -14,6 +14,7 @@ Vue.use(Element, {locale});
 
 const store = new Vuex.Store({
   state: {
+    currentFile: '',
     mode: 'multi',
     editor: null,
     linkDialogVisible: false,
@@ -21,6 +22,9 @@ const store = new Vuex.Store({
     tableDialogVisible: false
   },
   mutations: {
+    changeCurrentFile(state, file) {
+      state.currentFile = file;
+    },
     changeMode(state, mode) {
       state.mode = mode;
     },

@@ -7,6 +7,7 @@
 
 <script>
 import FileUtil from '../scripts/FileUtil';
+import fs from 'fs';
 
 export default {
   watch: {
@@ -20,7 +21,8 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
-      console.log(data);
+      if(fs.statSync(data.path).isDirectory()) return;
+      this.$store.commit('changeCurrentFile', data.path);
     },
     filterNode(value, data) {
       if (!value) return true;

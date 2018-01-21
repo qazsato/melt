@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import fs from 'fs';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/base16-light.css';
 import '../styles/MarkdownEditor.css';
@@ -68,6 +69,17 @@ export default {
       tableRow: 3,
       tableColumn: 3
     };
+  },
+  computed: {
+    file() {
+      return this.$store.state.currentFile;
+    }
+  },
+  watch: {
+    file(file) {
+      const text = fs.readFileSync(file, 'utf-8');
+      this.editor.editor.getDoc().setValue(text);
+    }
   },
   mounted() {
     this.editor = new Editor('editor');
