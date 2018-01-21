@@ -14,7 +14,7 @@ Vue.use(Element, {locale});
 
 const store = new Vuex.Store({
   state: {
-    currentFile: '',
+    currentFile: 'Untitled',
     mode: 'multi',
     editor: null,
     linkDialogVisible: false,

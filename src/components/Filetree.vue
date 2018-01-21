@@ -2,6 +2,7 @@
   <div class="container">
     <div class="input-area">
       <h1 class="file-name">
+        <i class="icon-file"></i>
         <div>{{fileName}}</div>
       </h1>
       <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
@@ -84,10 +85,15 @@ export default {
     align-items: center;
     margin: 0 10px;
     height: 50px;
+    color: #fff;
+  }
+
+  .file-name .icon-file {
+    margin-right: 5px;
+    font-size: 22px;
   }
 
   .file-name div {
-    color: #fff;
     font-size: 18px;
     font-weight: bold;
     overflow: hidden;
