@@ -1,6 +1,9 @@
 <template>
   <div class="container">
     <div class="input-area">
+      <h1 class="file-name">
+        <div>{{fileName}}</div>
+      </h1>
       <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
     </div>
     <div class="tree-area">
@@ -12,8 +15,20 @@
 <script>
 import FileUtil from '../scripts/FileUtil';
 import fs from 'fs';
+import path from 'path';
 
 export default {
+  data() {
+    return {
+      filterText: '',
+      treeDatas: []
+    };
+  },
+  computed: {
+    fileName() {
+      return path.basename(this.$store.state.currentFile);
+    }
+  },
   watch: {
     filterText(val) {
       this.$refs.filetree.filter(val);
@@ -32,12 +47,6 @@ export default {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
     }
-  },
-  data() {
-    return {
-      filterText: '',
-      treeDatas: []
-    };
   }
 }
 </script>
@@ -70,8 +79,24 @@ export default {
     overflow-y: auto;
   }
 
+  .file-name {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    height: 50px;
+  }
+
+  .file-name div {
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
   .filter-input {
-    margin: 50px 10px 10px 10px;
+    margin: 4px 10px;
     width: calc(100% - 20px);
   }
 
