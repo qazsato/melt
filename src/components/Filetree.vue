@@ -3,7 +3,9 @@
     <div class="input-area">
       <h1 class="file-name">
         <i class="icon-file"></i>
-        <div>{{fileName}}</div>
+        <el-tooltip :content="this.$store.state.currentFile" :open-delay="1000">
+          <div>{{fileName}}</div>
+        </el-tooltip>
       </h1>
       <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
     </div>
