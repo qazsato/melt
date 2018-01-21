@@ -94,7 +94,8 @@ export default {
       'Cmd-O': () => this.editor.insertBulletedList(),
       'Cmd-U': () => this.editor.insertNumberedList(),
       'Cmd-Y': () => this.editor.insertCheckedList(),
-      'Cmd-T': () => this.openTableDialog()
+      'Cmd-T': () => this.openTableDialog(),
+      'Cmd-S': () => this.saveFile()
     });
     this.$store.commit('setEditor', this.editor);
   },
@@ -151,6 +152,9 @@ export default {
       this.tableColumn = 3;
       this.$store.commit('visualizeTableDialog', false);
     },
+    saveFile() {
+      fs.writeFileSync(this.$store.state.currentFile, this.editor.getText());
+    }
   }
 }
 </script>
