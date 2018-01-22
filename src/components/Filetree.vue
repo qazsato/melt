@@ -8,6 +8,11 @@
         </el-tooltip>
       </h1>
       <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
+      <div class="button-area">
+        <i class="icon-new_file" @click="createFile"></i>
+        <i class="icon-new_folder" @click="createFolder"></i>
+        <i class="icon-sync" @click="reloadTree"></i>
+      </div>
     </div>
     <div class="tree-area">
       <el-tree class="file-tree" :data="treeDatas" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
@@ -49,6 +54,15 @@ export default {
     filterNode(value, data) {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
+    },
+    createFile() {
+      console.log('file');
+    },
+    createFolder() {
+      console.log('folder');
+    },
+    reloadTree() {
+      console.log('tree');
     }
   }
 }
@@ -74,11 +88,11 @@ export default {
   }
 
   .input-area {
-    height: 90px;
+    height: 115px;
   }
 
   .tree-area {
-    height: calc(100% - 90px);
+    height: calc(100% - 115px);
     overflow-y: auto;
   }
 
@@ -106,6 +120,20 @@ export default {
   .filter-input {
     margin: 4px 10px;
     width: calc(100% - 20px);
+  }
+
+  .button-area {
+    text-align: right;
+    margin: 5px 10px 0 0;
+  }
+
+  .button-area > i {
+    cursor: pointer;
+    color: #ddd;
+  }
+
+  .button-area > i:hover {
+    color: #fff;
   }
 
   .file-tree {
