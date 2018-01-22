@@ -28,7 +28,7 @@
   "scripts": {
     "start": "electron .",
     "dev": "webpack --watch",
-    "pack:mac": "electron-packager . melt --platform=darwin --arch=x64 --electronVersion=1.7.10 --icon=./icon.icns"
+    "pack:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icon.icns --prune=true"
   },
   "keywords": [
     "markdown",
