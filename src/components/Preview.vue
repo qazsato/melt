@@ -19,7 +19,10 @@ export default {
     publishButton
   },
   mounted() {
+    const renderer = new marked.Renderer();
+    renderer.link = (href, title, text) => `<a target="_blank" href="${href}" title="${title}">${text}</a>`;
     marked.setOptions({
+      renderer,
       highlight: (code) => {
         return highlight.highlightAuto(code).value;
       }

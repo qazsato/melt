@@ -22,6 +22,11 @@ function createWindow () {
     slashes: true
   }))
 
+  mainWindow.webContents.on('new-window', (event, url) => {
+    event.preventDefault();
+    electron.shell.openExternal(url);
+  });
+
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
