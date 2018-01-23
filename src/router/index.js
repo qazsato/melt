@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import AppTop from '../components/AppTop.vue';
+import PageTop from '../components/PageTop.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', component: AppTop }
+  { path: '/', component: PageTop }
 ];
 
 export default new VueRouter({
