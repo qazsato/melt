@@ -5,8 +5,8 @@ import Element from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/ja';
 import 'element-ui/lib/theme-chalk/index.css';
 import AppTop from './components/AppTop.vue';
-import './styles/main.css';
-import './fonts/icomoon/style.css';
+import './assets/styles/main.css';
+import './assets/fonts/icomoon/style.css';
 
 Vue.use(Vuex);
 Vue.use(VueRouter);

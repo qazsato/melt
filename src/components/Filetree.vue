@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import FileUtil from '../scripts/FileUtil';
+import FileUtil from '../assets/scripts/FileUtil';
 import fs from 'fs';
 import path from 'path';
 

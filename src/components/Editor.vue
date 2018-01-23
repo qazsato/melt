@@ -50,14 +50,14 @@
 import fs from 'fs';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/base16-light.css';
-import '../styles/MarkdownEditor.css';
+import '../assets/styles/MarkdownEditor.css';
 import 'codemirror/mode/gfm/gfm.js';
 import 'codemirror/addon/edit/continuelist.js';
 import 'codemirror/addon/search/search.js';
 import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
-import Editor from '../scripts/MarkdownEditor';
+import Editor from '../assets/scripts/MarkdownEditor';
 export default {
   data() {
     return {
