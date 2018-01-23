@@ -15,10 +15,10 @@
     "vuex": "3.0.1"
   },
   "devDependencies": {
-    "css-loader": "0.28.8",
-    "electron": "1.7.10",
+    "css-loader": "0.28.9",
+    "electron": "1.7.11",
     "electron-packager": "10.1.1",
-    "eslint": "4.15.0",
+    "eslint": "4.16.0",
     "file-loader": "1.1.6",
     "style-loader": "0.19.1",
     "vue-loader": "13.7.0",
