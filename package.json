@@ -28,6 +28,7 @@
   "scripts": {
     "start": "electron .",
     "dev": "webpack --watch",
+    "prepack:mac": "webpack",
     "pack:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icon.icns --prune=true"
   },
   "keywords": [
