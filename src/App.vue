@@ -12,4 +12,5 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './assets/styles/main.css';
 import './assets/fonts/icomoon/style.css';
 Vue.use(Element, {locale});
+export default {}
 </script>
