@@ -30,13 +30,14 @@ class Editor {
   /**
    * 任意の文字を挿入します。
    * @param {string} text
-   * @param {object} pos
+   * @param {object} from {line, ch}
+   * @param {object} to {line, ch}
    */
-  insert(text, pos) {
-    if (!pos) {
-      pos = this.editor.getCursor();
+  insert(text, from, to) {
+    if (!from) {
+      from = this.editor.getCursor();
     }
-    this.editor.replaceRange(text, pos);
+    this.editor.replaceRange(text, from, to);
   }
   /**
    * 行の先頭に任意の文字を挿入します。

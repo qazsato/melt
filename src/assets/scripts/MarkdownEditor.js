@@ -116,8 +116,7 @@ class MarkdownEditor extends Editor {
           lineText += '\n';
         }
       }
-      this.editor.replaceSelection('');
-      this.insert(lineText, {line: startY, ch: startX});
+      this.insert(lineText, {line: startY, ch: startX}, {line: endY, ch: endX});
     }
   }
   /**
@@ -140,8 +139,9 @@ class MarkdownEditor extends Editor {
           lineText += '\n';
         }
       }
-      this.editor.replaceSelection('');
-      this.insert(lineText, {line: pos.start.y, ch: pos.start.x});
+      const from = {line: pos.start.y, ch: 0};
+      const to = {line: pos.end.y, ch: this.editor.getLine(pos.end.y).length};
+      this.insert(lineText, from, to);
     }
   }
   /**
