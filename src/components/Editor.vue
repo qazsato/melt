@@ -151,6 +151,7 @@ export default {
     closeTableDialog() {
       this.tableRow = 3;
       this.tableColumn = 3;
+      this.editor.focus();
       this.$store.commit('visualizeTableDialog', false);
     },
     saveFile() {
