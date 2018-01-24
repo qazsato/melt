@@ -41,7 +41,22 @@ class MarkdownEditor extends Editor {
    * 引用を挿入します。
    */
   insertQuote() {
-    this.insertPrefix(`> `);
+    const pos = this.getSelectionPosition();
+    if (pos.start.y === pos.end.y) {  // 単一行
+      this.insertPrefix('> ');
+    } else {  // 複数行
+      let lineText = '';
+      for (let i = pos.start.y; i <= pos.end.y; i++) {
+        const line = this.editor.getLine(i);
+        lineText += `> ${line}\t`;
+        if (i !== pos.end.y) {
+          lineText += '\n';
+        }
+      }
+      const from = {line: pos.start.y, ch: 0};
+      const to = {line: pos.end.y, ch: this.editor.getLine(pos.end.y).length};
+      this.insert(lineText, from, to);
+    }
   }
   /**
    * 箇条書きリストを挿入します。
