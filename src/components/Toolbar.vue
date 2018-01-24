@@ -5,7 +5,7 @@
         <i class="icon-link"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Image (⌘G)" :open-delay="500">
+    <el-tooltip content="Image (⌘P)" :open-delay="500">
       <button @click="insertImage" :disabled="mode === 'preview'">
         <i class="icon-photo"></i>
       </button>
@@ -30,7 +30,7 @@
         <i class="icon-code"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Quote (⌘+I)" :open-delay="500">
+    <el-tooltip content="Quote (⌘+U)" :open-delay="500">
       <button @click="insertQuote" :disabled="mode === 'preview'">
         <i class="icon-quote"></i>
       </button>
@@ -40,7 +40,7 @@
         <i class="icon-list_bulleted"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Numbered List (⌘+U)" :open-delay="500">
+    <el-tooltip content="Numbered List (⌘+N)" :open-delay="500">
       <button @click="insertNumberedList" :disabled="mode === 'preview'">
         <i class="icon-list_numbered"></i>
       </button>

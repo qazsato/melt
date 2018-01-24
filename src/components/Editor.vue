@@ -86,13 +86,14 @@ export default {
     this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
     this.editor.addKeyMap({
       'Cmd-L': () => this.openLinkDialog(),
-      'Cmd-G': () => this.openImageDialog(),
+      'Cmd-P': () => this.openImageDialog(),
       'Cmd-B': () => this.editor.insertBold(),
       'Cmd-I': () => this.editor.insertItalic(),
       'Shift-Cmd-X': () => this.editor.insertStrikethrough(),
       'Cmd-K': () => this.editor.insertCode(),
+      'Cmd-U': () => this.editor.insertQuote(),
       'Cmd-O': () => this.editor.insertBulletedList(),
-      'Cmd-U': () => this.editor.insertNumberedList(),
+      'Cmd-N': () => this.editor.insertNumberedList(),
       'Cmd-Y': () => this.editor.insertCheckedList(),
       'Cmd-T': () => this.openTableDialog(),
       'Cmd-S': () => this.saveFile()
