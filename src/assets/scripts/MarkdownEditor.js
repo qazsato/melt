@@ -23,7 +23,7 @@ class MarkdownEditor extends Editor {
    * 斜体を挿入します。
    */
   insertItalic() {
-    this.putMarkInSelection('_');
+    this.putMarkInSelection('*');
   }
   /**
    * 打ち消し線を挿入します。
@@ -120,9 +120,9 @@ class MarkdownEditor extends Editor {
         const line = this.editor.getLine(i);
         if (line.trim() !== '') {
           if (i === startY && startX !== 0) {
-            lineText += ` ${mark}${line.slice(startX, line.length)}${mark}`;
+            lineText += `${mark}${line.slice(startX, line.length)}${mark}`;
           } else if (i === endY && endX !== line.length) {
-            lineText += `${mark}${line.slice(0, endX)}${mark} `;
+            lineText += `${mark}${line.slice(0, endX)}${mark}`;
           } else {
             lineText += `${mark}${line}${mark}`;
           }
