@@ -1,4 +1,4 @@
-# melt
+# Melt
 
 My Markdown Editor.
 
