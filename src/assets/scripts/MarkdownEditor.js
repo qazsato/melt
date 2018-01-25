@@ -9,7 +9,25 @@ class MarkdownEditor extends Editor {
       autofocus: true,
       indentUnit: 4,
       indentWithTabs: true,
-      extraKeys: {'Enter': 'newlineAndIndentContinueMarkdownList'}
+      extraKeys: {
+        Enter: 'newlineAndIndentContinueMarkdownList',
+        Tab: (cm) => {
+          const pos = this.editor.getCursor();
+          let text = this.editor.getLine(pos.line);
+          // TODO Numberlistも要対応
+          if (text.trim().indexOf('- ') === 0 ||
+              text.trim().indexOf('* ') === 0 ||
+              text.trim().indexOf('+ ') === 0) {
+            text = `\t${text}`;
+            const from = {line: pos.line, ch: 0};
+            const to = {line: pos.line, ch: text.length};
+            this.insert(text, from, to);
+          } else {
+            const spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
+            cm.replaceSelection(spaces);
+          }
+        }
+      }
     };
     super(id, option);
   }
