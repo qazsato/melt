@@ -10,7 +10,9 @@ const store = new Vuex.Store({
     editor: null,
     linkDialogVisible: false,
     imageDialogVisible: false,
-    tableDialogVisible: false
+    tableDialogVisible: false,
+    fileDialogVisible: false,
+    folderDialogVisible: false
   },
   mutations: {
     changeCurrentFile(state, file) {
@@ -30,6 +32,12 @@ const store = new Vuex.Store({
     },
     visualizeTableDialog(state, visible) {
       state.tableDialogVisible = visible;
+    },
+    visualizeFileDialog(state, visible) {
+      state.fileDialogVisible = visible;
+    },
+    visualizeFolderDialog(state, visible) {
+      state.folderDialogVisible = visible;
     }
   }
 });

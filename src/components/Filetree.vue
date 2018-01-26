@@ -9,14 +9,42 @@
       </h1>
       <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
       <div class="button-area">
-        <i class="icon-new_file" @click="createFile"></i>
-        <i class="icon-new_folder" @click="createFolder"></i>
+        <i class="icon-new_file" @click="openFileDialog"></i>
+        <i class="icon-new_folder" @click="openFolderDialog"></i>
         <i class="icon-sync" @click="loadTree"></i>
       </div>
     </div>
     <div class="tree-area">
       <el-tree class="file-tree" :data="treeDatas" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
     </div>
+    <el-dialog title="New File" :visible.sync="this.$store.state.fileDialogVisible" :before-close="closeFileDialog" width="400px">
+       <el-form label-width="45px">
+        <el-form-item label="Path">
+          <el-input placeholder="Please input" v-model="path"></el-input>
+        </el-form-item>
+        <el-form-item label="Name">
+          <el-input placeholder="Please input" v-model="name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="createFile">Create</el-button>
+        <el-button @click="closeFileDialog">Cancel</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="New Folder" :visible.sync="this.$store.state.folderDialogVisible" :before-close="closeFolderDialog" width="400px">
+       <el-form label-width="45px">
+        <el-form-item label="Path">
+          <el-input placeholder="Please input" v-model="path"></el-input>
+        </el-form-item>
+        <el-form-item label="Name">
+          <el-input placeholder="Please input" v-model="name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="createFolder">Create</el-button>
+        <el-button @click="closeFolderDialog">Cancel</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -30,7 +58,9 @@ export default {
   data() {
     return {
       filterText: '',
-      treeDatas: []
+      treeDatas: [],
+      path: '',
+      name: ''
     };
   },
   computed: {
@@ -60,6 +90,18 @@ export default {
     },
     createFolder() {
       console.log('folder');
+    },
+    openFileDialog() {
+      this.$store.commit('visualizeFileDialog', true);
+    },
+    closeFileDialog() {
+      this.$store.commit('visualizeFileDialog', false);
+    },
+    openFolderDialog() {
+      this.$store.commit('visualizeFolderDialog', true);
+    },
+    closeFolderDialog() {
+      this.$store.commit('visualizeFolderDialog', false);
     },
     loadTree() {
       FileUtil.readTree(settings.directory).then((t) => this.treeDatas = t);
