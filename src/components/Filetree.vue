@@ -11,7 +11,7 @@
       <div class="button-area">
         <i class="icon-new_file" @click="createFile"></i>
         <i class="icon-new_folder" @click="createFolder"></i>
-        <i class="icon-sync" @click="reloadTree"></i>
+        <i class="icon-sync" @click="loadTree"></i>
       </div>
     </div>
     <div class="tree-area">
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import settings from '../../config/settings.json';
 import FileUtil from '../assets/scripts/FileUtil';
 import fs from 'fs';
 import path from 'path';
@@ -43,8 +44,7 @@ export default {
     }
   },
   mounted() {
-    const dir = '/Users/kazuki-sato/Dropbox/notes';
-    FileUtil.readTree(dir).then((t) => this.treeDatas = t);
+    this.loadTree();
   },
   methods: {
     handleNodeClick(data) {
@@ -61,8 +61,8 @@ export default {
     createFolder() {
       console.log('folder');
     },
-    reloadTree() {
-      console.log('tree');
+    loadTree() {
+      FileUtil.readTree(settings.directory).then((t) => this.treeDatas = t);
     }
   }
 }
