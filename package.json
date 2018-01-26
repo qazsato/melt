@@ -31,7 +31,7 @@
     "start": "electron .",
     "dev": "webpack --watch",
     "prepack:mac": "NODE_ENV=production webpack",
-    "pack:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icon.icns --prune=true"
+    "pack:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icon.icns --prune=true --out=release-builds"
   },
   "keywords": [
     "markdown",
