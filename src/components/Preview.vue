@@ -68,8 +68,11 @@ export default {
 
 <style>
   .markdown-body .check-list {
-    padding: 0;
     list-style: none;
+  }
+
+  .markdown-body .check-list input[type="checkbox"] {
+    margin-left: -2em;
   }
 </style>
 
