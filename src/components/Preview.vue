@@ -19,10 +19,8 @@ export default {
     publishButton
   },
   mounted() {
-    const renderer = new marked.Renderer();
-    renderer.link = (href, title, text) => `<a target="_blank" href="${href}" title="${title}">${text}</a>`;
     marked.setOptions({
-      renderer,
+      renderer: this.createRenderer(),
       highlight: (code) => {
         return highlight.highlightAuto(code).value;
       }
@@ -30,14 +28,50 @@ export default {
   },
   computed: {
     markedText() {
-      let text = emoji.emojify(this.text);
-      text = text.replace(/\[x\]/gi, '<input type="checkbox" disabled checked>');
-      text = text.replace(/\[ \]/gi, '<input type="checkbox" disabled>');
-      return marked(text);
+      return marked(this.text);
+    }
+  },
+  methods: {
+    createRenderer() {
+      const renderer = new marked.Renderer();
+      renderer.list = (body, ordered) => {
+        // GFMのCheckbox記法に対応するため拡張
+        let html;
+        if (ordered === true) {
+          html = `<ol>${body}</ol>`;
+        } else if (body.includes('type="checkbox"')) {
+          html = `<ul class="check-list">${body}</ul>`
+        } else {
+          html = `<ul>${body}</ul>`;
+        }
+        return html;
+      };
+      renderer.listitem = (text) => {
+        // GFMのCheckbox記法に対応するため拡張
+        text = text.replace(/\[x\]/gi, '<input type="checkbox" disabled checked>');
+        text = text.replace(/\[ \]/gi, '<input type="checkbox" disabled>');
+        return `<li>${text}</li>`;
+      };
+      renderer.text = (html) => {
+        // 絵文字に対応するため拡張
+        return emoji.emojify(html);
+      };
+      renderer.link = (href, title, text) => {
+        // 新規タブでブラウザ起動するため拡張
+        return `<a target="_blank" href="${href}" title="${title}">${text}</a>`
+      };
+      return renderer;
     }
   }
 }
 </script>
+
+<style>
+  .markdown-body .check-list {
+    padding: 0;
+    list-style: none;
+  }
+</style>
 
 <style scoped>
   .preview-area {
