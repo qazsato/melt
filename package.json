@@ -21,6 +21,8 @@
     "electron-packager": "10.1.1",
     "eslint": "4.16.0",
     "file-loader": "1.1.6",
+    "node-sass": "4.7.2",
+    "sass-loader": "6.0.6",
     "style-loader": "0.19.1",
     "uglifyjs-webpack-plugin": "1.1.6",
     "vue-loader": "13.7.0",

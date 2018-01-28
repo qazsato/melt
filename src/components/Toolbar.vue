@@ -55,7 +55,7 @@
         <i class="icon-table"></i>
       </button>
     </el-tooltip>
-    <el-radio-group @change="changeViewMode" v-model="mode" size="mini" fill="#00b1b3" class="checkbox-mode">
+    <el-radio-group @change="changeViewMode" v-model="mode" size="mini" class="checkbox-mode">
       <el-radio-button label="multi">A</el-radio-button>
       <el-radio-button label="editor">B</el-radio-button>
       <el-radio-button label="preview">C</el-radio-button>
@@ -118,14 +118,6 @@ export default {
   }
 }
 </script>
-
-<style>
-  .el-radio-button__inner,
-  .el-radio-button__inner:hover {
-    color: inherit;
-  }
-</style>
-
 
 <style scoped>
   #toolbar {
