@@ -7,7 +7,7 @@
           <div>{{fileName}}</div>
         </el-tooltip>
       </h1>
-      <el-input class="filter-input" placeholder="Filter keyword" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
+      <el-input class="filter-input" placeholder="Search" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
       <div class="button-area">
         <i class="icon-new_file" @click="openFileDialog"></i>
         <i class="icon-new_folder" @click="openFolderDialog"></i>
@@ -83,7 +83,14 @@ export default {
     },
     filterNode(value, data) {
       if (!value) return true;
-      return data.label.indexOf(value) !== -1;
+      value = value.toLowerCase();
+      const label = data.label.toLowerCase();
+      if(fs.statSync(data.path).isDirectory()) {
+        return label.indexOf(value) !== -1;
+      } else {
+        const text = fs.readFileSync(data.path, 'utf-8').toLowerCase();
+        return text.includes(value);
+      }
     },
     createFile() {
       console.log('file');
