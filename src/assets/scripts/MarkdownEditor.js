@@ -14,17 +14,16 @@ class MarkdownEditor extends Editor {
         Tab: (cm) => {
           const pos = this.editor.getCursor();
           let text = this.editor.getLine(pos.line);
-          // TODO Numberlistも要対応
-          if (text.trim().indexOf('- ') === 0 ||
-              text.trim().indexOf('* ') === 0 ||
-              text.trim().indexOf('+ ') === 0) {
-            text = `\t${text}`;
-            const from = {line: pos.line, ch: 0};
-            const to = {line: pos.line, ch: text.length};
-            this.insert(text, from, to);
+          if (cm.somethingSelected()) {
+            cm.indentSelection('add');
           } else {
-            const spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
-            cm.replaceSelection(spaces);
+            if (this.isBulletedList(text) || this.isNumberedList(text) || this.isCheckedList(text)) {
+              cm.execCommand('goLineStart');
+              cm.execCommand('insertTab');
+              cm.execCommand('goLineEnd');
+            } else {
+              cm.execCommand('insertTab');
+            }
           }
         }
       }
@@ -93,6 +92,43 @@ class MarkdownEditor extends Editor {
    */
   insertCheckedList() {
     this.insertList('check');
+  }
+  /**
+   * 箇条書きリストか判定します。
+   */
+  isBulletedList(lineText) {
+    const trimed = lineText.trimLeft();
+    if (trimed.indexOf('- ') === 0 ||
+        trimed.indexOf('* ') === 0 ||
+        trimed.indexOf('+ ') === 0) {
+      return true;
+    }
+    return false;
+  }
+  /**
+   * 番号付きリストか判定します。
+   */
+  isNumberedList(lineText) {
+    const trimed = lineText.trimLeft();
+    if (trimed.search(/^[0-9]+\./) !== -1) {
+      return true;
+    }
+    return false;
+  }
+  /**
+   * チェックリストか判定します。
+   */
+  isCheckedList(lineText) {
+    const trimed = lineText.trimLeft();
+    if (trimed.indexOf('- [ ]') === 0 ||
+        trimed.indexOf('* [ ]') === 0 ||
+        trimed.indexOf('+ [ ]') === 0 ||
+        trimed.indexOf('- [x]') === 0 ||
+        trimed.indexOf('* [x]') === 0 ||
+        trimed.indexOf('+ [x]') === 0) {
+      return true;
+    }
+    return false;
   }
   /**
    * テーブルを挿入します。
