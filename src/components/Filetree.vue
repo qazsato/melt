@@ -76,7 +76,10 @@ export default {
   },
   mounted() {
     this.loadTree();
-    ipcRenderer.on('focus-search', () => this.$refs.search.$refs.input.focus());
+    ipcRenderer.on('focus-search', () => {
+      // サイドバー非表示時は検索ボックスのフォーカスが効かないためタイミングをずらす
+      setTimeout(() => this.$refs.search.$refs.input.focus());
+    });
   },
   methods: {
     handleNodeClick(data) {
