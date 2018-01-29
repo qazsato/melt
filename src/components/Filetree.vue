@@ -120,12 +120,11 @@ export default {
 <style>
   .el-tree-node:focus>.el-tree-node__content,
   .el-tree-node__content:hover {
-    background-color: inherit;
+    background-color: rgba(0, 0, 0, 0.1);
   }
 
   .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
-    background-color: inherit;
-    opacity: 0.4;
+    background-color: rgba(0, 0, 0, 0.2);
   }
 </style>
 
