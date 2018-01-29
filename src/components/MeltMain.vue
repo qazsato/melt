@@ -1,5 +1,5 @@
 <template>
-  <div id="screen">
+  <div id="screen" :class="{'visible-aside': visibleAside}">
     <aside>
       <filetree></filetree>
     </aside>
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import {ipcRenderer} from 'electron';
 import toolbar from './Toolbar.vue';
 import filetree from './Filetree.vue';
 import editor from './Editor.vue';
@@ -28,13 +29,18 @@ export default {
   },
   data() {
     return {
-      text: ''
+      text: '',
+      visibleAside: true
     };
   },
   methods: {
     changeText(text) {
       this.text = text;
     }
+  },
+  mounted() {
+    ipcRenderer.on('toggle-aside', () => this.visibleAside = !this.visibleAside);
+    ipcRenderer.on('focus-search', () => this.visibleAside = true);
   }
 }
 </script>
@@ -45,13 +51,22 @@ export default {
     height: 100%;
   }
 
-  aside {
+  #screen aside {
+    display: none;
     width: 250px;
   }
 
-  main {
-    width: calc(100% - 250px);
+  #screen main {
+    width: 100%;
     height: 100%;
+  }
+
+  #screen.visible-aside aside {
+    display: block;
+  }
+
+  #screen.visible-aside main {
+    width: calc(100% - 250px);
   }
 
   main > section {
