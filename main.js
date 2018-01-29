@@ -91,7 +91,14 @@ function createMenu() {
         {role: 'zoomin'},
         {role: 'zoomout'},
         {type: 'separator'},
-        {role: 'togglefullscreen'}
+        {role: 'togglefullscreen'},
+        {
+          label: 'Focus Search',
+          accelerator: 'Shift+CmdOrCtrl+F',
+          click() {
+            mainWindow.webContents.send('focus-search');
+          }
+        }
       ]
     },
     {

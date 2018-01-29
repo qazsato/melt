@@ -7,7 +7,7 @@
           <div>{{fileName}}</div>
         </el-tooltip>
       </h1>
-      <el-input class="filter-input" placeholder="Search" v-model="filterText" prefix-icon="el-icon-search" size="small"></el-input>
+      <el-input class="filter-input" placeholder="Search" v-model="filterText" prefix-icon="el-icon-search" size="small" ref="search"></el-input>
       <div class="button-area">
         <i class="icon-new_file" @click="openFileDialog"></i>
         <i class="icon-new_folder" @click="openFolderDialog"></i>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import {ipcRenderer} from 'electron';
 import settings from '../../config/settings.json';
 import FileUtil from '../assets/scripts/FileUtil';
 import fs from 'fs';
@@ -75,6 +76,7 @@ export default {
   },
   mounted() {
     this.loadTree();
+    ipcRenderer.on('focus-search', () => this.$refs.search.$refs.input.focus());
   },
   methods: {
     handleNodeClick(data) {
