@@ -4,10 +4,10 @@
     <el-dialog title="Hyperlink" :visible.sync="this.$store.state.linkDialogVisible" :before-close="closeLinkDialog" width="400px">
       <el-form label-width="45px">
         <el-form-item label="Title">
-          <el-input placeholder="Please input" v-model="linkTitle"></el-input>
+          <el-input placeholder="Please input" v-model="linkTitle" ref="linkTitleInput"></el-input>
         </el-form-item>
         <el-form-item label="URL">
-          <el-input placeholder="Please input" v-model="linkUrl"></el-input>
+          <el-input placeholder="Please input" v-model="linkUrl" ref="linkUrlInput"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -18,10 +18,10 @@
     <el-dialog title="Image" :visible.sync="this.$store.state.imageDialogVisible" :before-close="closeImageDialog" width="400px">
        <el-form label-width="45px">
         <el-form-item label="Alt">
-          <el-input placeholder="Please input" v-model="imageAlt"></el-input>
+          <el-input placeholder="Please input" v-model="imageAlt" ref="imageAltInput"></el-input>
         </el-form-item>
         <el-form-item label="URL">
-          <el-input placeholder="Please input" v-model="imageUrl"></el-input>
+          <el-input placeholder="Please input" v-model="imageUrl" ref="imageUrlInput"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -32,7 +32,7 @@
     <el-dialog title="Table" :visible.sync="this.$store.state.tableDialogVisible" :before-close="closeTableDialog" width="400px">
        <el-form label-width="45px">
         <el-form-item label="Row">
-          <el-input-number v-model="tableRow" :min="1" :max="10"></el-input-number>
+          <el-input-number v-model="tableRow" :min="1" :max="10" ref="tableRowInput"></el-input-number>
         </el-form-item>
         <el-form-item label="Col">
           <el-input-number v-model="tableColumn" :min="1" :max="10"></el-input-number>
@@ -115,11 +115,17 @@ export default {
     },
     openLinkDialog() {
       const text = this.editor.getSelection();
-      try {
-        new URL(text);
-        this.linkUrl = text;
-      } catch(e) {
-        this.linkTitle = text;
+      if (text) {
+        try {
+          new URL(text);
+          this.linkUrl = text;
+          setTimeout(() => this.$refs.linkTitleInput.$refs.input.focus());
+        } catch(e) {
+          this.linkTitle = text;
+          setTimeout(() => this.$refs.linkUrlInput.$refs.input.focus());
+        }
+      } else {
+        setTimeout(() => this.$refs.linkTitleInput.$refs.input.focus());
       }
       this.$store.commit('visualizeLinkDialog', true);
     },
@@ -131,11 +137,17 @@ export default {
     },
     openImageDialog() {
       const text = this.editor.getSelection();
-      try {
-        new URL(text);
-        this.imageUrl = text;
-      } catch(e) {
-        this.imageAlt = text;
+      if (text) {
+        try {
+          new URL(text);
+          this.imageUrl = text;
+          setTimeout(() => this.$refs.imageAltInput.$refs.input.focus());
+        } catch(e) {
+          this.imageAlt = text;
+          setTimeout(() => this.$refs.imageUrlInput.$refs.input.focus());
+        }
+      } else {
+        setTimeout(() => this.$refs.imageAltInput.$refs.input.focus());
       }
       this.$store.commit('visualizeImageDialog', true);
     },
@@ -146,6 +158,7 @@ export default {
       this.$store.commit('visualizeImageDialog', false);
     },
     openTableDialog() {
+      setTimeout(() => this.$refs.tableRowInput.$refs.input.focus());
       this.$store.commit('visualizeTableDialog', true);
     },
     closeTableDialog() {
