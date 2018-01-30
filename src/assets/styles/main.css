@@ -6,7 +6,8 @@ html {
 body {
   height: 100%;
   margin: 0;
-  font-family: "Source Code Pro", "Source Sans Pro", Helvetica, Arial, 游ゴシック体, YuGothic, メイリオ, Meiryo, sans-serif;
+  font-family: -apple-system, 'BlinkMacSystemFont',  Sans-Serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 #app {
