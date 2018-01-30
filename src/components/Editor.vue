@@ -1,7 +1,7 @@
 <template>
   <div class="editor-area" v-show="this.$store.state.mode === 'editor' || this.$store.state.mode === 'multi'">
     <textarea id="editor"></textarea>
-    <el-dialog title="Hyperlink" :visible.sync="this.$store.state.linkDialogVisible" :before-close="closeLinkDialog" width="400px">
+    <el-dialog title="Hyperlink" :visible.sync="this.$store.state.linkDialogVisible" @open="openLinkDialog" :before-close="closeLinkDialog" width="400px">
       <el-form label-width="45px">
         <el-form-item label="Title">
           <el-input placeholder="Please input" v-model="linkTitle" ref="linkTitleInput"></el-input>
@@ -15,7 +15,7 @@
         <el-button @click="closeLinkDialog">Cancel</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="Image" :visible.sync="this.$store.state.imageDialogVisible" :before-close="closeImageDialog" width="400px">
+    <el-dialog title="Image" :visible.sync="this.$store.state.imageDialogVisible" @open="openImageDialog" :before-close="closeImageDialog" width="400px">
        <el-form label-width="45px">
         <el-form-item label="Alt">
           <el-input placeholder="Please input" v-model="imageAlt" ref="imageAltInput"></el-input>
@@ -29,7 +29,7 @@
         <el-button @click="closeImageDialog">Cancel</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="Table" :visible.sync="this.$store.state.tableDialogVisible" :before-close="closeTableDialog" width="400px">
+    <el-dialog title="Table" :visible.sync="this.$store.state.tableDialogVisible" @open="openTableDialog" :before-close="closeTableDialog" width="400px">
        <el-form label-width="45px">
         <el-form-item label="Row">
           <el-input-number v-model="tableRow" :min="1" :max="10" ref="tableRowInput"></el-input-number>
