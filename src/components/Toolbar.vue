@@ -20,37 +20,37 @@
         <i class="icon-italic"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Strikethrough (⌘+Shift+X)" :open-delay="500">
+    <el-tooltip content="Strikethrough (⇧⌘X)" :open-delay="500">
       <button @click="insertStrikethrough" :disabled="mode === 'preview'">
         <i class="icon-strikethrough"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Code (⌘+K)" :open-delay="500">
+    <el-tooltip content="Code (⌘K)" :open-delay="500">
       <button @click="insertCode" :disabled="mode === 'preview'">
         <i class="icon-code"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Quote (⌘+U)" :open-delay="500">
+    <el-tooltip content="Quote (⌘U)" :open-delay="500">
       <button @click="insertQuote" :disabled="mode === 'preview'">
         <i class="icon-quote"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Bulleted List (⌘+O)" :open-delay="500">
+    <el-tooltip content="Bulleted List (⇧⌘O)" :open-delay="500">
       <button @click="insertBulletedList" :disabled="mode === 'preview'">
         <i class="icon-list_bulleted"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Numbered List (⌘+N)" :open-delay="500">
+    <el-tooltip content="Numbered List (⇧⌘N)" :open-delay="500">
       <button @click="insertNumberedList" :disabled="mode === 'preview'">
         <i class="icon-list_numbered"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Checked List (⌘+Y)" :open-delay="500">
+    <el-tooltip content="Checked List (⇧⌘Y)" :open-delay="500">
       <button @click="insertCheckedList" :disabled="mode === 'preview'">
         <i class="icon-list_checked"></i>
       </button>
     </el-tooltip>
-    <el-tooltip content="Table (⌘+T)" :open-delay="500">
+    <el-tooltip content="Table (⌘T)" :open-delay="500">
       <button @click="insertTable" :disabled="mode === 'preview'">
         <i class="icon-table"></i>
       </button>

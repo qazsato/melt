@@ -8,14 +8,14 @@ My Markdown Editor.
 
 | Type			| Command 	|
 |:--------------|:----------|
-| HyperLink		| ⌘+L      	| 
-| Image			| ⌘+P      	| 
-| Bold      	| ⌘+B       | 
-| Italic    	| ⌘+I       | 
-| Strikethrough | ⌘+Shift+X	| 
-| Code    		| ⌘+K		| 
-| Quote    		| ⌘+U		| 
-| Bulleted List | ⌘+O		| 
-| Numbered List | ⌘+N		| 
-| Checked List 	| ⌘+Y		| 
-| Table        	| ⌘+T		| 
+| HyperLink		| ⌘L      	| 
+| Image			| ⌘P      	| 
+| Bold      	| ⌘B       | 
+| Italic    	| ⌘I       | 
+| Strikethrough | ⇧⌘X	| 
+| Code    		| ⌘K		| 
+| Quote    		| ⌘U		| 
+| Bulleted List | ⇧⌘O		| 
+| Numbered List | ⇧⌘N		| 
+| Checked List 	| ⇧⌘Y		| 
+| Table        	| ⌘T		| 

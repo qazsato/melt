@@ -92,9 +92,9 @@ export default {
       'Shift-Cmd-X': () => this.editor.insertStrikethrough(),
       'Cmd-K': () => this.editor.insertCode(),
       'Cmd-U': () => this.editor.insertQuote(),
-      'Cmd-O': () => this.editor.insertBulletedList(),
-      'Cmd-N': () => this.editor.insertNumberedList(),
-      'Cmd-Y': () => this.editor.insertCheckedList(),
+      'Shift-Cmd-O': () => this.editor.insertBulletedList(),
+      'Shift-Cmd-N': () => this.editor.insertNumberedList(),
+      'Shift-Cmd-Y': () => this.editor.insertCheckedList(),
       'Cmd-T': () => this.openTableDialog(),
       'Cmd-S': () => this.saveFile()
     });
