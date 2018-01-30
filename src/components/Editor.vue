@@ -102,11 +102,11 @@ export default {
   },
   methods: {
     insertLink() {
-      this.editor.insert(`[${this.linkTitle}](${this.linkUrl})`);
+      this.editor.insertLink(this.linkTitle, this.linkUrl);
       this.closeLinkDialog();
     },
     insertImage() {
-      this.editor.insert(`![${this.imageAlt}](${this.imageUrl})`);
+      this.editor.insertImage(this.imageAlt, this.imageUrl);
       this.closeImageDialog();
     },
     insertTable() {

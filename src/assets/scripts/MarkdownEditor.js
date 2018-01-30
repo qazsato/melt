@@ -31,6 +31,22 @@ class MarkdownEditor extends Editor {
     super(id, option);
   }
   /**
+   * リンクを挿入します。
+   * @param {string} title
+   * @param {string} url
+   */
+  insertLink(title = '', url = '') {
+    this.editor.replaceSelection(`[${title}](${url})`);
+  }
+  /**
+   * 画像を挿入します。
+   * @param {string} alt
+   * @param {string} url
+   */
+  insertImage(alt = '', url = '') {
+    this.editor.replaceSelection(`![${alt}](${url})`);
+  }
+  /**
    * 太字を挿入します。
    */
   insertBold() {
