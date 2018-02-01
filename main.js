@@ -69,6 +69,18 @@ app.on('activate', function () {
 function createMenu() {
   const template = [
     {
+      label: 'File',
+      submenu: [
+        {
+          label: 'New Post',
+          accelerator: 'CmdOrCtrl+N',
+          click() {
+            mainWindow.webContents.send('new-post');
+          }
+        }
+      ]
+    },
+    {
       label: 'Edit',
       submenu: [
         {role: 'undo'},

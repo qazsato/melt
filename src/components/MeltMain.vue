@@ -39,6 +39,9 @@ export default {
     }
   },
   mounted() {
+    ipcRenderer.on('new-post', () => {
+      console.log('new-post');
+    });
     ipcRenderer.on('toggle-aside', () => this.visibleAside = !this.visibleAside);
     ipcRenderer.on('focus-search', () => this.visibleAside = true);
   }
