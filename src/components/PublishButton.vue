@@ -1,7 +1,7 @@
 <template>
-  <button @click="uploadText">
-    <i class="icon-upload"></i>
-  </button>
+  <el-button type="primary" @click="uploadText">
+     <i class="icon-upload"></i>
+  </el-button>
 </template>
 
 <script>
@@ -22,16 +22,9 @@ export default {
     height: 60px;
     width: 60px;
     padding: 0;
-    border: none;
     border-radius: 50%;
-    color: #fff;
-    background-color: #00b1b3;
     box-shadow: 0px 0px 26px -8px rgba(0, 0, 0, 0.7);
     cursor: pointer;
-  }
-
-  button:hover {
-    background-color: #007f80;
   }
 
   .icon-upload {
