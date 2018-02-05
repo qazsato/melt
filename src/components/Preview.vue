@@ -21,8 +21,11 @@ export default {
   mounted() {
     marked.setOptions({
       renderer: this.createRenderer(),
-      highlight: (code) => {
-        return highlight.highlightAuto(code).value;
+      highlight: (code, lang) => {
+        if (lang) {
+          return highlight.highlightAuto(code, [lang]).value;
+        }
+        return code;
       }
     });
   },
