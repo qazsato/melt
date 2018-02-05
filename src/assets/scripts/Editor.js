@@ -1,6 +1,8 @@
 class Editor {
   constructor(id, option) {
     const CodeMirror = require('codemirror');
+    CodeMirror.keyMap.default['Tab'] = 'indentMore';
+    CodeMirror.keyMap.default['Shift-Tab'] = 'indentLess';
     this.editor = CodeMirror.fromTextArea(document.getElementById(id), option);
     this.focused = false;
     this.editor.on('focus', () => this.focused = true);
