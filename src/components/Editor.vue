@@ -4,10 +4,10 @@
     <el-dialog title="Hyperlink" :visible.sync="this.$store.state.linkDialogVisible" @open="openLinkDialog" :before-close="closeLinkDialog" width="400px">
       <el-form label-width="45px">
         <el-form-item label="Title">
-          <el-input placeholder="Please input" v-model="linkTitle" ref="linkTitleInput"></el-input>
+          <el-input @keyup.enter.native="insertLink" placeholder="Please input" v-model="linkTitle" ref="linkTitleInput"></el-input>
         </el-form-item>
         <el-form-item label="URL">
-          <el-input placeholder="Please input" v-model="linkUrl" ref="linkUrlInput"></el-input>
+          <el-input @keyup.enter.native="insertLink" placeholder="Please input" v-model="linkUrl" ref="linkUrlInput"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -18,10 +18,10 @@
     <el-dialog title="Image" :visible.sync="this.$store.state.imageDialogVisible" @open="openImageDialog" :before-close="closeImageDialog" width="400px">
        <el-form label-width="45px">
         <el-form-item label="Alt">
-          <el-input placeholder="Please input" v-model="imageAlt" ref="imageAltInput"></el-input>
+          <el-input @keyup.enter.native="insertImage" placeholder="Please input" v-model="imageAlt" ref="imageAltInput"></el-input>
         </el-form-item>
         <el-form-item label="URL">
-          <el-input placeholder="Please input" v-model="imageUrl" ref="imageUrlInput"></el-input>
+          <el-input @keyup.enter.native="insertImage" placeholder="Please input" v-model="imageUrl" ref="imageUrlInput"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -32,10 +32,10 @@
     <el-dialog title="Table" :visible.sync="this.$store.state.tableDialogVisible" @open="openTableDialog" :before-close="closeTableDialog" width="400px">
        <el-form label-width="45px">
         <el-form-item label="Row">
-          <el-input-number v-model="tableRow" :min="1" :max="10" ref="tableRowInput"></el-input-number>
+          <el-input-number @keyup.enter.native="insertTable" v-model="tableRow" :min="1" :max="10" ref="tableRowInput"></el-input-number>
         </el-form-item>
         <el-form-item label="Col">
-          <el-input-number v-model="tableColumn" :min="1" :max="10"></el-input-number>
+          <el-input-number @keyup.enter.native="insertTable" v-model="tableColumn" :min="1" :max="10"></el-input-number>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
