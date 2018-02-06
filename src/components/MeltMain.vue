@@ -5,7 +5,8 @@
     </aside>
     <main>
       <toolbar></toolbar>
-      <section>
+      <tags></tags>
+      <section class="note">
         <editor @changeText="changeText"></editor>
         <preview :text="text"></preview>
       </section>
@@ -19,13 +20,15 @@ import toolbar from './Toolbar.vue';
 import filetree from './Filetree.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
+import tags from './Tags.vue';
 
 export default {
   components: {
     toolbar,
     filetree,
     editor,
-    preview
+    preview,
+    tags
   },
   data() {
     return {
@@ -72,8 +75,8 @@ export default {
     width: calc(100% - 250px);
   }
 
-  main > section {
+  .note {
     display: flex;
-    height: calc(100% - 50px);
+    height: calc(100% - 90px);
   }
 </style>
