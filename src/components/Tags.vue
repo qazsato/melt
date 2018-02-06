@@ -57,10 +57,11 @@
 <style scoped>
   section {
     height: 40px;
-    margin: 0 10px;
+    padding: 0 10px;
     display: flex;
     align-items: center;
     overflow-x: auto;
+    border-bottom: 1px solid #ebeef5;
   }
 </style>
 
