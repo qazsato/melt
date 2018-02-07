@@ -133,7 +133,7 @@ export default {
   }
 
   button {
-    margin: 5px 3px;
+    margin: 5px 0;
     padding: 0;
     border: none;
     color: #ddd;
