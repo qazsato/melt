@@ -5,7 +5,7 @@
       v-for="tag in dynamicTags"
       closable
       size="small"
-      :disable-transitions="false"
+      :disable-transitions="true"
       @close="handleClose(tag)">
       {{tag}}
     </el-tag>
@@ -25,55 +25,70 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        dynamicTags: [],
-        inputVisible: false,
-        inputValue: ''
+import Note from '../assets/scripts/Note';
+
+export default {
+  data() {
+    return {
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: ''
+    };
+  },
+  computed: {
+    file() {
+      return this.$store.state.currentFile;
+    }
+  },
+  watch: {
+    file(file) {
+      const tags = Note.readTag(file);
+      this.dynamicTags = tags;
+    }
+  },
+  methods: {
+    querySearch(queryString, cb) {
+      var links = [
+        { "value": "vue", "link": "https://github.com/vuejs/vue" },
+        { "value": "element", "link": "https://github.com/ElemeFE/element" },
+        { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
+        { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
+        { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
+        { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
+        { "value": "babel", "link": "https://github.com/babel/babel" }
+      ];
+      var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (link) => {
+        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    methods: {
-      querySearch(queryString, cb) {
-        var links = [
-          { "value": "vue", "link": "https://github.com/vuejs/vue" },
-          { "value": "element", "link": "https://github.com/ElemeFE/element" },
-          { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
-          { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
-          { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
-          { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
-          { "value": "babel", "link": "https://github.com/babel/babel" }
-        ];
-        var results = queryString ? links.filter(this.createFilter(queryString)) : links;
-        cb(results);
-      },
-      createFilter(queryString) {
-        return (link) => {
-          return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
-      },
-      handleClose(tag) {
-        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-      },
-      showInput() {
-        this.inputVisible = true;
-        this.$nextTick(_ => {
-          this.$refs.saveTagInput.$refs.input.focus();
-        });
-      },
-      handleInput(item) {
-        let inputValue = item.value || this.inputValue;
-        if (inputValue && !this.dynamicTags.includes(inputValue)) {
-          this.dynamicTags.push(inputValue);
-        }
-        this.inputVisible = false;
-        this.inputValue = '';
-      },
-      blurInput() {
-        setTimeout(() => this.inputVisible = false, 100);
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      Note.removeTag(this.file, tag);
+    },
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInput(item) {
+      let inputValue = item.value || this.inputValue;
+      if (inputValue && !this.dynamicTags.includes(inputValue)) {
+        this.dynamicTags.push(inputValue);
+        Note.registTag(this.file, inputValue);
       }
+      this.inputVisible = false;
+      this.inputValue = '';
+    },
+    blurInput() {
+      setTimeout(() => this.inputVisible = false, 500);
     }
   }
+}
 </script>
 
 <style scoped>
