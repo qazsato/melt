@@ -21,6 +21,7 @@ import filetree from './Filetree.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
 import tags from './Tags.vue';
+import Note from '../assets/scripts/Note';
 
 export default {
   components: {
@@ -42,9 +43,7 @@ export default {
     }
   },
   mounted() {
-    ipcRenderer.on('new-post', () => {
-      console.log('new-post');
-    });
+    ipcRenderer.on('new-post', () => Note.create());
     ipcRenderer.on('toggle-aside', () => this.visibleAside = !this.visibleAside);
     ipcRenderer.on('focus-search', () => this.visibleAside = true);
   }
