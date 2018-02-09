@@ -4,6 +4,7 @@
       :key="tag"
       v-for="tag in dynamicTags"
       closable
+      type="info"
       size="small"
       :disable-transitions="true"
       @close="handleClose(tag)">
@@ -46,18 +47,15 @@ export default {
       this.dynamicTags = tags;
     }
   },
+  mounted() {
+    const tags = Note.readAllTags();
+    this.links = tags.map((t) => {
+      return {value: t}
+    });
+  },
   methods: {
     querySearch(queryString, cb) {
-      var links = [
-        { "value": "vue", "link": "https://github.com/vuejs/vue" },
-        { "value": "element", "link": "https://github.com/ElemeFE/element" },
-        { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
-        { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
-        { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
-        { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
-        { "value": "babel", "link": "https://github.com/babel/babel" }
-      ];
-      var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      const results = queryString ? this.links.filter(this.createFilter(queryString)) : this.links;
       cb(results);
     },
     createFilter(queryString) {

@@ -19,6 +19,15 @@ class Note {
     const text = fs.readFileSync(file, 'utf-8');
     return JSON.parse(text).tags;
   }
+  static readAllTags() {
+    let tags = [];
+    const files = fs.readdirSync(settings.directory);
+    for (const file of files) {
+      tags = tags.concat(this.readTag(`${settings.directory}/${file}`));
+    }
+    tags = tags.filter((element, index, array) => array.indexOf(element) === index);
+    return tags;
+  }
   static readContent(file) {
     const text = fs.readFileSync(file, 'utf-8');
     return JSON.parse(text).content;
