@@ -54,6 +54,7 @@ import settings from '../../config/settings.json';
 import FileUtil from '../assets/scripts/FileUtil';
 import fs from 'fs';
 import path from 'path';
+import Note from '../assets/scripts/Note';
 
 export default {
   data() {
@@ -93,8 +94,8 @@ export default {
       if(fs.statSync(data.path).isDirectory()) {
         return label.indexOf(value) !== -1;
       } else {
-        const text = fs.readFileSync(data.path, 'utf-8').toLowerCase();
-        return text.includes(value);
+        const content = Note.readContent(data.path);
+        return content.includes(value);
       }
     },
     createFile() {
