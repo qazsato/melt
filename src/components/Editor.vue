@@ -58,6 +58,7 @@ import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
 import Editor from '../assets/scripts/MarkdownEditor';
+import Note from '../assets/scripts/Note';
 export default {
   data() {
     return {
@@ -77,8 +78,8 @@ export default {
   },
   watch: {
     file(file) {
-      const text = fs.readFileSync(file, 'utf-8');
-      this.editor.editor.getDoc().setValue(text);
+      const content = Note.readContent(file);
+      this.editor.editor.getDoc().setValue(content);
     }
   },
   mounted() {
@@ -168,7 +169,9 @@ export default {
       this.$store.commit('visualizeTableDialog', false);
     },
     saveFile() {
-      fs.writeFileSync(this.$store.state.currentFile, this.editor.getText());
+      const file = this.$store.state.currentFile;
+      const content = this.editor.getText();
+      Note.updateContent(file, content);
     }
   }
 }
