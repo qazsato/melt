@@ -17,17 +17,17 @@
   },
   "devDependencies": {
     "css-loader": "0.28.9",
-    "electron": "1.7.12",
-    "electron-packager": "10.1.2",
-    "eslint": "4.16.0",
+    "electron": "1.8.2",
+    "electron-packager": "11.0.0",
+    "eslint": "4.17.0",
     "file-loader": "1.1.6",
     "node-sass": "4.7.2",
     "sass-loader": "6.0.6",
     "style-loader": "0.20.1",
     "uglifyjs-webpack-plugin": "1.1.8",
-    "vue-loader": "14.0.3",
+    "vue-loader": "14.1.1",
     "vue-template-compiler": "2.5.13",
-    "webpack": "3.10.0"
+    "webpack": "3.11.0"
   },
   "scripts": {
     "start": "electron .",
