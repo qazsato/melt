@@ -5,6 +5,7 @@
   "description": "A markdown editor in which the brain melts.",
   "main": "main.js",
   "dependencies": {
+    "axios": "0.17.1",
     "codemirror": "5.34.0",
     "element-ui": "2.1.0",
     "github-markdown-css": "2.10.0",
