@@ -78,7 +78,7 @@ export default {
   },
   watch: {
     file(file) {
-      const content = Note.readContent(file);
+      const content = this.$store.state.note.readContent();
       this.editor.editor.getDoc().setValue(content);
     }
   },
@@ -171,7 +171,7 @@ export default {
     saveFile() {
       const file = this.$store.state.currentFile;
       const content = this.editor.getText();
-      Note.updateContent(file, content);
+      this.$store.state.note.updateContent(content);
     }
   }
 }

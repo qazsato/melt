@@ -43,8 +43,7 @@ export default {
   },
   watch: {
     file(file) {
-      const tags = Note.readTag(file);
-      this.dynamicTags = tags;
+      this.dynamicTags = this.$store.state.note.readTag();
     }
   },
   mounted() {
@@ -64,8 +63,7 @@ export default {
       };
     },
     handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-      Note.removeTag(this.file, tag);
+      this.$store.state.note.removeTag(tag);
     },
     showInput() {
       this.inputVisible = true;
@@ -74,10 +72,10 @@ export default {
       });
     },
     handleInput(item) {
+      const tags = this.$store.state.note.readTag();
       let inputValue = item.value || this.inputValue;
-      if (inputValue && !this.dynamicTags.includes(inputValue)) {
-        this.dynamicTags.push(inputValue);
-        Note.registTag(this.file, inputValue);
+      if (inputValue && !tags.includes(inputValue)) {
+        this.$store.state.note.registTag(inputValue);
       }
       this.inputVisible = false;
       this.inputValue = '';

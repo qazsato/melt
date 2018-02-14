@@ -1,63 +1,70 @@
-
 const settings = require('../../../config/settings.json');
 const fs = require('fs');
 
 class Note {
-  static create() {
-    const now = new Date();
-    const file = `${settings.directory}/${now.toISOString()}.json`;
-    const data = {
-      createdAt: now.toISOString(),
+  constructor(path) {
+    if (path) {
+      this.path = path;
+      this.read();
+    } else {
+      this.path = `${settings.directory}/${new Date().toISOString()}.json`;
+      this.create();
+    }
+  }
+  create() {
+    this.data = this.createEmptyData();
+    this.data.createdAt = new Date().toISOString();
+    fs.writeFileSync(this.path, JSON.stringify(this.data));
+  }
+  read() {
+    const f = fs.readFileSync(this.path, 'utf-8');
+    this.data = JSON.parse(f);
+  }
+  update() {
+    this.data.updatedAt = new Date().toISOString();
+    fs.writeFileSync(this.path, JSON.stringify(this.data));
+  }
+  delete() {
+    // TODO
+    this.data = {};
+    fs.unlinkSync(this.path);
+  }
+  createEmptyData() {
+    return {
+      createdAt: '',
       updatedAt: '',
       title: '',
       content: '',
       tags: []
-    };
-    fs.writeFileSync(file, JSON.stringify(data));
+    }
   }
-  static readTag(file) {
-    const text = fs.readFileSync(file, 'utf-8');
-    return JSON.parse(text).tags;
+  readTag() {
+    return this.data.tags;
+  }
+  readContent() {
+    return this.data.content;
+  }
+  registTag(tag) {
+    this.data.tags.push(tag);
+    this.update();
+  }
+  removeTag(tag) {
+    this.data.tags.splice(this.data.tags.indexOf(tag), 1);
+    this.update();
+  }
+  updateContent(content) {
+    this.data.content = content;
+    this.update();
   }
   static readAllTags() {
     let tags = [];
     const files = fs.readdirSync(settings.directory);
     for (const file of files) {
-      tags = tags.concat(this.readTag(`${settings.directory}/${file}`));
+      const note = new Note(`${settings.directory}/${file}`);
+      tags = tags.concat(note.readTag());
     }
     tags = tags.filter((element, index, array) => array.indexOf(element) === index);
     return tags;
-  }
-  static readContent(file) {
-    const text = fs.readFileSync(file, 'utf-8');
-    return JSON.parse(text).content;
-  }
-  static registTag(file, tag) {
-    const now = new Date();
-    const text = fs.readFileSync(file, 'utf-8');
-    const data = JSON.parse(text);
-    data.tags.push(tag);
-    data.updatedAt = now.toISOString();
-    fs.writeFileSync(file, JSON.stringify(data));
-  }
-  static removeTag(file, tag) {
-    const now = new Date();
-    const text = fs.readFileSync(file, 'utf-8');
-    const data = JSON.parse(text);
-    data.tags.splice(data.tags.indexOf(tag), 1);
-    data.updatedAt = now.toISOString();
-    fs.writeFileSync(file, JSON.stringify(data));
-  }
-  static updateContent(file, content) {
-    const now = new Date();
-    const text = fs.readFileSync(file, 'utf-8');
-    const data = JSON.parse(text);
-    data.content = content;
-    data.updatedAt = now.toISOString();
-    fs.writeFileSync(file, JSON.stringify(data));
-  }
-  static delete() {
-
   }
 }
 

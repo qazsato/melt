@@ -43,7 +43,7 @@ export default {
     }
   },
   mounted() {
-    ipcRenderer.on('new-post', () => Note.create());
+    ipcRenderer.on('new-post', () => new Note());
     ipcRenderer.on('toggle-aside', () => this.visibleAside = !this.visibleAside);
     ipcRenderer.on('focus-search', () => this.visibleAside = true);
   }

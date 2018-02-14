@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import Note from '../assets/scripts/Note';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    note: null,
     currentFile: 'Untitled',
     mode: 'multi',
     editor: null,
@@ -15,6 +17,7 @@ const store = new Vuex.Store({
   mutations: {
     changeCurrentFile(state, file) {
       state.currentFile = file;
+      state.note = new Note(file);
     },
     changeMode(state, mode) {
       state.mode = mode;

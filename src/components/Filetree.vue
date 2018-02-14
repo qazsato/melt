@@ -61,7 +61,8 @@ export default {
       if(fs.statSync(data.path).isDirectory()) {
         return label.indexOf(value) !== -1;
       } else {
-        const content = Note.readContent(data.path);
+        const note = new Note(data.path);
+        const content = note.readContent();
         return content.includes(value);
       }
     }
