@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import fs from 'fs';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/base16-light.css';
 import '../assets/styles/MarkdownEditor.css';
