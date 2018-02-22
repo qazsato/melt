@@ -187,12 +187,10 @@ export default {
     flex: 1;
     min-width: 50%;
     height: 100%;
-    background-color: #fafafa;
   }
 
   #editor {
     width: 100%;
     height: 100%;
-    background-color: #fafafa;
   }
 </style>
