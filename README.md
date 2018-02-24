@@ -19,3 +19,4 @@ My Markdown Editor.
 | Numbered List | ⇧⌘N		| 
 | Checked List 	| ⇧⌘Y		| 
 | Table        	| ⌘T		| 
+| New Post      | ⌘N		| 
