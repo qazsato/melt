@@ -1,8 +1,7 @@
 const path = require('path');
-const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
+  mode: process.env.NODE_ENV,
   target: "electron-main",
   entry: {
     main: './src/main.js'
@@ -32,21 +31,11 @@ module.exports = {
       }
     ]
   },
-  devtool: 'eval-source-map',
+  devtool: this.mode === 'production' ? false : 'eval-source-map',
   resolve: {
     extensions: ['.js'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
     }
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: `"${process.env.NODE_ENV}"`
-      }
-    }),
-    new UglifyJsPlugin({
-      sourceMap: process.env.NODE_ENV !== 'production'
-    })
-  ]
+  }
 };
