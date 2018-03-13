@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/base16-light.css';
 import '../assets/styles/MarkdownEditor.css';
@@ -56,6 +57,7 @@ import 'codemirror/addon/search/search.js';
 import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
+import settings from '../../config/settings.json';
 import Editor from '../assets/scripts/MarkdownEditor';
 import Note from '../assets/scripts/Note';
 export default {
@@ -119,6 +121,12 @@ export default {
         try {
           new URL(text);
           this.linkUrl = text;
+          const url = `${settings.api}/web/title?url=${this.linkUrl}`;
+          axios.get(url).then((res) => {
+            if (this.linkTitle === '' && this.$store.state.linkDialogVisible === true) {
+              this.linkTitle = res.data.title;
+            }
+          });
           setTimeout(() => this.$refs.linkTitleInput.$refs.input.focus());
         } catch(e) {
           this.linkTitle = text;
@@ -177,20 +185,20 @@ export default {
 </script>
 
 <style>
-  .el-dialog__body {
-    padding: 20px 20px 0;
-  }
+.el-dialog__body {
+  padding: 20px 20px 0;
+}
 </style>
 
 <style scoped>
-  .editor-area {
-    flex: 1;
-    min-width: 50%;
-    height: 100%;
-  }
+.editor-area {
+  flex: 1;
+  min-width: 50%;
+  height: 100%;
+}
 
-  #editor {
-    width: 100%;
-    height: 100%;
-  }
+#editor {
+  width: 100%;
+  height: 100%;
+}
 </style>
