@@ -87,8 +87,8 @@ export default {
     this.editor = new Editor('editor');
     this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
     this.editor.addKeyMap({
-      'Cmd-L': () => this.openLinkDialog(),
-      'Cmd-P': () => this.openImageDialog(),
+      'Cmd-L': () => this.$store.commit('visualizeLinkDialog', true),
+      'Cmd-P': () => this.$store.commit('visualizeImageDialog', true),
       'Cmd-B': () => this.editor.insertBold(),
       'Cmd-I': () => this.editor.insertItalic(),
       'Shift-Cmd-X': () => this.editor.insertStrikethrough(),
@@ -97,7 +97,7 @@ export default {
       'Shift-Cmd-O': () => this.editor.insertBulletedList(),
       'Shift-Cmd-N': () => this.editor.insertNumberedList(),
       'Shift-Cmd-Y': () => this.editor.insertCheckedList(),
-      'Cmd-T': () => this.openTableDialog(),
+      'Cmd-T': () => this.$store.commit('visualizeTableDialog', true),
       'Cmd-S': () => this.saveFile()
     });
     this.$store.commit('setEditor', this.editor);
@@ -135,7 +135,6 @@ export default {
       } else {
         setTimeout(() => this.$refs.linkTitleInput.$refs.input.focus());
       }
-      this.$store.commit('visualizeLinkDialog', true);
     },
     closeLinkDialog() {
       this.linkTitle = '';
@@ -157,7 +156,6 @@ export default {
       } else {
         setTimeout(() => this.$refs.imageAltInput.$refs.input.focus());
       }
-      this.$store.commit('visualizeImageDialog', true);
     },
     closeImageDialog() {
       this.imageAlt = '';
@@ -167,7 +165,6 @@ export default {
     },
     openTableDialog() {
       setTimeout(() => this.$refs.tableRowInput.$refs.input.focus());
-      this.$store.commit('visualizeTableDialog', true);
     },
     closeTableDialog() {
       this.tableRow = 3;
