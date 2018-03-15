@@ -5,10 +5,22 @@
 </template>
 
 <script>
+import axios from 'axios';
+import settings from '../../config/settings.json';
+
 export default {
   methods: {
     uploadText() {
-      console.log('upload');
+      const content = this.$store.state.note.readContent();
+      const url = `${settings.api}/note`;
+      axios.post(url, {content})
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      console.log(content);
     }
   }
 }
