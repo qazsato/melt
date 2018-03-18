@@ -6,6 +6,7 @@
   "main": "main.js",
   "dependencies": {
     "axios": "0.18.0",
+    "clipboard": "2.0.0",
     "codemirror": "5.35.0",
     "element-ui": "2.2.0",
     "github-markdown-css": "2.10.0",
