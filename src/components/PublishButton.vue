@@ -1,7 +1,16 @@
 <template>
-  <el-button type="primary" @click="uploadText">
-     <i class="icon-upload"></i>
-  </el-button>
+  <div>
+    <el-button class="upload-btn" type="primary" @click="uploadText">
+      <i class="icon-upload"></i>
+    </el-button>
+    <el-dialog title="Note" :visible.sync="uploadDialogVisible" width="400px">
+      <el-input v-model="noteUrl"></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="openBrowser">Open</el-button>
+        <el-button @click="uploadDialogVisible = false">Cancel</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -9,25 +18,32 @@ import axios from 'axios';
 import settings from '../../config/settings.json';
 
 export default {
+  data() {
+    return {
+      uploadDialogVisible: false,
+      noteUrl: ''
+    };
+  },
   methods: {
     uploadText() {
       const content = this.$store.state.note.readContent();
       const url = `${settings.api}/note`;
       axios.post(url, {content})
         .then((res) => {
-          console.log(res);
+          this.uploadDialogVisible = true;
+          this.noteUrl = res.data.url;
         })
-        .catch((e) => {
-          console.log(e);
-        });
-      console.log(content);
+        .catch((e) => {});
+    },
+    openBrowser() {
+      window.open(this.noteUrl);
     }
   }
 }
 </script>
 
 <style scoped>
-  button {
+  .upload-btn {
     position: fixed;
     bottom: 15px;
     right: 15px;
