@@ -4,7 +4,9 @@
       <i class="icon-upload"></i>
     </el-button>
     <el-dialog title="Note" :visible.sync="uploadDialogVisible" width="400px">
-      <el-input v-model="noteUrl"></el-input>
+      <el-input id="url-input" v-model="noteUrl">
+        <el-button slot="append" icon="el-icon-document" class="copy-btn" data-clipboard-target="#url-input"></el-button>
+      </el-input>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="openBrowser">Open</el-button>
         <el-button @click="uploadDialogVisible = false">Cancel</el-button>
@@ -16,6 +18,7 @@
 <script>
 import axios from 'axios';
 import settings from '../../config/settings.json';
+import Clipboard from 'clipboard';
 
 export default {
   data() {
@@ -23,6 +26,9 @@ export default {
       uploadDialogVisible: false,
       noteUrl: ''
     };
+  },
+  mounted() {
+    new Clipboard('.copy-btn');
   },
   methods: {
     uploadText() {
