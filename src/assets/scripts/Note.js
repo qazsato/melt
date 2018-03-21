@@ -38,6 +38,9 @@ class Note {
       tags: []
     }
   }
+  readPath() {
+    return this.path;
+  }
   readTag() {
     return this.data.tags;
   }

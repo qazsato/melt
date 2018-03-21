@@ -32,9 +32,10 @@ export default {
   },
   methods: {
     uploadText() {
+      const path = this.$store.state.note.readPath();
       const content = this.$store.state.note.readContent();
       const url = `${settings.api}/note`;
-      axios.post(url, {content})
+      axios.post(url, {path, content})
         .then((res) => {
           this.uploadDialogVisible = true;
           this.noteUrl = res.data.url;
