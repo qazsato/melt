@@ -243,6 +243,16 @@ class MarkdownEditor extends Editor {
       return `- [ ] `;
     }
   }
+  /**
+   * 文書の見出し(Hタグ)を取得します。
+   */
+  getTitle() {
+    const re = /# (.+)\n/.exec(this.editor.getValue());
+    if (re === null) {
+      return '';
+    }
+    return re[1];
+  }
 }
 
 module.exports = MarkdownEditor;

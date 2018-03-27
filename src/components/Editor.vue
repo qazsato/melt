@@ -174,6 +174,8 @@ export default {
     },
     saveFile() {
       const file = this.$store.state.currentFile;
+      const title = this.editor.getTitle();
+      this.$store.state.note.updateTitle(title);
       const content = this.editor.getText();
       this.$store.state.note.updateContent(content);
     }

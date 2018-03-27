@@ -44,6 +44,9 @@ class Note {
   readTag() {
     return this.data.tags;
   }
+  readTitle() {
+    return this.data.title;
+  }
   readContent() {
     return this.data.content;
   }
@@ -53,6 +56,10 @@ class Note {
   }
   removeTag(tag) {
     this.data.tags.splice(this.data.tags.indexOf(tag), 1);
+    this.update();
+  }
+  updateTitle(title) {
+    this.data.title = title;
     this.update();
   }
   updateContent(content) {
