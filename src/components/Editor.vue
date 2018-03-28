@@ -50,7 +50,7 @@
 import axios from 'axios';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/base16-light.css';
-import '../assets/styles/MarkdownEditor.css';
+import '../assets/styles/MarkdownEditor.scss';
 import 'codemirror/mode/gfm/gfm.js';
 import 'codemirror/addon/edit/continuelist.js';
 import 'codemirror/addon/search/search.js';
