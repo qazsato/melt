@@ -48,6 +48,8 @@ export default {
       // サイドバー非表示時は検索ボックスのフォーカスが効かないためタイミングをずらす
       setTimeout(() => this.$refs.search.$refs.input.focus());
     });
+    const file = Note.getRecentPath();
+    this.$store.commit('changeCurrentFile', file);
   },
   methods: {
     handleNodeClick(data) {

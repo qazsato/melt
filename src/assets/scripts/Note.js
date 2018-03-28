@@ -1,5 +1,6 @@
 const settings = require('../../../config/settings.json');
 const fs = require('fs');
+const moment = require('moment');
 
 class Note {
   constructor(path) {
@@ -14,6 +15,7 @@ class Note {
   create() {
     this.data = this.createEmptyData();
     this.data.createdAt = new Date().toISOString();
+    this.data.updatedAt = new Date().toISOString();
     fs.writeFileSync(this.path, JSON.stringify(this.data));
   }
   read() {
@@ -50,6 +52,9 @@ class Note {
   readContent() {
     return this.data.content;
   }
+  readUpdateTime() {
+    return this.data.updatedAt;
+  }
   registTag(tag) {
     this.data.tags.push(tag);
     this.update();
@@ -75,6 +80,21 @@ class Note {
     }
     tags = tags.filter((element, index, array) => array.indexOf(element) === index);
     return tags;
+  }
+  static getRecentPath() {
+    const files = fs.readdirSync(settings.directory);
+    let recentPath = '';
+    let recentTime = '';
+    for (const file of files) {
+      const note = new Note(`${settings.directory}/${file}`);
+      const updatedAt = note.readUpdateTime();
+      const path = note.readPath();
+      if (!recentTime || moment(updatedAt).isAfter(recentTime)) {
+        recentPath = path;
+        recentTime = updatedAt;
+      }
+    }
+    return recentPath;
   }
 }
 
