@@ -152,4 +152,10 @@ export default {
     top: 11px;
     right: 15px;
   }
+
+  @media (max-width: 900px) {
+    #toolbar > button {
+      display: none;
+    }
+  }
 </style>
