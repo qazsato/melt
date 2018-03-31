@@ -34,7 +34,8 @@ export default {
   },
   computed: {
     fileName() {
-      return path.basename(this.$store.state.currentFile);
+      const title = new Note(this.$store.state.currentFile).readTitle();
+      return title || 'Untitled';
     }
   },
   watch: {

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const Note = require('./Note');
 
 class FileUtil {
   static readTree(dir) {
@@ -22,8 +23,9 @@ class FileUtil {
               });
               return fs.statSync(file).isFile();
             }).forEach((file) => { //ファイル名を保存
+              const title = new Note(file).readTitle()
               results.push({
-                label:path.basename(file),
+                label: title || 'Untitled',
                 path: file
               });
               if (!--pending) callback(null, results);
