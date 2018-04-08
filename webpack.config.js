@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   mode: process.env.NODE_ENV,
-  target: "electron-main",
+  target: 'electron-main',
   entry: {
     main: './src/main.js'
   },
