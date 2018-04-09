@@ -7,7 +7,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     note: null,
-    currentFile: 'Untitled',
+    currentFile: '',
     mode: 'multi',
     editor: null,
     linkDialogVisible: false,
