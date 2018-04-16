@@ -178,6 +178,7 @@ export default {
       this.$store.state.note.updateTitle(title);
       const content = this.editor.getText();
       this.$store.state.note.updateContent(content);
+      this.$store.commit('updateTreeDatas');
     }
   }
 }

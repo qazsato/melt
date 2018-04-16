@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Note from '../assets/scripts/Note';
+import settings from '../../config/settings.json';
+import FileUtil from '../assets/scripts/FileUtil';
 
 Vue.use(Vuex);
 
@@ -10,6 +12,7 @@ const store = new Vuex.Store({
     currentFile: '',
     mode: 'multi',
     editor: null,
+    treeDatas: null,
     linkDialogVisible: false,
     imageDialogVisible: false,
     tableDialogVisible: false
@@ -24,6 +27,9 @@ const store = new Vuex.Store({
     },
     setEditor(state, editor) {
       state.editor = editor;
+    },
+    updateTreeDatas(state) {
+      FileUtil.readTree(settings.directory).then((t) => state.treeDatas = t);
     },
     visualizeLinkDialog(state, visible) {
       state.linkDialogVisible = visible;

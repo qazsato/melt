@@ -10,15 +10,13 @@
       <el-input class="filter-input" placeholder="Search" v-model="filterText" prefix-icon="el-icon-search" size="small" ref="search"></el-input>
     </div>
     <div class="tree-area">
-      <el-tree class="file-tree" :data="treeDatas" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
+      <el-tree class="file-tree" :data="this.$store.state.treeDatas" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
     </div>
   </div>
 </template>
 
 <script>
 import {ipcRenderer} from 'electron';
-import settings from '../../config/settings.json';
-import FileUtil from '../assets/scripts/FileUtil';
 import fs from 'fs';
 import path from 'path';
 import Note from '../assets/scripts/Note';
@@ -27,7 +25,6 @@ export default {
   data() {
     return {
       filterText: '',
-      treeDatas: [],
       path: '',
       name: ''
     };
@@ -45,7 +42,7 @@ export default {
     }
   },
   mounted() {
-    FileUtil.readTree(settings.directory).then((t) => this.treeDatas = t);
+    this.$store.commit('updateTreeDatas');
     ipcRenderer.on('focus-search', () => {
       // サイドバー非表示時は検索ボックスのフォーカスが効かないためタイミングをずらす
       setTimeout(() => this.$refs.search.$refs.input.focus());

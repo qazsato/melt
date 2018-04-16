@@ -43,7 +43,11 @@ export default {
     }
   },
   mounted() {
-    ipcRenderer.on('new-post', () => new Note());
+    ipcRenderer.on('new-post', () => {
+      const note = new Note();
+      this.$store.commit('changeCurrentFile', note.readPath());
+      this.$store.commit('updateTreeDatas');
+    });
     ipcRenderer.on('toggle-aside', () => this.visibleAside = !this.visibleAside);
     ipcRenderer.on('focus-search', () => this.visibleAside = true);
   }
