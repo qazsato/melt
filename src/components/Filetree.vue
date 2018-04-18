@@ -58,14 +58,9 @@ export default {
     filterNode(value, data) {
       if (!value) return true;
       value = value.toLowerCase();
-      const label = data.label.toLowerCase();
-      if(fs.statSync(data.path).isDirectory()) {
-        return label.indexOf(value) !== -1;
-      } else {
-        const note = new Note(data.path);
-        const content = note.readContent();
-        return content.includes(value);
-      }
+      const note = new Note(data.path);
+      const content = note.readContent().toLowerCase();
+      return content.includes(value);
     }
   }
 }
