@@ -75,6 +75,7 @@ class Note {
     let tags = [];
     const files = fs.readdirSync(settings.directory);
     for (const file of files) {
+      if (!file.endsWith('.json')) continue;
       const note = new Note(`${settings.directory}/${file}`);
       tags = tags.concat(note.readTag());
     }
@@ -86,6 +87,7 @@ class Note {
     let recentPath = '';
     let recentTime = '';
     for (const file of files) {
+      if (!file.endsWith('.json')) continue;
       const note = new Note(`${settings.directory}/${file}`);
       const updatedAt = note.readUpdateTime();
       const path = note.readPath();

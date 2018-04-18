@@ -23,11 +23,13 @@ class FileUtil {
               });
               return fs.statSync(file).isFile();
             }).forEach((file) => { //ファイル名を保存
-              const title = new Note(file).readTitle()
-              results.push({
-                label: title || 'Untitled',
-                path: file
-              });
+              if (file.endsWith('.json')) {
+                const title = new Note(file).readTitle()
+                results.push({
+                  label: title || 'Untitled',
+                  path: file
+                });
+              }
               if (!--pending) callback(null, results);
             });
       }
