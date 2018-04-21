@@ -10,7 +10,7 @@ const store = new Vuex.Store({
   state: {
     note: null,
     currentFile: '',
-    mode: 'multi',
+    mode: 'editor',
     editor: null,
     treeDatas: null,
     linkDialogVisible: false,
