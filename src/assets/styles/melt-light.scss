@@ -1,0 +1,51 @@
+.CodeMirror.cm-s-melt-light {
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  color: rgba(0,0,0,.75);
+  font-size: 16px;
+  font-family: -apple-system, 'BlinkMacSystemFont',  Sans-Serif;
+  line-height: 1.5em;
+
+  .CodeMirror-scroll {
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .cm-formatting,
+  .cm-url {
+    color: rgba(0,0,0,.28);
+  }
+
+  .cm-formatting-strikethrough {
+    text-decoration: none;
+  }
+
+  .cm-header {
+    line-height: 1.25em;
+  }
+
+  .cm-header-1 {
+    font-size: 2em;
+  }
+
+  .cm-header-2 {
+    font-size: 1.5em;
+  }
+
+  .cm-header-3 {
+    font-size: 1.25em;
+  }
+
+  .cm-header-4 {
+    font-size: 1em;
+  }
+
+  .cm-header-5 {
+    font-size: 0.875em;
+  }
+
+  .cm-header-6 {
+    font-size: 0.85em;
+  }
+}

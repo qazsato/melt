@@ -3,8 +3,11 @@ const Editor = require('./Editor');
 class MarkdownEditor extends Editor {
   constructor(id) {
     const option = {
-      mode: 'gfm',
-      theme: 'base16-light',
+      mode: {
+        name: 'gfm',
+        highlightFormatting: true
+      },
+      theme: 'melt-light',
       lineWrapping: true,
       autofocus: true,
       indentUnit: 4,

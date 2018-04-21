@@ -49,8 +49,7 @@
 <script>
 import axios from 'axios';
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/base16-light.css';
-import '../assets/styles/MarkdownEditor.scss';
+import '../assets/styles/melt-light.scss';
 import 'codemirror/mode/gfm/gfm.js';
 import 'codemirror/addon/edit/continuelist.js';
 import 'codemirror/addon/search/search.js';
