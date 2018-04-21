@@ -85,6 +85,7 @@ export default {
     min-width: 50%;
     height: 100%;
     overflow-y: scroll;
+    border-left: 1px solid #ebeef5;
   }
 
   .markdown-body {
