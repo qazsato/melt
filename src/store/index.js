@@ -29,7 +29,7 @@ const store = new Vuex.Store({
       state.editor = editor;
     },
     updateTreeDatas(state) {
-      FileUtil.readTree(settings.directory).then((t) => state.treeDatas = t);
+      state.treeDatas = FileUtil.readTree(settings.directory);
     },
     visualizeLinkDialog(state, visible) {
       state.linkDialogVisible = visible;
