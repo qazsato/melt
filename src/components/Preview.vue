@@ -75,7 +75,8 @@ export default {
   }
 
   .markdown-body .check-list input[type="checkbox"] {
-    margin-left: -2em;
+    margin-left: -1.3em;
+    margin-right: 0.2em;
   }
 </style>
 
