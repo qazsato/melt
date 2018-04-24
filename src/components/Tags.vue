@@ -43,6 +43,7 @@ export default {
   },
   watch: {
     file(file) {
+      if (!file) return;
       this.dynamicTags = this.$store.state.note.readTag();
     }
   },

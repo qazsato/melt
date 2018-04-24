@@ -55,6 +55,11 @@
         <i class="icon-table"></i>
       </button>
     </el-tooltip>
+    <el-tooltip content="Delete" :open-delay="500">
+      <button @click="deleteFile" :disabled="mode === 'preview'">
+        <i class="icon-delete"></i>
+      </button>
+    </el-tooltip>
     <el-radio-group @change="changeViewMode" v-model="mode" size="mini" class="checkbox-mode">
       <el-radio-button label="multi">A</el-radio-button>
       <el-radio-button label="editor">B</el-radio-button>
@@ -111,6 +116,11 @@ export default {
     },
     insertTable() {
       this.$store.commit('visualizeTableDialog', true);
+    },
+    deleteFile() {
+      this.$store.state.note.delete();
+      this.$store.commit('updateTreeDatas');
+      this.$store.commit('changeCurrentFile', this.$store.state.treeDatas[0].path);
     },
     changeViewMode() {
       this.$store.commit('changeMode', this.mode);

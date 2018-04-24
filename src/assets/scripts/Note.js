@@ -27,7 +27,6 @@ class Note {
     fs.writeFileSync(this.path, JSON.stringify(this.data));
   }
   delete() {
-    // TODO
     this.data = {};
     fs.unlinkSync(this.path);
   }

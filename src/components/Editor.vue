@@ -78,6 +78,7 @@ export default {
   },
   watch: {
     file(file) {
+      if (!file) return;
       const content = this.$store.state.note.readContent();
       this.editor.editor.getDoc().setValue(content);
     }
