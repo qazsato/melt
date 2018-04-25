@@ -77,7 +77,9 @@ export default {
       let inputValue = item.value || this.inputValue;
       if (inputValue && !tags.includes(inputValue)) {
         this.$store.state.note.registTag(inputValue);
-        this.links.push({value: inputValue});
+        if (this.links.filter((d) => d.value === inputValue).length === 0) {
+          this.links.push({value: inputValue});
+        }
       }
       this.inputVisible = false;
       this.inputValue = '';
