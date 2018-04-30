@@ -1,7 +1,7 @@
 {
   "name": "melt",
   "productName": "Melt",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A markdown editor in which the brain melts.",
   "main": "main.js",
   "dependencies": {
