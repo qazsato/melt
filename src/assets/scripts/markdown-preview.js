@@ -9,6 +9,8 @@ class MarkdownPreview {
   constructor() {
     this.md = new MarkdownIt({
       html: true,
+      breaks: true,
+      linkify: true,
       highlight: (code, lang) => {
         if (lang) {
           return highlight.highlightAuto(code, [lang]).value;
