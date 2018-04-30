@@ -1,6 +1,7 @@
 const MarkdownIt = require('markdown-it');
 const emoji = require('markdown-it-emoji');
 const katex = require('markdown-it-katex');
+const footnote = require('markdown-it-footnote');
 const checkbox = require('markdown-it-task-checkbox');
 const highlight = require('highlight.js');
 
@@ -17,6 +18,7 @@ class MarkdownPreview {
     });
     this.md.use(emoji);
     this.md.use(katex);
+    this.md.use(footnote);
     this.md.use(checkbox, {disabled: true});
 
     // NOTE 全てのaタグにtarget="_blank"を付与する
