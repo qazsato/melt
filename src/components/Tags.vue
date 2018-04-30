@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import Note from '../assets/scripts/Note';
+import Note from '../assets/scripts/note.js';
 
 export default {
   data() {

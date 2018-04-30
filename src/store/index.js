@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import Note from '../assets/scripts/Note';
+import Note from '../assets/scripts/note.js';
 import settings from '../../config/settings.json';
-import FileUtil from '../assets/scripts/FileUtil';
+import FileUtil from '../assets/scripts/file-util.js';
 
 Vue.use(Vuex);
 

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const Note = require('./Note');
+const Note = require('./note.js');
 const _ = require('lodash');
 
 class FileUtil {

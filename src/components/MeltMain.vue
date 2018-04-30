@@ -21,7 +21,7 @@ import filetree from './Filetree.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
 import tags from './Tags.vue';
-import Note from '../assets/scripts/Note';
+import Note from '../assets/scripts/note.js';
 
 export default {
   components: {

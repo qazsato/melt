@@ -19,7 +19,7 @@
 import {ipcRenderer} from 'electron';
 import fs from 'fs';
 import path from 'path';
-import Note from '../assets/scripts/Note';
+import Note from '../assets/scripts/note.js';
 
 export default {
   data() {

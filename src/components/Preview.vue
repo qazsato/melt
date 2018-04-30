@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Markdown from '../assets/scripts/MarkdownPreview';
+import Markdown from '../assets/scripts/markdown-preview.js';
 import publishButton from './PublishButton.vue';
 import '../assets/styles/markdown-preview.scss';
 

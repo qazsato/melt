@@ -57,8 +57,8 @@ import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
 import settings from '../../config/settings.json';
-import Editor from '../assets/scripts/MarkdownEditor';
-import Note from '../assets/scripts/Note';
+import Editor from '../assets/scripts/markdown-editor.js';
+import Note from '../assets/scripts/note.js';
 export default {
   data() {
     return {
