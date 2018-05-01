@@ -22,9 +22,14 @@ class MarkdownPreview {
     this.md.use(katex);
     this.md.use(footnote);
     this.md.use(checkbox, {disabled: true});
-
-    // NOTE 全てのaタグにtarget="_blank"を付与する
-    // https://github.com/markdown-it/markdown-it/blob/0e51825a5cd912121d733938ef2603833378888a/docs/architecture.md#renderer
+    this.changeLinkOpenRule();
+  }
+  render(text) {
+    return this.md.render(text);
+  }
+  changeLinkOpenRule() {
+    // NOTE 全てのaタグにtarget="_blank"を付与する。
+    // 参考) https://github.com/markdown-it/markdown-it/blob/0e51825a5cd912121d733938ef2603833378888a/docs/architecture.md#renderer
     // Remember old renderer, if overriden, or proxy to default renderer
     const defaultRender = this.md.renderer.rules.link_open || function(tokens, idx, options, env, self) {
       return self.renderToken(tokens, idx, options);
@@ -43,9 +48,6 @@ class MarkdownPreview {
       // pass token to default renderer.
       return defaultRender(tokens, idx, options, env, self);
     };
-  }
-  render(text) {
-    return this.md.render(text);
   }
 }
 
