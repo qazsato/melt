@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import {ipcRenderer} from 'electron';
 import fs from 'fs';
 import path from 'path';
@@ -54,7 +55,7 @@ export default {
     this.$store.commit('updateTreeDatas');
     ipcRenderer.on('focus-search', () => {
       // サイドバー非表示時は検索ボックスのフォーカスが効かないためタイミングをずらす
-      setTimeout(() => this.$refs.search.$refs.input.focus());
+      Vue.nextTick().then(() => this.$refs.search.$refs.input.focus());
     });
     const file = Note.getRecentPath();
     this.$store.commit('changeCurrentFile', file);

@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import Note from '../assets/scripts/note.js';
 
 export default {
@@ -83,7 +84,7 @@ export default {
       this.inputValue = '';
     },
     blurInput() {
-      setTimeout(() => this.inputVisible = false, 500);
+      Vue.nextTick().then(() => this.inputVisible = false);
     }
   }
 }
