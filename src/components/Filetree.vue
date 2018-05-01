@@ -7,7 +7,16 @@
           <div>{{fileName}}</div>
         </el-tooltip>
       </h1>
-      <el-input class="filter-input" placeholder="Search" v-model="filterText" prefix-icon="el-icon-search" size="small" ref="search"></el-input>
+      <el-autocomplete
+        class="filter-input"
+        placeholder="Search"
+        v-model="filterText"
+        prefix-icon="el-icon-search"
+        size="small"
+        ref="search"
+        :fetch-suggestions="querySearch"
+        @select="handleInput"
+      ></el-autocomplete>
     </div>
     <div class="tree-area">
       <el-tree class="file-tree" :data="this.$store.state.treeDatas" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
@@ -59,8 +68,28 @@ export default {
       if (!value) return true;
       value = value.toLowerCase();
       const note = new Note(data.path);
+      if (value.startsWith('#')) {
+        const tags = note.readTag().toString().toLowerCase();
+        return tags.includes(value.split('#')[1]);
+      }
       const content = note.readContent().toLowerCase();
       return content.includes(value);
+    },
+    querySearch(queryString, cb) {
+      let results = [];
+      if (queryString.startsWith('#')) {
+        const filterText = queryString.split('#')[1];
+        results = filterText ? this.$store.state.suggestDatas.filter(this.createFilter(filterText)) : this.$store.state.suggestDatas;
+      }
+      cb(results);
+    },
+    createFilter(filterText) {
+      return (d) => {
+        return (d.value.toLowerCase().indexOf(filterText.toLowerCase()) === 0);
+      };
+    },
+    handleInput(data) {
+      this.filterText = `#${data.value}`;
     }
   }
 }

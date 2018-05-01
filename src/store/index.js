@@ -13,6 +13,7 @@ const store = new Vuex.Store({
     mode: 'editor',
     editor: null,
     treeDatas: null,
+    suggestDatas: null,
     linkDialogVisible: false,
     imageDialogVisible: false,
     tableDialogVisible: false
@@ -30,6 +31,10 @@ const store = new Vuex.Store({
     },
     updateTreeDatas(state) {
       state.treeDatas = FileUtil.readTree(settings.directory);
+    },
+    updateSuggestDatas(state) {
+      const tags = Note.readAllTags();
+      state.suggestDatas = tags.map((t) => {return {value: t}});
     },
     visualizeLinkDialog(state, visible) {
       state.linkDialogVisible = visible;

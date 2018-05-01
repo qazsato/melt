@@ -48,23 +48,21 @@ export default {
     }
   },
   mounted() {
-    const tags = Note.readAllTags();
-    this.links = tags.map((t) => {
-      return {value: t}
-    });
+    this.$store.commit('updateSuggestDatas');
   },
   methods: {
     querySearch(queryString, cb) {
-      const results = queryString ? this.links.filter(this.createFilter(queryString)) : this.links;
+      const results = queryString ? this.$store.state.suggestDatas.filter(this.createFilter(queryString)) : this.$store.state.suggestDatas;
       cb(results);
     },
     createFilter(queryString) {
-      return (link) => {
-        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      return (d) => {
+        return (d.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
     handleClose(tag) {
       this.$store.state.note.removeTag(tag);
+      this.$store.commit('updateSuggestDatas');
     },
     showInput() {
       this.inputVisible = true;
@@ -77,8 +75,8 @@ export default {
       let inputValue = item.value || this.inputValue;
       if (inputValue && !tags.includes(inputValue)) {
         this.$store.state.note.registTag(inputValue);
-        if (this.links.filter((d) => d.value === inputValue).length === 0) {
-          this.links.push({value: inputValue});
+        if (this.$store.state.suggestDatas.filter((d) => d.value === inputValue).length === 0) {
+          this.$store.commit('updateSuggestDatas');
         }
       }
       this.inputVisible = false;
