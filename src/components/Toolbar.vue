@@ -61,8 +61,8 @@
       </button>
     </el-tooltip>
     <el-radio-group @change="changeViewMode" v-model="mode" size="mini" class="checkbox-mode">
-      <el-radio-button label="multi">A</el-radio-button>
-      <el-radio-button label="editor">B</el-radio-button>
+      <el-radio-button label="editor">A</el-radio-button>
+      <el-radio-button label="multi">B</el-radio-button>
       <el-radio-button label="preview">C</el-radio-button>
     </el-radio-group>
   </section>
