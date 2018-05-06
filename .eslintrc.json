@@ -10,5 +10,9 @@
   },
   "extends": [
     "eslint:recommended"
-  ]
+  ],
+  "globals": {
+    "test": false,
+    "expect": false
+  }
 }
