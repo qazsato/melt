@@ -97,12 +97,12 @@ export default {
 </script>
 
 <style>
-  .el-tree-node:focus>.el-tree-node__content,
-  .el-tree-node__content:hover {
+  .tree-area .el-tree-node:focus>.el-tree-node__content,
+  .tree-area .el-tree-node__content:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
 
-  .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+  .tree-area .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
     background-color: rgba(0, 0, 0, 0.2);
   }
 </style>
