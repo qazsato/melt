@@ -1,4 +1,4 @@
-const Editor = require('./editor.js');
+import Editor from './editor.js';
 
 class MarkdownEditor extends Editor {
   constructor(id) {

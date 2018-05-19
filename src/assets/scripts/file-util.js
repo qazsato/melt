@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const Note = require('./note.js');
-const _ = require('lodash');
+import fs from 'fs';
+import path from 'path';
+import Note from './note.js';
+import _ from 'lodash';
 
 class FileUtil {
   static readTree(dir) {

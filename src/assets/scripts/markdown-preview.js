@@ -1,9 +1,9 @@
-const MarkdownIt = require('markdown-it');
-const emoji = require('markdown-it-emoji');
-const katex = require('markdown-it-katex');
-const footnote = require('markdown-it-footnote');
-const checkbox = require('markdown-it-task-checkbox');
-const highlight = require('highlight.js');
+import MarkdownIt from 'markdown-it';
+import emoji from 'markdown-it-emoji';
+import katex from 'markdown-it-katex';
+import footnote from 'markdown-it-footnote';
+import checkbox from 'markdown-it-task-checkbox';
+import highlight from 'highlight.js';
 
 class MarkdownPreview {
   constructor() {

@@ -1,6 +1,6 @@
-const settings = require('../../../config/settings.json');
-const fs = require('fs');
-const moment = require('moment');
+import settings from '../../../config/settings.json';
+import fs from 'fs';
+import moment from 'moment';
 
 class Note {
   constructor(path) {
