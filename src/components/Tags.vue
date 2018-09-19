@@ -84,7 +84,8 @@ export default {
       this.inputValue = '';
     },
     blurInput() {
-      Vue.nextTick().then(() => this.inputVisible = false);
+      // TODO: サジェストからの項目が選択出来ない事象が発生しているため暫定的にコメントアウトする
+      // Vue.nextTick().then(() => this.inputVisible = false);
     }
   }
 }
