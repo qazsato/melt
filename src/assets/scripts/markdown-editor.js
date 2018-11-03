@@ -258,4 +258,4 @@ class MarkdownEditor extends Editor {
   }
 }
 
-module.exports = MarkdownEditor;
+export default MarkdownEditor;

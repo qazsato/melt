@@ -26,4 +26,4 @@ class FileUtil {
   }
 }
 
-module.exports = FileUtil;
+export default FileUtil;
