@@ -9,5 +9,6 @@ module.exports = {
   collectCoverageFrom: [
     'src/assets/scripts/**/*.js',
     'src/**/*.vue',
-  ]
+  ],
+  testPathIgnorePatterns: ["/node_modules/", "/release-builds/"]
 };
