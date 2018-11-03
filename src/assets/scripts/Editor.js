@@ -1,6 +1,7 @@
+import CodeMirror from 'codemirror';
+
 class Editor {
   constructor(id, option) {
-    const CodeMirror = require('codemirror');
     CodeMirror.keyMap.default['Tab'] = 'indentMore';
     CodeMirror.keyMap.default['Shift-Tab'] = 'indentLess';
     this.editor = CodeMirror.fromTextArea(document.getElementById(id), option);
