@@ -1,4 +1,4 @@
-const Markdown = require('../src/assets/scripts/markdown-preview');
+const Markdown = require('../src/assets/scripts/markdown');
 const markdown = new Markdown();
 
 test('HTML文字列がエスケープされずに出力される(html=true)', () => {

@@ -6,7 +6,7 @@ import footnote from 'markdown-it-footnote';
 import checkbox from 'markdown-it-task-checkbox';
 import highlight from 'highlight.js';
 
-class MarkdownPreview {
+class Markdown {
   constructor() {
     this.md = new MarkdownIt({
       html: true,
@@ -53,4 +53,4 @@ class MarkdownPreview {
   }
 }
 
-module.exports = MarkdownPreview;
+export default Markdown;

@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import Markdown from '../assets/scripts/markdown-preview.js';
+import Markdown from '../assets/scripts/markdown.js';
 import publishButton from './PublishButton.vue';
-import '../assets/styles/markdown-preview.scss';
+import '../assets/styles/markdown.scss';
 
 export default {
   props: ['text'],
