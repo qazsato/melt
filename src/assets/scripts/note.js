@@ -1,34 +1,18 @@
 import settings from '../../../config/settings.json';
 import fs from 'fs';
 import moment from 'moment';
+import AbstractNote from './abstract-note';
 
-class Note {
+class Note extends AbstractNote {
   constructor(path) {
+    super();
     if (path) {
       this.path = path;
-      this.read();
+      this.data = this.readFile(this.path);
     } else {
       this.path = `${settings.directory}/${new Date().toISOString()}.json`;
-      this.create();
+      this.data = this.createFile(this.path, this.createEmptyData());
     }
-  }
-  create() {
-    this.data = this.createEmptyData();
-    this.data.createdAt = new Date().toISOString();
-    this.data.updatedAt = new Date().toISOString();
-    fs.writeFileSync(this.path, JSON.stringify(this.data));
-  }
-  read() {
-    const f = fs.readFileSync(this.path, 'utf-8');
-    this.data = JSON.parse(f);
-  }
-  update() {
-    this.data.updatedAt = new Date().toISOString();
-    fs.writeFileSync(this.path, JSON.stringify(this.data));
-  }
-  delete() {
-    this.data = {};
-    fs.unlinkSync(this.path);
   }
   createEmptyData() {
     return {
@@ -38,6 +22,9 @@ class Note {
       content: '',
       tags: []
     }
+  }
+  delete() {
+    this.deleteFile(this.path);
   }
   readPath() {
     return this.path;
@@ -56,19 +43,19 @@ class Note {
   }
   registTag(tag) {
     this.data.tags.push(tag);
-    this.update();
+    this.data = this.updateFile(this.path, this.data);
   }
   removeTag(tag) {
     this.data.tags.splice(this.data.tags.indexOf(tag), 1);
-    this.update();
+    this.data = this.updateFile(this.path, this.data);
   }
   updateTitle(title) {
     this.data.title = title;
-    this.update();
+    this.data = this.updateFile(this.path, this.data);
   }
   updateContent(content) {
     this.data.content = content;
-    this.update();
+    this.data = this.updateFile(this.path, this.data);
   }
   static readAllTags() {
     let tags = [];
