@@ -1,4 +1,5 @@
 module.exports = {
+  setupFiles: ['./test/jsdom-polyfill.js'],
   moduleFileExtensions: ['js', 'json', 'vue'],
   transform: {
     '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
@@ -10,5 +11,5 @@ module.exports = {
     'src/assets/scripts/**/*.js',
     'src/**/*.vue',
   ],
-  testPathIgnorePatterns: ["/node_modules/", "/release-builds/"]
+  testPathIgnorePatterns: ['/node_modules/', '/release-builds/']
 };
