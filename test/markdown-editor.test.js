@@ -126,8 +126,15 @@ test('テーブルを挿入する', () => {
   expect(editor.getText()).toBe(table);
 });
 
-test('タイトルを取得する', () => {
+test('タイトルを取得する(タイトル無)', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>';
   const editor = new Editor('editor');
   expect(editor.getTitle()).toBe('');
+});
+
+test('タイトルを取得する(タイトル有)', () => {
+  document.body.innerHTML = '<textarea id="editor"></textarea>';
+  const editor = new Editor('editor');
+  editor.insert('# title\n');
+  expect(editor.getTitle()).toBe('title');
 });
