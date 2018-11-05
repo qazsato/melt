@@ -17,7 +17,7 @@ class NoteUtil {
         notes.push(note);
       }
     }
-    notes = _.orderBy(notes, (note) => note.data.title.toLowerCase(), 'asc');
+    notes = _.orderBy(notes, (note) => note.data.updatedAt, 'desc');
     for (const note of notes) {
       results.push({
         label: note.readTitle() || 'Untitled',
