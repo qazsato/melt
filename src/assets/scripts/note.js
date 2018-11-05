@@ -1,6 +1,4 @@
 import settings from '../../../config/settings.json';
-import fs from 'fs';
-import moment from 'moment';
 import AbstractNote from './abstract-note';
 
 class Note extends AbstractNote {
@@ -56,33 +54,6 @@ class Note extends AbstractNote {
   updateContent(content) {
     this.data.content = content;
     this.data = this.updateFile(this.path, this.data);
-  }
-  static readAllTags() {
-    let tags = [];
-    const files = fs.readdirSync(settings.directory);
-    for (const file of files) {
-      if (!file.endsWith('.json')) continue;
-      const note = new Note(`${settings.directory}/${file}`);
-      tags = tags.concat(note.readTag());
-    }
-    tags = tags.filter((element, index, array) => array.indexOf(element) === index);
-    return tags;
-  }
-  static getRecentPath() {
-    const files = fs.readdirSync(settings.directory);
-    let recentPath = '';
-    let recentTime = '';
-    for (const file of files) {
-      if (!file.endsWith('.json')) continue;
-      const note = new Note(`${settings.directory}/${file}`);
-      const updatedAt = note.readUpdateTime();
-      const path = note.readPath();
-      if (!recentTime || moment(updatedAt).isAfter(recentTime)) {
-        recentPath = path;
-        recentTime = updatedAt;
-      }
-    }
-    return recentPath;
   }
 }
 

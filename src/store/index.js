@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Note from '../assets/scripts/note.js';
 import settings from '../../config/settings.json';
-import FileUtil from '../assets/scripts/file-util.js';
+import NoteUtil from '../assets/scripts/note-util.js';
 
 Vue.use(Vuex);
 
@@ -30,10 +30,10 @@ const store = new Vuex.Store({
       state.editor = editor;
     },
     updateTreeDatas(state) {
-      state.treeDatas = FileUtil.readTree(settings.directory);
+      state.treeDatas = NoteUtil.readTree(settings.directory);
     },
     updateSuggestDatas(state) {
-      const tags = Note.readAllTags();
+      const tags = NoteUtil.readAllTags();
       state.suggestDatas = tags.map((t) => {return {value: t}});
     },
     visualizeLinkDialog(state, visible) {

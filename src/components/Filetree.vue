@@ -30,6 +30,7 @@ import {ipcRenderer} from 'electron';
 import fs from 'fs';
 import path from 'path';
 import Note from '../assets/scripts/note.js';
+import NoteUtil from '../assets/scripts/note-util.js';
 
 export default {
   data() {
@@ -57,7 +58,7 @@ export default {
       // サイドバー非表示時は検索ボックスのフォーカスが効かないためタイミングをずらす
       Vue.nextTick().then(() => this.$refs.search.$refs.input.focus());
     });
-    const file = Note.getRecentPath();
+    const file = NoteUtil.getRecentPath();
     this.$store.commit('changeCurrentFile', file);
   },
   methods: {
