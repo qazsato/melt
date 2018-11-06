@@ -20,6 +20,14 @@ const store = new Vuex.Store({
   },
   mutations: {
     changeCurrentFile(state, file) {
+      // エディタとノートの内容に差分がある場合は切替前に保存する
+      if (state.editor && state.editor.getText() !== state.note.readContent()) {
+        const title = state.editor.getTitle();
+        const content = state.editor.getText();
+        state.note.updateTitle(title);
+        state.note.updateContent(content);
+        this.commit('updateTreeDatas');
+      }
       state.currentFile = file;
       state.note = new Note(file);
     },

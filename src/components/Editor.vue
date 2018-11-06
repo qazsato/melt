@@ -174,10 +174,9 @@ export default {
       this.$store.commit('visualizeTableDialog', false);
     },
     saveFile() {
-      const file = this.$store.state.currentFile;
       const title = this.editor.getTitle();
-      this.$store.state.note.updateTitle(title);
       const content = this.editor.getText();
+      this.$store.state.note.updateTitle(title);
       this.$store.state.note.updateContent(content);
       this.$store.commit('updateTreeDatas');
     }
