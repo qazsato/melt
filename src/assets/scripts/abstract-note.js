@@ -5,7 +5,7 @@ class AbstractNote {
     const date = new Date().toISOString();
     data.createdAt = date;
     data.updatedAt = date;
-    fs.writeFileSync(path, JSON.stringify(data));
+    fs.writeFileSync(path, JSON.stringify(data, null, '\t'));
     return data;
   }
   readFile(path) {
@@ -16,7 +16,7 @@ class AbstractNote {
   updateFile(path, data) {
     const date = new Date().toISOString();
     data.updatedAt = date;
-    fs.writeFileSync(path, JSON.stringify(data));
+    fs.writeFileSync(path, JSON.stringify(data, null, '\t'));
     return data;
   }
   deleteFile(path) {
