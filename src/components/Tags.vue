@@ -27,7 +27,7 @@
 
 <script>
 import Vue from 'vue';
-import Note from '../assets/scripts/note.js';
+import Note from '../assets/scripts/note/note.js';
 
 export default {
   data() {

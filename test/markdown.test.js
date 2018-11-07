@@ -1,4 +1,4 @@
-import Markdown from '../src/assets/scripts/markdown';
+import Markdown from '../src/assets/scripts/markdown/markdown';
 const markdown = new Markdown();
 
 test('HTML文字列がエスケープされずに出力される(html=true)', () => {

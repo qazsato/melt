@@ -1,4 +1,4 @@
-import settings from '../../../config/settings.json';
+import settings from '../../../../config/settings.json';
 import fs from 'fs';
 import path from 'path';
 import moment from 'moment';

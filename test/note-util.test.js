@@ -1,6 +1,6 @@
 import settings from '../config/settings.json';
-import NoteUtil from '../src/assets/scripts/note-util';
-import Note from '../src/assets/scripts/note';
+import NoteUtil from '../src/assets/scripts/note/note-util';
+import Note from '../src/assets/scripts/note/note';
 
 test('全てのノートを読み込む', () => {
   const note = new Note();

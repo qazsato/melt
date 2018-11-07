@@ -29,8 +29,8 @@ import Vue from 'vue';
 import {ipcRenderer} from 'electron';
 import fs from 'fs';
 import path from 'path';
-import Note from '../assets/scripts/note.js';
-import NoteUtil from '../assets/scripts/note-util.js';
+import Note from '../assets/scripts/note/note.js';
+import NoteUtil from '../assets/scripts/note/note-util.js';
 
 export default {
   data() {

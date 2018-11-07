@@ -1,4 +1,4 @@
-import Editor from '../src/assets/scripts/markdown-editor';
+import Editor from '../src/assets/scripts/editor/markdown-editor';
 
 test('エディタを生成する', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>';

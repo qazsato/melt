@@ -1,4 +1,4 @@
-import Note from '../src/assets/scripts/note';
+import Note from '../src/assets/scripts/note/note';
 
 test('新規ノートを作成する', () => {
   const note = new Note();
