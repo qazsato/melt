@@ -9,7 +9,8 @@
     "sourceType": "module"
   },
   "extends": [
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:vue/recommended"
   ],
   "globals": {
     "test": false,
