@@ -13,6 +13,7 @@
     "plugin:vue/recommended"
   ],
   "globals": {
+    "window": false,
     "test": false,
     "expect": false
   },
@@ -24,6 +25,7 @@
         "args": "none",
         "ignoreRestSiblings": false
       }
-    ]
+    ],
+    "no-var": "warn"
   }
 }

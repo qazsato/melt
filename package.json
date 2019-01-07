@@ -52,7 +52,7 @@
     "prepack:mac": "NODE_ENV=production webpack",
     "pack:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icon.icns --prune=true --out=release-builds",
     "test": "jest",
-    "lint": "eslint --ext .js --ext .vue ./src"
+    "lint": "eslint --ext .js --ext .vue ."
   },
   "keywords": [
     "markdown",
