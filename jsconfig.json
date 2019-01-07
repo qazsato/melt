@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@scripts/*": ["./src/assets/scripts/*"]
+    }
+  },
+  "exclude": ["node_modules", "release-builds", "dist"]
+}

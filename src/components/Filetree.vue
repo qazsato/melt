@@ -38,8 +38,8 @@
 import Vue from 'vue';
 import {ipcRenderer} from 'electron';
 import fs from 'fs';
-import Note from '../assets/scripts/note/note.js';
-import NoteUtil from '../assets/scripts/note/note-util.js';
+import Note from '@scripts/note/note.js';
+import NoteUtil from '@scripts/note/note-util.js';
 
 export default {
   data() {

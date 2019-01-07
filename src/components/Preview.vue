@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import Markdown from '../assets/scripts/markdown/markdown.js';
+import Markdown from '@scripts/markdown/markdown.js';
 import publishButton from './PublishButton.vue';
-import '../assets/styles/markdown.scss';
+import '@styles/markdown.scss';
 
 export default {
   components: {

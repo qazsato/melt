@@ -43,7 +43,7 @@
 
 <script>
 import axios from 'axios';
-import settings from '../../config/settings.json';
+import settings from '@config/settings.json';
 import Clipboard from 'clipboard';
 
 export default {

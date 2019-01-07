@@ -132,15 +132,15 @@
 import Vue from 'vue';
 import axios from 'axios';
 import 'codemirror/lib/codemirror.css';
-import '../assets/styles/melt-light.scss';
+import '@styles/melt-light.scss';
 import 'codemirror/mode/gfm/gfm.js';
 import 'codemirror/addon/edit/continuelist.js';
 import 'codemirror/addon/search/search.js';
 import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
-import settings from '../../config/settings.json';
-import Editor from '../assets/scripts/editor/markdown-editor.js';
+import settings from '@config/settings.json';
+import Editor from '@scripts/editor/markdown-editor.js';
 
 export default {
   data() {

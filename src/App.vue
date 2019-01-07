@@ -8,9 +8,9 @@
 import Vue from 'vue';
 import Element from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/ja';
-import './assets/styles/element-variables.scss'
-import './assets/styles/main.scss';
-import './assets/fonts/icomoon/style.css';
+import '@styles/element-variables.scss'
+import '@styles/main.scss';
+import '@fonts/icomoon/style.css';
 Vue.use(Element, {locale});
 export default {}
 </script>

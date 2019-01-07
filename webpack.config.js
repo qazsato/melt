@@ -41,7 +41,11 @@ module.exports = {
   resolve: {
     extensions: ['.js'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.esm.js',
+      '@config': path.resolve(__dirname, 'config'),
+      '@fonts': path.resolve(__dirname, 'src/assets/fonts'),
+      '@scripts': path.resolve(__dirname, 'src/assets/scripts'),
+      '@styles': path.resolve(__dirname, 'src/assets/styles'),
     }
   },
   plugins: [

@@ -1,4 +1,4 @@
-import settings from '../../../../config/settings.json';
+import settings from '@config/settings.json';
 import AbstractNote from './abstract-note';
 
 class Note extends AbstractNote {
