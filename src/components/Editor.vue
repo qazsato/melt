@@ -1,46 +1,128 @@
 <template>
-  <div class="editor-area" v-show="this.$store.state.mode === 'editor' || this.$store.state.mode === 'multi'">
-    <textarea id="editor"></textarea>
-    <el-dialog title="Hyperlink" :visible.sync="this.$store.state.linkDialogVisible" @open="openLinkDialog" :before-close="closeLinkDialog" width="400px">
+  <div
+    v-show="this.$store.state.mode === 'editor' || this.$store.state.mode === 'multi'"
+    class="editor-area"
+  >
+    <textarea id="editor" />
+    <el-dialog
+      title="Hyperlink"
+      :visible.sync="this.$store.state.linkDialogVisible"
+      :before-close="closeLinkDialog"
+      width="400px"
+      @open="openLinkDialog"
+    >
       <el-form label-width="45px">
         <el-form-item label="Title">
-          <el-input @keyup.enter.native="insertLink" placeholder="Please input" v-model="linkTitle" ref="linkTitleInput"></el-input>
+          <el-input
+            ref="linkTitleInput"
+            v-model="linkTitle"
+            placeholder="Please input"
+            @keyup.enter.native="insertLink"
+          />
         </el-form-item>
         <el-form-item label="URL">
-          <el-input @keyup.enter.native="insertLink" placeholder="Please input" v-model="linkUrl" ref="linkUrlInput"></el-input>
+          <el-input
+            ref="linkUrlInput"
+            v-model="linkUrl"
+            placeholder="Please input"
+            @keyup.enter.native="insertLink"
+          />
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="insertLink">Insert</el-button>
-        <el-button @click="closeLinkDialog">Cancel</el-button>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          type="primary"
+          @click="insertLink"
+        >
+          Insert
+        </el-button>
+        <el-button @click="closeLinkDialog">
+          Cancel
+        </el-button>
       </span>
     </el-dialog>
-    <el-dialog title="Image" :visible.sync="this.$store.state.imageDialogVisible" @open="openImageDialog" :before-close="closeImageDialog" width="400px">
-       <el-form label-width="45px">
+    <el-dialog
+      title="Image"
+      :visible.sync="this.$store.state.imageDialogVisible"
+      width="400px"
+      :before-close="closeImageDialog"
+      @open="openImageDialog"
+    >
+      <el-form label-width="45px">
         <el-form-item label="Alt">
-          <el-input @keyup.enter.native="insertImage" placeholder="Please input" v-model="imageAlt" ref="imageAltInput"></el-input>
+          <el-input
+            ref="imageAltInput"
+            v-model="imageAlt"
+            placeholder="Please input"
+            @keyup.enter.native="insertImage"
+          />
         </el-form-item>
         <el-form-item label="URL">
-          <el-input @keyup.enter.native="insertImage" placeholder="Please input" v-model="imageUrl" ref="imageUrlInput"></el-input>
+          <el-input
+            ref="imageUrlInput"
+            v-model="imageUrl"
+            placeholder="Please input"
+            @keyup.enter.native="insertImage"
+          />
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="insertImage">Insert</el-button>
-        <el-button @click="closeImageDialog">Cancel</el-button>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          type="primary"
+          @click="insertImage"
+        >
+          Insert
+        </el-button>
+        <el-button @click="closeImageDialog">
+          Cancel
+        </el-button>
       </span>
     </el-dialog>
-    <el-dialog title="Table" :visible.sync="this.$store.state.tableDialogVisible" @open="openTableDialog" :before-close="closeTableDialog" width="400px">
-       <el-form label-width="45px">
+    <el-dialog
+      title="Table"
+      :visible.sync="this.$store.state.tableDialogVisible"
+      width="400px"
+      :before-close="closeTableDialog"
+      @open="openTableDialog"
+    >
+      <el-form label-width="45px">
         <el-form-item label="Row">
-          <el-input-number @keyup.enter.native="insertTable" v-model="tableRow" :min="1" :max="10" ref="tableRowInput"></el-input-number>
+          <el-input-number
+            ref="tableRowInput"
+            v-model="tableRow"
+            :max="10"
+            :min="1"
+            @keyup.enter.native="insertTable"
+          />
         </el-form-item>
         <el-form-item label="Col">
-          <el-input-number @keyup.enter.native="insertTable" v-model="tableColumn" :min="1" :max="10"></el-input-number>
+          <el-input-number
+            v-model="tableColumn"
+            :max="10"
+            :min="1"
+            @keyup.enter.native="insertTable"
+          />
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="insertTable">Insert</el-button>
-        <el-button @click="closeTableDialog">Cancel</el-button>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          type="primary"
+          @click="insertTable"
+        >
+          Insert
+        </el-button>
+        <el-button @click="closeTableDialog">
+          Cancel
+        </el-button>
       </span>
     </el-dialog>
   </div>
@@ -59,7 +141,7 @@ import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
 import settings from '../../config/settings.json';
 import Editor from '../assets/scripts/editor/markdown-editor.js';
-import Note from '../assets/scripts/note/note.js';
+
 export default {
   data() {
     return {

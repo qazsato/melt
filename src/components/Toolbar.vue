@@ -1,69 +1,152 @@
 <template>
   <section id="toolbar">
-    <el-tooltip content="Hyperlink (⌘L)" :open-delay="500">
-      <button @click="insertLink" :disabled="mode === 'preview'">
-        <i class="icon-link"></i>
+    <el-tooltip
+      content="Hyperlink (⌘L)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertLink"
+      >
+        <i class="icon-link" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Image (⌘P)" :open-delay="500">
-      <button @click="insertImage" :disabled="mode === 'preview'">
-        <i class="icon-photo"></i>
+    <el-tooltip
+      content="Image (⌘P)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertImage"
+      >
+        <i class="icon-photo" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Bold (⌘B)" :open-delay="500">
-      <button @click="insertBold" :disabled="mode === 'preview'">
-        <i class="icon-bold"></i>
+    <el-tooltip
+      content="Bold (⌘B)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertBold"
+      >
+        <i class="icon-bold" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Italic (⌘I)" :open-delay="500">
-      <button @click="insertItalic" :disabled="mode === 'preview'">
-        <i class="icon-italic"></i>
+    <el-tooltip
+      content="Italic (⌘I)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertItalic"
+      >
+        <i class="icon-italic" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Strikethrough (⇧⌘X)" :open-delay="500">
-      <button @click="insertStrikethrough" :disabled="mode === 'preview'">
-        <i class="icon-strikethrough"></i>
+    <el-tooltip
+      content="Strikethrough (⇧⌘X)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertStrikethrough"
+      >
+        <i class="icon-strikethrough" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Code (⌘K)" :open-delay="500">
-      <button @click="insertCode" :disabled="mode === 'preview'">
-        <i class="icon-code"></i>
+    <el-tooltip
+      content="Code (⌘K)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertCode"
+      >
+        <i class="icon-code" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Quote (⌘U)" :open-delay="500">
-      <button @click="insertQuote" :disabled="mode === 'preview'">
-        <i class="icon-quote"></i>
+    <el-tooltip
+      content="Quote (⌘U)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertQuote"
+      >
+        <i class="icon-quote" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Bulleted List (⇧⌘O)" :open-delay="500">
-      <button @click="insertBulletedList" :disabled="mode === 'preview'">
-        <i class="icon-list_bulleted"></i>
+    <el-tooltip
+      content="Bulleted List (⇧⌘O)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertBulletedList"
+      >
+        <i class="icon-list_bulleted" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Numbered List (⇧⌘N)" :open-delay="500">
-      <button @click="insertNumberedList" :disabled="mode === 'preview'">
-        <i class="icon-list_numbered"></i>
+    <el-tooltip
+      content="Numbered List (⇧⌘N)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertNumberedList"
+      >
+        <i class="icon-list_numbered" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Checked List (⇧⌘Y)" :open-delay="500">
-      <button @click="insertCheckedList" :disabled="mode === 'preview'">
-        <i class="icon-list_checked"></i>
+    <el-tooltip
+      content="Checked List (⇧⌘Y)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertCheckedList"
+      >
+        <i class="icon-list_checked" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Table (⌘T)" :open-delay="500">
-      <button @click="insertTable" :disabled="mode === 'preview'">
-        <i class="icon-table"></i>
+    <el-tooltip
+      content="Table (⌘T)"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="insertTable"
+      >
+        <i class="icon-table" />
       </button>
     </el-tooltip>
-    <el-tooltip content="Delete" :open-delay="500">
-      <button @click="deleteFile" :disabled="mode === 'preview'">
-        <i class="icon-delete"></i>
+    <el-tooltip
+      content="Delete"
+      :open-delay="500"
+    >
+      <button
+        :disabled="mode === 'preview'"
+        @click="deleteFile"
+      >
+        <i class="icon-delete" />
       </button>
     </el-tooltip>
-    <el-radio-group @change="changeViewMode" v-model="mode" size="mini" class="checkbox-mode">
-      <el-radio-button label="editor">A</el-radio-button>
-      <el-radio-button label="multi">B</el-radio-button>
-      <el-radio-button label="preview">C</el-radio-button>
+    <el-radio-group
+      v-model="mode"
+      class="checkbox-mode"
+      size="mini"
+      @change="changeViewMode"
+    >
+      <el-radio-button label="editor">
+        A
+      </el-radio-button>
+      <el-radio-button label="multi">
+        B
+      </el-radio-button>
+      <el-radio-button label="preview">
+        C
+      </el-radio-button>
     </el-radio-group>
   </section>
 </template>

@@ -1,34 +1,39 @@
 <template>
   <section>
     <el-tag
-      :key="tag"
-      v-for="tag in dynamicTags"
+      v-for="(tag, index) in dynamicTags"
+      :key="index"
       closable
       type="info"
       size="small"
       :disable-transitions="true"
-      @close="handleClose(tag)">
-      {{tag}}
+      @close="handleClose(tag)"
+    >
+      {{ tag }}
     </el-tag>
     <el-autocomplete
-      class="input-new-tag"
       v-if="inputVisible"
-      v-model="inputValue"
-      :fetch-suggestions="querySearch"
       ref="saveTagInput"
+      v-model="inputValue"
+      class="input-new-tag"
+      :fetch-suggestions="querySearch"
       size="mini"
       @keyup.enter.native="handleInput"
       @select="handleInput"
       @blur="blurInput"
-    ></el-autocomplete>
-    <el-button v-else class="button-new-tag" size="mini" @click="showInput">+ New Tag</el-button>
+    />
+    <el-button
+      v-else
+      class="button-new-tag"
+      size="mini"
+      @click="showInput"
+    >
+      + New Tag
+    </el-button>
   </section>
 </template>
 
 <script>
-import Vue from 'vue';
-import Note from '../assets/scripts/note/note.js';
-
 export default {
   data() {
     return {

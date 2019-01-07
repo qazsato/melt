@@ -1,7 +1,15 @@
 <template>
-  <div class="preview-area" v-show="this.$store.state.mode === 'preview' || this.$store.state.mode === 'multi'">
-    <article class="markdown-body" v-html="markedText"></article>
-    <publish-button></publish-button>
+  <div
+    v-show="this.$store.state.mode === 'preview' || this.$store.state.mode === 'multi'"
+    class="preview-area"
+  >
+    <!-- eslint-disable vue/no-v-html -->
+    <article
+      class="markdown-body"
+      v-html="markedText"
+    />
+    <!-- eslint-enable vue/no-v-html -->
+    <publish-button />
   </div>
 </template>
 
@@ -11,17 +19,22 @@ import publishButton from './PublishButton.vue';
 import '../assets/styles/markdown.scss';
 
 export default {
-  props: ['text'],
   components: {
     publishButton
   },
-  created() {
-    this.markdown = new Markdown();
+  props: {
+    text: {
+      type: String,
+      required: true
+    }
   },
   computed: {
     markedText() {
       return this.markdown.render(this.text);
     }
+  },
+  created() {
+    this.markdown = new Markdown();
   }
 }
 </script>

@@ -2,24 +2,34 @@
   <div class="container">
     <div class="input-area">
       <h1 class="file-name">
-        <i class="icon-file"></i>
-        <el-tooltip :content="this.$store.state.currentFile" :open-delay="1000">
-          <div>{{fileName}}</div>
+        <i class="icon-file" />
+        <el-tooltip
+          :content="this.$store.state.currentFile"
+          :open-delay="1000"
+        >
+          <div>{{ fileName }}</div>
         </el-tooltip>
       </h1>
       <el-autocomplete
+        ref="search"
+        v-model="filterText"
         class="filter-input"
         placeholder="Search"
-        v-model="filterText"
         prefix-icon="el-icon-search"
         size="small"
-        ref="search"
         :fetch-suggestions="querySearch"
         @select="handleInput"
-      ></el-autocomplete>
+      />
     </div>
     <div class="tree-area">
-      <el-tree class="file-tree" :data="this.$store.state.treeDatas" @node-click="handleNodeClick" :filter-node-method="filterNode" ref="filetree" :highlight-current="true"></el-tree>
+      <el-tree
+        ref="filetree"
+        class="file-tree"
+        :data="this.$store.state.treeDatas"
+        :highlight-current="true"
+        :filter-node-method="filterNode"
+        @node-click="handleNodeClick"
+      />
     </div>
   </div>
 </template>
@@ -28,7 +38,6 @@
 import Vue from 'vue';
 import {ipcRenderer} from 'electron';
 import fs from 'fs';
-import path from 'path';
 import Note from '../assets/scripts/note/note.js';
 import NoteUtil from '../assets/scripts/note/note-util.js';
 

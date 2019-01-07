@@ -1,14 +1,17 @@
 <template>
-  <div id="screen" :class="{'visible-aside': visibleAside}">
+  <div
+    id="screen"
+    :class="{'visible-aside': visibleAside}"
+  >
     <aside>
-      <filetree></filetree>
+      <filetree />
     </aside>
     <main>
-      <toolbar></toolbar>
-      <tags></tags>
+      <toolbar />
+      <tags />
       <section class="note">
-        <editor @changeText="changeText"></editor>
-        <preview :text="text"></preview>
+        <editor @changeText="changeText" />
+        <preview :text="text" />
       </section>
     </main>
   </div>
@@ -37,11 +40,6 @@ export default {
       visibleAside: true
     };
   },
-  methods: {
-    changeText(text) {
-      this.text = text;
-    }
-  },
   mounted() {
     ipcRenderer.on('new-post', () => {
       const note = new Note();
@@ -50,6 +48,11 @@ export default {
     });
     ipcRenderer.on('toggle-aside', () => this.visibleAside = !this.visibleAside);
     ipcRenderer.on('focus-search', () => this.visibleAside = true);
+  },
+  methods: {
+    changeText(text) {
+      this.text = text;
+    }
   }
 }
 </script>
