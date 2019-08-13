@@ -1,0 +1,22 @@
+.CodeMirror.dialog-opened {
+  padding-top: 40px;
+}
+
+.CodeMirror-dialog-top.CodeMirror-dialog-top {
+  background-color: #fff;
+  padding: 5px 10px;
+
+  &:before {
+    content: "\e778";
+    font-family: 'element-icons';
+  }
+}
+
+.CodeMirror-search-label,
+.CodeMirror-search-hint {
+  display: none;
+}
+
+.CodeMirror-search-field {
+  font-size: 22px;
+}
