@@ -133,6 +133,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import 'codemirror/lib/codemirror.css';
 import '@styles/melt-light.scss';
+import '@styles/melt-dialog.scss';
 import 'codemirror/mode/gfm/gfm.js';
 import 'codemirror/addon/edit/continuelist.js';
 import 'codemirror/addon/search/search.js';
