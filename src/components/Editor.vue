@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="this.$store.state.mode === 'editor' || this.$store.state.mode === 'multi'"
+    v-show="this.$store.state.mode === 'editor'"
     class="editor-area"
   >
     <textarea id="editor" />
