@@ -1,11 +1,5 @@
 <template>
-  <div
-    id="screen"
-    :class="{'visible-aside': visibleAside}"
-  >
-    <aside>
-      <filetree />
-    </aside>
+  <div id="screen">
     <main>
       <toolbar />
       <section class="note">
@@ -19,7 +13,6 @@
 <script>
 import {ipcRenderer} from 'electron';
 import toolbar from './Toolbar.vue';
-import filetree from './Filetree.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
 import Note from '@scripts/note/note.js';
@@ -27,7 +20,6 @@ import Note from '@scripts/note/note.js';
 export default {
   components: {
     toolbar,
-    filetree,
     editor,
     preview
   },
@@ -43,8 +35,6 @@ export default {
       this.$store.commit('changeCurrentFile', note.readPath());
       this.$store.commit('updateTreeDatas');
     });
-    ipcRenderer.on('toggle-aside', () => this.visibleAside = !this.visibleAside);
-    ipcRenderer.on('focus-search', () => this.visibleAside = true);
   },
   methods: {
     changeText(text) {
@@ -60,22 +50,9 @@ export default {
     height: 100%;
   }
 
-  #screen aside {
-    display: none;
-    width: 250px;
-  }
-
   #screen main {
     width: 100%;
     height: 100%;
-  }
-
-  #screen.visible-aside aside {
-    display: block;
-  }
-
-  #screen.visible-aside main {
-    width: calc(100% - 250px);
   }
 
   .note {

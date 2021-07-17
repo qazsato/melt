@@ -109,21 +109,7 @@ function createMenu() {
         {role: 'zoomin'},
         {role: 'zoomout'},
         {type: 'separator'},
-        {role: 'togglefullscreen'},
-        {
-          label: 'Focus Search',
-          accelerator: 'Shift+CmdOrCtrl+F',
-          click() {
-            mainWindow.webContents.send('focus-search');
-          }
-        },
-        {
-          label: 'Toggle Tree View',
-          accelerator: 'CmdOrCtrl+/',
-          click() {
-            mainWindow.webContents.send('toggle-aside');
-          }
-        }
+        {role: 'togglefullscreen'}
       ]
     },
     {
