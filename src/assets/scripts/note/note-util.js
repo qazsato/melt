@@ -26,17 +26,7 @@ class NoteUtil {
     }
     return results;
   }
-  static readAllTags() {
-    let tags = [];
-    const files = fs.readdirSync(settings.directory);
-    for (const file of files) {
-      if (!file.endsWith('.json')) continue;
-      const note = new Note(`${settings.directory}/${file}`);
-      tags = tags.concat(note.readTag());
-    }
-    tags = tags.filter((element, index, array) => array.indexOf(element) === index);
-    return tags;
-  }
+
   static getRecentPath() {
     const files = fs.readdirSync(settings.directory);
     let recentPath = '';

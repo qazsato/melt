@@ -12,14 +12,6 @@ test('全てのノートを読み込む', () => {
   note.delete();
 });
 
-test('全てのノートのタグを読み込む', () => {
-  const note = new Note();
-  note.registTag('test');
-  const tags = NoteUtil.readAllTags();
-  expect(tags).toContain('test');
-  note.delete();
-});
-
 test('全てのノートから最近更新したノートのパスを取得する', () => {
   const note = new Note();
   const path = NoteUtil.getRecentPath();
