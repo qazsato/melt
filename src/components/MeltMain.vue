@@ -8,7 +8,6 @@
     </aside>
     <main>
       <toolbar />
-      <tags />
       <section class="note">
         <editor @changeText="changeText" />
         <preview :text="text" />
@@ -23,7 +22,6 @@ import toolbar from './Toolbar.vue';
 import filetree from './Filetree.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
-import tags from './Tags.vue';
 import Note from '@scripts/note/note.js';
 
 export default {
@@ -31,8 +29,7 @@ export default {
     toolbar,
     filetree,
     editor,
-    preview,
-    tags
+    preview
   },
   data() {
     return {
@@ -83,6 +80,7 @@ export default {
 
   .note {
     display: flex;
-    height: calc(100% - 90px);
+    height: calc(100%);
+    background-color: #fff;
   }
 </style>
