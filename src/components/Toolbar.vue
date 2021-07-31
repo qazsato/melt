@@ -27,6 +27,7 @@
 
 <script>
 import Note from '@scripts/note/note.js';
+import NoteUtil from '@scripts/note/note-util.js';
 
 export default {
   data() {
@@ -40,6 +41,10 @@ export default {
       const title = new Note(this.$store.state.currentFile).readTitle();
       return title || 'Untitled';
     }
+  },
+  mounted() {
+    const file = NoteUtil.getRecentPath();
+    this.$store.commit('changeCurrentFile', file);
   },
   methods: {
     changeViewMode() {
@@ -58,7 +63,7 @@ export default {
   .file-name {
     display: flex;
     align-items: center;
-    margin: 0 10px;
+    margin: 0 15px;
     height: 50px;
     color: #fff;
   }
