@@ -139,13 +139,10 @@
       @change="changeViewMode"
     >
       <el-radio-button label="editor">
-        A
-      </el-radio-button>
-      <el-radio-button label="multi">
-        B
+        TEXT
       </el-radio-button>
       <el-radio-button label="preview">
-        C
+        HTML
       </el-radio-button>
     </el-radio-group>
   </section>

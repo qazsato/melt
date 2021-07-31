@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="this.$store.state.mode === 'preview' || this.$store.state.mode === 'multi'"
+    v-show="$store.state.mode === 'preview'"
     class="preview-area"
   >
     <!-- eslint-disable vue/no-v-html -->

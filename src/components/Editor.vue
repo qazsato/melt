@@ -1,12 +1,12 @@
 <template>
   <div
-    v-show="this.$store.state.mode === 'editor' || this.$store.state.mode === 'multi'"
+    v-show="$store.state.mode === 'editor'"
     class="editor-area"
   >
     <textarea id="editor" />
     <el-dialog
       title="Hyperlink"
-      :visible.sync="this.$store.state.linkDialogVisible"
+      :visible.sync="$store.state.linkDialogVisible"
       :before-close="closeLinkDialog"
       width="400px"
       @open="openLinkDialog"
@@ -46,7 +46,7 @@
     </el-dialog>
     <el-dialog
       title="Image"
-      :visible.sync="this.$store.state.imageDialogVisible"
+      :visible.sync="$store.state.imageDialogVisible"
       width="400px"
       :before-close="closeImageDialog"
       @open="openImageDialog"
@@ -86,7 +86,7 @@
     </el-dialog>
     <el-dialog
       title="Table"
-      :visible.sync="this.$store.state.tableDialogVisible"
+      :visible.sync="$store.state.tableDialogVisible"
       width="400px"
       :before-close="closeTableDialog"
       @open="openTableDialog"
