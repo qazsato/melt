@@ -9,19 +9,14 @@
       v-html="markedText"
     />
     <!-- eslint-enable vue/no-v-html -->
-    <publish-button />
   </div>
 </template>
 
 <script>
 import Markdown from '@scripts/markdown/markdown.js';
-import publishButton from './PublishButton.vue';
 import '@styles/markdown.scss';
 
 export default {
-  components: {
-    publishButton
-  },
   props: {
     text: {
       type: String,
