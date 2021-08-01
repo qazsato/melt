@@ -10,7 +10,7 @@ const dialog = electron.dialog
 const fs = require('fs')
 const path = require('path')
 const url = require('url')
-const settings = require('./config/settings.json')
+const setting = require('./config/setting.json')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -182,7 +182,7 @@ function createMenu() {
 // 新規ファイル保存
 ipcMain.handle('file-save', async (event, data) => {
   const path = dialog.showSaveDialogSync(mainWindow, {
-    defaultPath: `${settings.directory}/Untitled`,
+    defaultPath: `${setting.directory}/Untitled`,
     filters: [
       { name: 'Text', extensions: ['md'] }
     ],

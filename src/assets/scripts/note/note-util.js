@@ -1,4 +1,4 @@
-import settings from '@config/settings.json';
+import setting from '@config/setting.json';
 import glob from 'glob';
 import Note from './note.js';
 import _ from 'lodash';
@@ -13,7 +13,7 @@ class NoteUtil {
       return {
         label: n.readTitle() || 'Untitled',
         path: path,
-        relativePath: path.split(settings.directory)[1]
+        relativePath: path.split(setting.directory)[1]
       }
     })
   }

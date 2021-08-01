@@ -50,7 +50,7 @@
 
 <script>
 import Vue from 'vue';
-import settings from '@config/settings.json';
+import setting from '@config/setting.json';
 import Note from '@scripts/note/note.js';
 import NoteUtil from '@scripts/note/note-util.js';
 import { VIEW_MODE } from '@constants/index.js'
@@ -72,7 +72,7 @@ export default {
     }
   },
   mounted() {
-    const notes = NoteUtil.readTree(settings.directory);
+    const notes = NoteUtil.readTree(setting.directory);
     this.treeData = notes.map((n) => {
       return {
         value: n.path,

@@ -144,7 +144,7 @@ import 'codemirror/addon/search/search.js';
 import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
-import settings from '@config/settings.json';
+import setting from '@config/setting.json';
 import Editor from '@scripts/editor/markdown-editor.js';
 import Note from '@scripts/note/note.js';
 import { VIEW_MODE } from '@constants/index.js'
@@ -215,7 +215,7 @@ export default {
         try {
           new URL(text);
           this.linkUrl = text;
-          const url = `${settings.api}/web/title?url=${this.linkUrl}`;
+          const url = `${setting.api}/web/title?url=${this.linkUrl}`;
           axios.get(url).then((res) => {
             if (this.linkTitle === '' && this.$store.state.linkDialogVisible === true) {
               this.linkTitle = res.data.title;

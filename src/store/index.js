@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Note from '@scripts/note/note.js';
-import settings from '@config/settings.json';
+import setting from '@config/setting.json';
 import NoteUtil from '@scripts/note/note-util.js';
 import { VIEW_MODE } from '@constants/index.js'
 
@@ -56,7 +56,7 @@ const store = new Vuex.Store({
     },
 
     updateTreeDatas(state) {
-      state.treeDatas = NoteUtil.readTree(settings.directory);
+      state.treeDatas = NoteUtil.readTree(setting.directory);
     },
 
     visualizeLinkDialog(state, visible) {
