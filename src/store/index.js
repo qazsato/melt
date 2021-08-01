@@ -15,12 +15,19 @@ const store = new Vuex.Store({
     treeDatas: null,
     linkDialogVisible: false,
     imageDialogVisible: false,
-    tableDialogVisible: false
+    tableDialogVisible: false,
+    fileSearchBoxVisible: false,
   },
   mutations: {
+    createNewPost(state) {
+      state.note = null
+      state.currentFile = ''
+      state.editor.setText('')
+    },
+
     changeCurrentFile(state, file) {
       // エディタとノートの内容に差分がある場合は切替前に保存する
-      if (state.editor && state.editor.getText() !== state.note.readContent()) {
+      if (state.note && state.editor && state.editor.getText() !== state.note.readContent()) {
         const title = state.editor.getTitle();
         const content = state.editor.getText();
         state.note.updateTitle(title);
@@ -41,6 +48,9 @@ const store = new Vuex.Store({
     },
     visualizeLinkDialog(state, visible) {
       state.linkDialogVisible = visible;
+    },
+    visualizeFileSearchBox(state, visible) {
+      state.fileSearchBoxVisible = visible;
     },
     visualizeImageDialog(state, visible) {
       state.imageDialogVisible = visible;

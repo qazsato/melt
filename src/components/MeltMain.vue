@@ -1,13 +1,11 @@
 <template>
-  <div id="screen">
-    <main>
-      <toolbar />
-      <section class="note">
-        <editor @changeText="changeText" />
-        <preview :text="text" />
-      </section>
-    </main>
-  </div>
+  <main>
+    <toolbar />
+    <section class="note">
+      <editor @changeText="changeText" />
+      <preview :text="text" />
+    </section>
+  </main>
 </template>
 
 <script>
@@ -15,7 +13,6 @@ import {ipcRenderer} from 'electron';
 import toolbar from './Toolbar.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
-import Note from '@scripts/note/note.js';
 
 export default {
   components: {
@@ -31,9 +28,7 @@ export default {
   },
   mounted() {
     ipcRenderer.on('new-post', () => {
-      const note = new Note();
-      this.$store.commit('changeCurrentFile', note.readPath());
-      this.$store.commit('updateTreeDatas');
+      this.$store.commit('createNewPost');
     });
   },
   methods: {
@@ -44,20 +39,16 @@ export default {
 }
 </script>
 
-<style scoped>
-  #screen {
-    display: flex;
-    height: 100%;
-  }
+<style lang="scss" scoped>
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
 
-  #screen main {
-    width: 100%;
-    height: 100%;
-  }
-
-  .note {
-    display: flex;
-    height: calc(100%);
-    background-color: #fff;
-  }
+.note {
+  flex: 1;
+  background-color: #fff;
+}
 </style>

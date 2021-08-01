@@ -132,6 +132,7 @@
 </template>
 
 <script>
+import {ipcRenderer} from 'electron';
 import Vue from 'vue';
 import axios from 'axios';
 import 'codemirror/lib/codemirror.css';
@@ -145,6 +146,7 @@ import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
 import settings from '@config/settings.json';
 import Editor from '@scripts/editor/markdown-editor.js';
+import Note from '@scripts/note/note.js';
 
 export default {
   data() {
@@ -175,7 +177,8 @@ export default {
     this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('visualizeLinkDialog', true),
-      'Cmd-P': () => this.$store.commit('visualizeImageDialog', true),
+      'Cmd-P': () => this.$store.commit('visualizeFileSearchBox', true),
+      'Shift-Cmd-P': () => this.$store.commit('visualizeImageDialog', true),
       'Cmd-B': () => this.editor.insertBold(),
       'Cmd-I': () => this.editor.insertItalic(),
       'Shift-Cmd-X': () => this.editor.insertStrikethrough(),
@@ -260,11 +263,30 @@ export default {
       this.$store.commit('visualizeTableDialog', false);
     },
     saveFile() {
-      const title = this.editor.getTitle();
       const content = this.editor.getText();
-      this.$store.state.note.updateTitle(title);
-      this.$store.state.note.updateContent(content);
-      this.$store.commit('updateTreeDatas');
+      if (this.$store.state.currentFile) {
+        this.$store.state.note.updateContent(content);
+        this.$store.commit('updateTreeDatas');
+      } else {
+        ipcRenderer.invoke('file-save', content)
+          .then((data) => {
+            // キャンセルで閉じた
+            if (data.status === undefined) {
+              return;
+            }
+            // 保存できなかった
+            if (data.status === false) {
+              alert(`ファイルが開けませんでした。\n${data.message}`);
+              return;
+            }
+            const note = new Note(data.path);
+            this.$store.commit('changeCurrentFile', note.readPath());
+            this.$store.commit('updateTreeDatas');
+          })
+          .catch((err) => {
+            alert(err);
+          });
+      }
     }
   }
 }

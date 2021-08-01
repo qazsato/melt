@@ -4,9 +4,13 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 const Menu = electron.Menu
+const ipcMain = electron.ipcMain
+const dialog = electron.dialog
 
+const fs = require('fs')
 const path = require('path')
 const url = require('url')
+const settings = require('./config/settings.json')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -160,3 +164,34 @@ function createMenu() {
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
+
+// 新規ファイル保存
+ipcMain.handle('file-save', async (event, data) => {
+  const path = dialog.showSaveDialogSync(mainWindow, {
+    defaultPath: `${settings.directory}/Untitled`,
+    filters: [
+      { name: 'Text', extensions: ['md'] }
+    ],
+    properties: ['createDirectory']
+  })
+
+  // キャンセルで閉じた場合
+  if (path === undefined) {
+    return {
+      status: undefined
+    }
+  }
+
+  try {
+    fs.writeFileSync(path, data);
+    return {
+      status: true,
+      path: path
+    }
+  } catch(error) {
+    return {
+      status: false,
+      message: error.message
+    }
+  }
+})
