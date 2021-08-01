@@ -88,6 +88,13 @@ function createMenu() {
           click() {
             mainWindow.webContents.send('new-post');
           }
+        },
+        {
+          label: 'Open File',
+          accelerator: 'CmdOrCtrl+P',
+          click() {
+            mainWindow.webContents.send('open-file');
+          }
         }
       ]
     },

@@ -182,7 +182,6 @@ export default {
     this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('visualizeLinkDialog', true),
-      'Cmd-P': () => this.$store.commit('visualizeFileSearchBox', true),
       'Shift-Cmd-P': () => this.$store.commit('visualizeImageDialog', true),
       'Cmd-B': () => this.editor.insertBold(),
       'Cmd-I': () => this.editor.insertItalic(),

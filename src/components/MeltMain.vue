@@ -31,6 +31,10 @@ export default {
       this.$store.commit('createNewPost');
     });
 
+    ipcRenderer.on('open-file', () => {
+      this.$store.commit('visualizeFileSearchBox', true)
+    });
+
     ipcRenderer.on('toggle-view-mode', () => {
       this.$store.commit('toggleViewMode');
     });
