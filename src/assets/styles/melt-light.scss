@@ -52,7 +52,9 @@
     text-decoration: none;
   }
 
-  .cm-formatting + :not(.cm-formatting) {
+  .cm-formatting + :not(.cm-formatting),
+  .cm-formatting + :not(.cm-formatting) + :not(.cm-formatting),
+  .cm-formatting + :not(.cm-formatting) + :not(.cm-formatting) + :not(.cm-formatting) {
     color: rgba(0,0,0,.75);
   }
 
