@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="$store.state.mode === 'preview'"
+    v-show="isViewModePreview"
     class="preview-area"
   >
     <!-- eslint-disable vue/no-v-html -->
@@ -15,6 +15,7 @@
 <script>
 import Markdown from '@scripts/markdown/markdown.js';
 import '@styles/markdown.scss';
+import { VIEW_MODE } from '@constants/index.js'
 
 export default {
   props: {
@@ -24,6 +25,10 @@ export default {
     }
   },
   computed: {
+    isViewModePreview() {
+      return this.$store.state.viewMode === VIEW_MODE.PREVIEW
+    },
+
     markedText() {
       return this.markdown.render(this.text);
     }

@@ -106,6 +106,13 @@ function createMenu() {
     {
       label: 'View',
       submenu: [
+        {
+          label: 'Toggle View Mode',
+          accelerator: 'CmdOrCtrl+E',
+          click() {
+            mainWindow.webContents.send('toggle-view-mode');
+          }
+        },
         {role: 'reload'},
         {role: 'forcereload'},
         {role: 'toggledevtools'},

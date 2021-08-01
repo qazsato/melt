@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="$store.state.mode === 'editor'"
+    v-show="isViewModeEditor"
     class="editor-area"
   >
     <textarea id="editor" />
@@ -147,6 +147,7 @@ import 'codemirror/addon/dialog/dialog.css';
 import settings from '@config/settings.json';
 import Editor from '@scripts/editor/markdown-editor.js';
 import Note from '@scripts/note/note.js';
+import { VIEW_MODE } from '@constants/index.js'
 
 export default {
   data() {
@@ -161,6 +162,10 @@ export default {
     };
   },
   computed: {
+    isViewModeEditor() {
+      return this.$store.state.viewMode === VIEW_MODE.EDITOR
+    },
+
     file() {
       return this.$store.state.currentFile;
     }
@@ -169,7 +174,7 @@ export default {
     file(file) {
       if (!file) return;
       const content = this.$store.state.note.readContent();
-      this.editor.editor.getDoc().setValue(content);
+      this.editor.setText(content);
     }
   },
   mounted() {

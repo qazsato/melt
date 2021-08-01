@@ -15,7 +15,7 @@
     </h1>
 
     <el-radio-group
-      v-model="mode"
+      v-model="viewMode"
       class="checkbox-mode"
       size="mini"
       @change="changeViewMode"
@@ -53,11 +53,12 @@ import Vue from 'vue';
 import settings from '@config/settings.json';
 import Note from '@scripts/note/note.js';
 import NoteUtil from '@scripts/note/note-util.js';
+import { VIEW_MODE } from '@constants/index.js'
 
 export default {
   data() {
     return {
-      mode: this.$store.state.mode,
+      viewMode: this.$store.state.viewMode,
       filePath: '',
       treeData: []
     };
@@ -91,15 +92,15 @@ export default {
     )
 
     this.$store.watch(
-      (state) => state.mode,
+      (state) => state.viewMode,
       (newValue, oldValue) => {
-        this.mode = newValue
+        this.viewMode = newValue
       }
     )
   },
   methods: {
     changeViewMode() {
-      this.$store.commit('changeMode', this.mode);
+      this.$store.commit('changeViewMode', this.viewMode);
     },
 
     queryFileSearch(queryString, cb) {
@@ -115,7 +116,7 @@ export default {
       this.$store.commit('changeCurrentFile', note.readPath());
       this.filePath = ''
       this.$store.commit('visualizeFileSearchBox', false);
-      this.$store.commit('changeMode', 'preview');
+      this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW);
     }
   }
 }

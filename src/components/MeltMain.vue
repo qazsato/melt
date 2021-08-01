@@ -30,6 +30,10 @@ export default {
     ipcRenderer.on('new-post', () => {
       this.$store.commit('createNewPost');
     });
+
+    ipcRenderer.on('toggle-view-mode', () => {
+      this.$store.commit('toggleViewMode');
+    });
   },
   methods: {
     changeText(text) {

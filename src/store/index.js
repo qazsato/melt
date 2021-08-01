@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import Note from '@scripts/note/note.js';
 import settings from '@config/settings.json';
 import NoteUtil from '@scripts/note/note-util.js';
+import { VIEW_MODE } from '@constants/index.js'
 
 Vue.use(Vuex);
 
@@ -10,7 +11,7 @@ const store = new Vuex.Store({
   state: {
     note: null,
     currentFile: '',
-    mode: 'editor',
+    viewMode: VIEW_MODE.EDITOR,
     editor: null,
     treeDatas: null,
     linkDialogVisible: false,
@@ -37,24 +38,39 @@ const store = new Vuex.Store({
       state.currentFile = file;
       state.note = new Note(file);
     },
-    changeMode(state, mode) {
-      state.mode = mode;
+
+    toggleViewMode(state) {
+      if (state.viewMode === VIEW_MODE.EDITOR) {
+        state.viewMode = VIEW_MODE.PREVIEW
+      } else {
+        state.viewMode = VIEW_MODE.EDITOR
+      }
     },
+
+    changeViewMode(state, viewMode) {
+      state.viewMode = viewMode;
+    },
+
     setEditor(state, editor) {
       state.editor = editor;
     },
+
     updateTreeDatas(state) {
       state.treeDatas = NoteUtil.readTree(settings.directory);
     },
+
     visualizeLinkDialog(state, visible) {
       state.linkDialogVisible = visible;
     },
+
     visualizeFileSearchBox(state, visible) {
       state.fileSearchBoxVisible = visible;
     },
+
     visualizeImageDialog(state, visible) {
       state.imageDialogVisible = visible;
     },
+
     visualizeTableDialog(state, visible) {
       state.tableDialogVisible = visible;
     }
