@@ -83,10 +83,19 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+</style>
 
-.checkbox-mode {
-  position: absolute;
-  top: 11px;
-  right: 15px;
+
+<style lang="scss">
+#toolbar {
+  .checkbox-mode {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+
+    .el-radio-button__inner {
+      padding: 6px 10px;
+    }
+  }
 }
 </style>
