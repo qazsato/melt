@@ -12,6 +12,11 @@
     box-sizing: border-box;
   }
 
+  .CodeMirror-selected {
+    background-color: #00b1b3;
+    opacity: 0.2;
+  }
+
   .cm-formatting,
   .cm-url {
     color: rgba(0,0,0,.28);
