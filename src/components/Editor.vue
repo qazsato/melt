@@ -170,6 +170,7 @@ export default {
       return this.$store.state.currentFile;
     }
   },
+
   watch: {
     file(file) {
       if (!file) return;
@@ -177,6 +178,7 @@ export default {
       this.editor.setText(content);
     }
   },
+
   mounted() {
     this.editor = new Editor('editor');
     this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
@@ -195,6 +197,17 @@ export default {
       'Cmd-S': () => this.saveFile()
     });
     this.$store.commit('setEditor', this.editor);
+
+    this.$store.watch(
+      (state) => state.viewMode,
+      (newValue, oldValue) => {
+        // NOTE: HTMLモードでファイル変更し、TEXTモードに切り替えた場合、変更前の情報が表示されたままとなってしまう。
+        // その問題を回避するため、ここで再度テキストを設定して変更後の情報にする。
+        if (newValue === VIEW_MODE.EDITOR) {
+          this.editor.setText(this.$store.state.note.readContent());
+        }
+      }
+    )
   },
   methods: {
     insertLink() {
