@@ -27,40 +27,16 @@
         HTML
       </el-radio-button>
     </el-radio-group>
-    <el-autocomplete
-      v-if="$store.state.fileSearchBoxVisible"
-      ref="fileInput"
-      v-model="filePath"
-      class="autocomplete"
-      popper-class="autocomplete-popper"
-      :fetch-suggestions="queryFileSearch"
-      :highlight-first-item="true"
-      placeholder="Search file to open"
-      @select="handleFileSelect"
-    >
-      <template slot-scope="{ item }">
-        <div class="label">
-          {{ item.label }}
-        </div>
-        <span class="path">.{{ item.relativePath }}</span>
-      </template>
-    </el-autocomplete>
   </section>
 </template>
 
 <script>
-import Vue from 'vue';
-import setting from '@config/setting.json';
 import Note from '@scripts/note/note.js';
-import NoteUtil from '@scripts/note/note-util.js';
-import { VIEW_MODE } from '@constants/index.js'
 
 export default {
   data() {
     return {
-      viewMode: this.$store.state.viewMode,
-      filePath: '',
-      treeData: []
+      viewMode: this.$store.state.viewMode
     };
   },
   computed: {
@@ -72,25 +48,6 @@ export default {
     }
   },
   mounted() {
-    const notes = NoteUtil.readTree(setting.directory);
-    this.treeData = notes.map((n) => {
-      return {
-        value: n.path,
-        label: n.label,
-        path: n.path,
-        relativePath: n.relativePath
-      }
-    })
-
-    this.$store.watch(
-      (state) => state.fileSearchBoxVisible,
-      (newValue, oldValue) => {
-        if (newValue) {
-          Vue.nextTick().then(() => this.$refs.fileInput.$refs.input.focus());
-        }
-      }
-    )
-
     this.$store.watch(
       (state) => state.viewMode,
       (newValue, oldValue) => {
@@ -101,75 +58,35 @@ export default {
   methods: {
     changeViewMode() {
       this.$store.commit('changeViewMode', this.viewMode);
-    },
-
-    queryFileSearch(queryString, cb) {
-      let results = this.treeData;
-      if (queryString) {
-        results = this.treeData.filter((d) => d.relativePath.toLowerCase().includes(queryString.toLowerCase()))
-      }
-      cb(results);
-    },
-
-    handleFileSelect(item) {
-      const note = new Note(item.path);
-      this.$store.commit('changeCurrentFile', note.readPath());
-      this.filePath = ''
-      this.$store.commit('visualizeFileSearchBox', false);
-      this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW);
     }
   }
 }
 </script>
 
-<style scoped>
-  #toolbar {
-    background-color: #4a4a4a;
-  }
-
-  .file-name {
-    display: flex;
-    align-items: center;
-    margin: 0 15px;
-    height: 50px;
-    color: #fff;
-  }
-
-  .file-name div {
-    font-size: 18px;
-    font-weight: bold;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  .checkbox-mode {
-    position: absolute;
-    top: 11px;
-    right: 15px;
-  }
-</style>
-
-<style lang="scss">
-.autocomplete {
-  width: 100%;
+<style lang="scss" scoped>
+#toolbar {
+  background-color: #4a4a4a;
 }
 
-.autocomplete-popper {
-  ul {
-    li {
-      line-height: normal;
-      padding: 7px 14px;
+.file-name {
+  display: flex;
+  align-items: center;
+  margin: 0 15px;
+  height: 50px;
+  color: #fff;
+}
 
-      .label {
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-      .path {
-        font-size: 12px;
-        color: #b4b4b4;
-      }
-    }
-  }
+.file-name div {
+  font-size: 18px;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.checkbox-mode {
+  position: absolute;
+  top: 11px;
+  right: 15px;
 }
 </style>

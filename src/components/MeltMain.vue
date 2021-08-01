@@ -5,6 +5,7 @@
       <editor @changeText="changeText" />
       <preview :text="text" />
     </section>
+    <file-dialog />
   </main>
 </template>
 
@@ -13,17 +14,18 @@ import {ipcRenderer} from 'electron';
 import toolbar from './Toolbar.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
+import fileDialog from './FileDialog.vue';
 
 export default {
   components: {
     toolbar,
     editor,
-    preview
+    preview,
+    fileDialog,
   },
   data() {
     return {
-      text: '',
-      visibleAside: true
+      text: ''
     };
   },
   mounted() {
@@ -49,14 +51,12 @@ export default {
 
 <style lang="scss" scoped>
 main {
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
 }
 
 .note {
-  flex: 1;
+  height: calc(100% - 50px);
   background-color: #fff;
 }
 </style>
