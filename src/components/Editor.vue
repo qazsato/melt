@@ -8,6 +8,7 @@
       title="Hyperlink"
       :visible.sync="$store.state.linkDialogVisible"
       :before-close="closeLinkDialog"
+      :close-on-click-modal="false"
       width="400px"
       @open="openLinkDialog"
     >
@@ -47,6 +48,7 @@
     <el-dialog
       title="Image"
       :visible.sync="$store.state.imageDialogVisible"
+      :close-on-click-modal="false"
       width="400px"
       :before-close="closeImageDialog"
       @open="openImageDialog"
@@ -87,6 +89,7 @@
     <el-dialog
       title="Table"
       :visible.sync="$store.state.tableDialogVisible"
+      :close-on-click-modal="false"
       width="400px"
       :before-close="closeTableDialog"
       @open="openTableDialog"
