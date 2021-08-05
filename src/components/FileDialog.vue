@@ -74,7 +74,7 @@ export default {
 
     handleFileSelect(item) {
       const note = new Note(item.path);
-      this.$store.commit('changeCurrentFile', note.readPath());
+      this.$store.commit('changeFile', note.readPath());
       this.filePath = ''
       this.$store.commit('visualizeFileSearchBox', false);
       this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW);

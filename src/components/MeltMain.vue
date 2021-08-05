@@ -44,6 +44,7 @@ export default {
   methods: {
     changeText(text) {
       this.text = text;
+      this.$store.commit('updateIsUnsaved');
     }
   }
 }

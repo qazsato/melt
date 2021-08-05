@@ -11,6 +11,7 @@ const store = new Vuex.Store({
   state: {
     note: null,
     currentFile: '',
+    isUnsaved: false,
     viewMode: VIEW_MODE.EDITOR,
     editor: null,
     treeDatas: null,
@@ -26,17 +27,22 @@ const store = new Vuex.Store({
       state.editor.setText('')
     },
 
-    changeCurrentFile(state, file) {
+    changeFile(state, file) {
       // エディタとノートの内容に差分がある場合は切替前に保存する
       if (state.note && state.editor && state.editor.getText() !== state.note.readContent()) {
         const title = state.editor.getTitle();
         const content = state.editor.getText();
         state.note.updateTitle(title);
         state.note.updateContent(content);
-        this.commit('updateTreeDatas');
+        this.commit('updateFiles');
       }
       state.currentFile = file;
       state.note = new Note(file);
+    },
+
+    updateIsUnsaved(state) {
+      const content = state.note ? state.note.readContent() : ''
+      state.isUnsaved = state.editor.getText() !== content
     },
 
     toggleViewMode(state) {
@@ -55,8 +61,9 @@ const store = new Vuex.Store({
       state.editor = editor;
     },
 
-    updateTreeDatas(state) {
+    updateFiles(state) {
       state.treeDatas = NoteUtil.readTree(setting.directory);
+      store.commit('updateIsUnsaved');
     },
 
     visualizeLinkDialog(state, visible) {

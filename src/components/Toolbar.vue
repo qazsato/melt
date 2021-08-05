@@ -12,6 +12,10 @@
       <template v-else>
         <div>{{ fileName }}</div>
       </template>
+      <span
+        v-if="isUnsaved"
+        class="unsaved"
+      >*</span>
     </h1>
 
     <el-radio-group
@@ -36,9 +40,11 @@ import Note from '@scripts/note/note.js';
 export default {
   data() {
     return {
-      viewMode: this.$store.state.viewMode
+      viewMode: this.$store.state.viewMode,
+      isUnsaved: this.$store.state.isUnsaved
     };
   },
+
   computed: {
     fileName() {
       if (this.$store.state.currentFile) {
@@ -47,6 +53,7 @@ export default {
       return 'Untitled';
     }
   },
+
   mounted() {
     this.$store.watch(
       (state) => state.viewMode,
@@ -54,7 +61,15 @@ export default {
         this.viewMode = newValue
       }
     )
+
+    this.$store.watch(
+      (state) => state.isUnsaved,
+      (newValue, oldValue) => {
+        this.isUnsaved = newValue
+      }
+    )
   },
+
   methods: {
     changeViewMode() {
       this.$store.commit('changeViewMode', this.viewMode);
@@ -97,5 +112,10 @@ export default {
       padding: 6px 10px;
     }
   }
+}
+
+.unsaved {
+  padding-top: 9px;
+  padding-left: 5px;
 }
 </style>

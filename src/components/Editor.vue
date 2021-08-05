@@ -292,7 +292,7 @@ export default {
       const content = this.editor.getText();
       if (this.$store.state.currentFile) {
         this.$store.state.note.updateContent(content);
-        this.$store.commit('updateTreeDatas');
+        this.$store.commit('updateFiles');
       } else {
         ipcRenderer.invoke('file-save', content)
           .then((data) => {
@@ -306,8 +306,8 @@ export default {
               return;
             }
             const note = new Note(data.path);
-            this.$store.commit('changeCurrentFile', note.readPath());
-            this.$store.commit('updateTreeDatas');
+            this.$store.commit('changeFile', note.readPath());
+            this.$store.commit('updateFiles');
           })
           .catch((err) => {
             alert(err);
