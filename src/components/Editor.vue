@@ -213,7 +213,10 @@ export default {
         // NOTE: HTMLモードでファイル変更し、TEXTモードに切り替えた場合、変更前の情報が表示されたままとなってしまう。
         // その問題を回避するため、ここで再度テキストを設定して変更後の情報にする。
         if (newValue === VIEW_MODE.EDITOR) {
-          this.editor.setText(this.$store.state.note.readContent());
+          // 未保存の情報を上書きしないように、保存済みの場合のみ設定する
+          if (!this.$store.state.isUnsaved && this.$store.state.note) {
+            this.editor.setText(this.$store.state.note.readContent());
+          }
         }
       }
     )
