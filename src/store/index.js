@@ -24,7 +24,11 @@ const store = new Vuex.Store({
     createNewPost(state) {
       state.note = null
       state.currentFile = ''
-      state.editor.setText('')
+      state.viewMode = VIEW_MODE.EDITOR
+      Vue.nextTick().then(() => {
+        state.editor.setText('')
+        state.editor.focus()
+      });
     },
 
     changeFile(state, file) {
@@ -50,11 +54,15 @@ const store = new Vuex.Store({
         state.viewMode = VIEW_MODE.PREVIEW
       } else {
         state.viewMode = VIEW_MODE.EDITOR
+        Vue.nextTick().then(() => state.editor.focus());
       }
     },
 
     changeViewMode(state, viewMode) {
       state.viewMode = viewMode;
+      if (state.viewMode === VIEW_MODE.EDITOR) {
+        Vue.nextTick().then(() => state.editor.focus());
+      }
     },
 
     setEditor(state, editor) {
