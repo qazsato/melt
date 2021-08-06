@@ -22,6 +22,11 @@ const store = new Vuex.Store({
   },
   mutations: {
     createNewPost(state) {
+      if (state.isUnsaved) {
+        if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
+          return
+        }
+      }
       state.note = null
       state.currentFile = ''
       state.viewMode = VIEW_MODE.EDITOR
@@ -32,14 +37,6 @@ const store = new Vuex.Store({
     },
 
     changeFile(state, file) {
-      // エディタとノートの内容に差分がある場合は切替前に保存する
-      if (state.note && state.editor && state.editor.getText() !== state.note.readContent()) {
-        const title = state.editor.getTitle();
-        const content = state.editor.getText();
-        state.note.updateTitle(title);
-        state.note.updateContent(content);
-        this.commit('updateFiles');
-      }
       state.currentFile = file;
       state.note = new Note(file);
     },

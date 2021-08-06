@@ -58,7 +58,7 @@ export default {
       (state) => state.fileSearchBoxVisible,
       (newValue, oldValue) => {
         if (newValue) {
-          Vue.nextTick().then(() => this.$refs.fileInput.$refs.input.focus());
+          this.$refs.fileInput.$refs.input.focus();
         }
       }
     )
@@ -73,10 +73,16 @@ export default {
     },
 
     handleFileSelect(item) {
+      this.filePath = ''
+      if (this.$store.state.isUnsaved) {
+        if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
+          this.$refs.fileInput.$refs.input.blur()
+          return
+        }
+      }
+      this.$store.commit('visualizeFileSearchBox', false);
       const note = new Note(item.path);
       this.$store.commit('changeFile', note.readPath());
-      this.filePath = ''
-      this.$store.commit('visualizeFileSearchBox', false);
       this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW);
     },
 
