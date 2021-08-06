@@ -57,6 +57,13 @@ class Editor {
     return this.editor.getValue();
   }
   /**
+   * エディタの文字を設定します。
+   * @param {String} val
+   */
+  setText(val) {
+    this.editor.setValue(val)
+  }
+  /**
    * 選択中の文字を返却します。
    */
   getSelection() {

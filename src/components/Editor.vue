@@ -1,13 +1,14 @@
 <template>
   <div
-    v-show="this.$store.state.mode === 'editor' || this.$store.state.mode === 'multi'"
+    v-show="isViewModeEditor"
     class="editor-area"
   >
     <textarea id="editor" />
     <el-dialog
       title="Hyperlink"
-      :visible.sync="this.$store.state.linkDialogVisible"
+      :visible.sync="$store.state.linkDialogVisible"
       :before-close="closeLinkDialog"
+      :close-on-click-modal="false"
       width="400px"
       @open="openLinkDialog"
     >
@@ -46,7 +47,8 @@
     </el-dialog>
     <el-dialog
       title="Image"
-      :visible.sync="this.$store.state.imageDialogVisible"
+      :visible.sync="$store.state.imageDialogVisible"
+      :close-on-click-modal="false"
       width="400px"
       :before-close="closeImageDialog"
       @open="openImageDialog"
@@ -86,7 +88,8 @@
     </el-dialog>
     <el-dialog
       title="Table"
-      :visible.sync="this.$store.state.tableDialogVisible"
+      :visible.sync="$store.state.tableDialogVisible"
+      :close-on-click-modal="false"
       width="400px"
       :before-close="closeTableDialog"
       @open="openTableDialog"
@@ -129,19 +132,31 @@
 </template>
 
 <script>
+import {ipcRenderer} from 'electron';
 import Vue from 'vue';
 import axios from 'axios';
 import 'codemirror/lib/codemirror.css';
 import '@styles/melt-light.scss';
 import '@styles/melt-dialog.scss';
 import 'codemirror/mode/gfm/gfm.js';
+import 'codemirror/mode/htmlmixed/htmlmixed.js';
+import 'codemirror/mode/css/css.js';
+import 'codemirror/mode/javascript/javascript.js';
+import 'codemirror/mode/vue/vue.js';
+import 'codemirror/mode/jsx/jsx.js';
+import 'codemirror/mode/ruby/ruby.js';
+import 'codemirror/mode/go/go.js';
+import 'codemirror/mode/sql/sql.js';
+import 'codemirror/mode/shell/shell.js';
 import 'codemirror/addon/edit/continuelist.js';
 import 'codemirror/addon/search/search.js';
 import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
-import settings from '@config/settings.json';
+import setting from '@config/setting.json';
 import Editor from '@scripts/editor/markdown-editor.js';
+import Note from '@scripts/note/note.js';
+import { VIEW_MODE } from '@constants/index.js'
 
 export default {
   data() {
@@ -156,23 +171,29 @@ export default {
     };
   },
   computed: {
+    isViewModeEditor() {
+      return this.$store.state.viewMode === VIEW_MODE.EDITOR
+    },
+
     file() {
       return this.$store.state.currentFile;
     }
   },
+
   watch: {
     file(file) {
       if (!file) return;
       const content = this.$store.state.note.readContent();
-      this.editor.editor.getDoc().setValue(content);
+      this.editor.setText(content);
     }
   },
+
   mounted() {
     this.editor = new Editor('editor');
     this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('visualizeLinkDialog', true),
-      'Cmd-P': () => this.$store.commit('visualizeImageDialog', true),
+      'Shift-Cmd-P': () => this.$store.commit('visualizeImageDialog', true),
       'Cmd-B': () => this.editor.insertBold(),
       'Cmd-I': () => this.editor.insertItalic(),
       'Shift-Cmd-X': () => this.editor.insertStrikethrough(),
@@ -185,6 +206,20 @@ export default {
       'Cmd-S': () => this.saveFile()
     });
     this.$store.commit('setEditor', this.editor);
+
+    this.$store.watch(
+      (state) => state.viewMode,
+      (newValue, oldValue) => {
+        // NOTE: HTMLモードでファイル変更し、TEXTモードに切り替えた場合、変更前の情報が表示されたままとなってしまう。
+        // その問題を回避するため、ここで再度テキストを設定して変更後の情報にする。
+        if (newValue === VIEW_MODE.EDITOR) {
+          // 未保存の情報を上書きしないように、保存済みの場合のみ設定する
+          if (!this.$store.state.isUnsaved && this.$store.state.note) {
+            this.editor.setText(this.$store.state.note.readContent());
+          }
+        }
+      }
+    )
   },
   methods: {
     insertLink() {
@@ -205,7 +240,7 @@ export default {
         try {
           new URL(text);
           this.linkUrl = text;
-          const url = `${settings.api}/web/title?url=${this.linkUrl}`;
+          const url = `${setting.api}/web/title?url=${this.linkUrl}`;
           axios.get(url).then((res) => {
             if (this.linkTitle === '' && this.$store.state.linkDialogVisible === true) {
               this.linkTitle = res.data.title;
@@ -257,11 +292,30 @@ export default {
       this.$store.commit('visualizeTableDialog', false);
     },
     saveFile() {
-      const title = this.editor.getTitle();
       const content = this.editor.getText();
-      this.$store.state.note.updateTitle(title);
-      this.$store.state.note.updateContent(content);
-      this.$store.commit('updateTreeDatas');
+      if (this.$store.state.currentFile) {
+        this.$store.state.note.updateContent(content);
+        this.$store.commit('updateFiles');
+      } else {
+        ipcRenderer.invoke('file-save', content)
+          .then((data) => {
+            // キャンセルで閉じた
+            if (data.status === undefined) {
+              return;
+            }
+            // 保存できなかった
+            if (data.status === false) {
+              alert(`ファイルが開けませんでした。\n${data.message}`);
+              return;
+            }
+            const note = new Note(data.path);
+            this.$store.commit('changeFile', note.readPath());
+            this.$store.commit('updateFiles');
+          })
+          .catch((err) => {
+            alert(err);
+          });
+      }
     }
   }
 }

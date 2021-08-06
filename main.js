@@ -4,9 +4,13 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 const Menu = electron.Menu
+const ipcMain = electron.ipcMain
+const dialog = electron.dialog
 
+const fs = require('fs')
 const path = require('path')
 const url = require('url')
+const setting = require('./config/setting.json')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -84,6 +88,13 @@ function createMenu() {
           click() {
             mainWindow.webContents.send('new-post');
           }
+        },
+        {
+          label: 'Open File',
+          accelerator: 'CmdOrCtrl+P',
+          click() {
+            mainWindow.webContents.send('open-file');
+          }
         }
       ]
     },
@@ -102,6 +113,13 @@ function createMenu() {
     {
       label: 'View',
       submenu: [
+        {
+          label: 'Toggle View Mode',
+          accelerator: 'CmdOrCtrl+E',
+          click() {
+            mainWindow.webContents.send('toggle-view-mode');
+          }
+        },
         {role: 'reload'},
         {role: 'forcereload'},
         {role: 'toggledevtools'},
@@ -110,21 +128,7 @@ function createMenu() {
         {role: 'zoomin'},
         {role: 'zoomout'},
         {type: 'separator'},
-        {role: 'togglefullscreen'},
-        {
-          label: 'Focus Search',
-          accelerator: 'Shift+CmdOrCtrl+F',
-          click() {
-            mainWindow.webContents.send('focus-search');
-          }
-        },
-        {
-          label: 'Toggle Tree View',
-          accelerator: 'CmdOrCtrl+/',
-          click() {
-            mainWindow.webContents.send('toggle-aside');
-          }
-        }
+        {role: 'togglefullscreen'}
       ]
     },
     {
@@ -174,3 +178,34 @@ function createMenu() {
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
+
+// 新規ファイル保存
+ipcMain.handle('file-save', async (event, data) => {
+  const path = dialog.showSaveDialogSync(mainWindow, {
+    defaultPath: `${setting.directory}/Untitled`,
+    filters: [
+      { name: 'Text', extensions: ['md'] }
+    ],
+    properties: ['createDirectory']
+  })
+
+  // キャンセルで閉じた場合
+  if (path === undefined) {
+    return {
+      status: undefined
+    }
+  }
+
+  try {
+    fs.writeFileSync(path, data);
+    return {
+      status: true,
+      path: path
+    }
+  } catch(error) {
+    return {
+      status: false,
+      message: error.message
+    }
+  }
+})

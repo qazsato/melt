@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Note from '@scripts/note/note.js';
-import settings from '@config/settings.json';
+import setting from '@config/setting.json';
 import NoteUtil from '@scripts/note/note-util.js';
+import { VIEW_MODE } from '@constants/index.js'
 
 Vue.use(Vuex);
 
@@ -10,46 +11,78 @@ const store = new Vuex.Store({
   state: {
     note: null,
     currentFile: '',
-    mode: 'editor',
+    isUnsaved: false,
+    viewMode: VIEW_MODE.EDITOR,
     editor: null,
     treeDatas: null,
-    suggestDatas: null,
     linkDialogVisible: false,
     imageDialogVisible: false,
-    tableDialogVisible: false
+    tableDialogVisible: false,
+    fileSearchBoxVisible: false,
   },
   mutations: {
-    changeCurrentFile(state, file) {
-      // エディタとノートの内容に差分がある場合は切替前に保存する
-      if (state.editor && state.editor.getText() !== state.note.readContent()) {
-        const title = state.editor.getTitle();
-        const content = state.editor.getText();
-        state.note.updateTitle(title);
-        state.note.updateContent(content);
-        this.commit('updateTreeDatas');
+    createNewPost(state) {
+      if (state.isUnsaved) {
+        if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
+          return
+        }
       }
+      state.note = null
+      state.currentFile = ''
+      state.viewMode = VIEW_MODE.EDITOR
+      Vue.nextTick().then(() => {
+        state.editor.setText('')
+        state.editor.focus()
+      });
+    },
+
+    changeFile(state, file) {
       state.currentFile = file;
       state.note = new Note(file);
     },
-    changeMode(state, mode) {
-      state.mode = mode;
+
+    updateIsUnsaved(state) {
+      const content = state.note ? state.note.readContent() : ''
+      state.isUnsaved = state.editor.getText() !== content
     },
+
+    toggleViewMode(state) {
+      if (state.viewMode === VIEW_MODE.EDITOR) {
+        state.viewMode = VIEW_MODE.PREVIEW
+      } else {
+        state.viewMode = VIEW_MODE.EDITOR
+        Vue.nextTick().then(() => state.editor.focus());
+      }
+    },
+
+    changeViewMode(state, viewMode) {
+      state.viewMode = viewMode;
+      if (state.viewMode === VIEW_MODE.EDITOR) {
+        Vue.nextTick().then(() => state.editor.focus());
+      }
+    },
+
     setEditor(state, editor) {
       state.editor = editor;
     },
-    updateTreeDatas(state) {
-      state.treeDatas = NoteUtil.readTree(settings.directory);
+
+    updateFiles(state) {
+      state.treeDatas = NoteUtil.readTree(setting.directory);
+      store.commit('updateIsUnsaved');
     },
-    updateSuggestDatas(state) {
-      const tags = NoteUtil.readAllTags();
-      state.suggestDatas = tags.map((t) => {return {value: t}});
-    },
+
     visualizeLinkDialog(state, visible) {
       state.linkDialogVisible = visible;
     },
+
+    visualizeFileSearchBox(state, visible) {
+      state.fileSearchBoxVisible = visible;
+    },
+
     visualizeImageDialog(state, visible) {
       state.imageDialogVisible = visible;
     },
+
     visualizeTableDialog(state, visible) {
       state.tableDialogVisible = visible;
     }

@@ -1,88 +1,63 @@
 <template>
-  <div
-    id="screen"
-    :class="{'visible-aside': visibleAside}"
-  >
-    <aside>
-      <filetree />
-    </aside>
-    <main>
-      <toolbar />
-      <tags />
-      <section class="note">
-        <editor @changeText="changeText" />
-        <preview :text="text" />
-      </section>
-    </main>
-  </div>
+  <main>
+    <toolbar />
+    <section class="note">
+      <editor @changeText="changeText" />
+      <preview :text="text" />
+    </section>
+    <file-dialog />
+  </main>
 </template>
 
 <script>
 import {ipcRenderer} from 'electron';
 import toolbar from './Toolbar.vue';
-import filetree from './Filetree.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
-import tags from './Tags.vue';
-import Note from '@scripts/note/note.js';
+import fileDialog from './FileDialog.vue';
 
 export default {
   components: {
     toolbar,
-    filetree,
     editor,
     preview,
-    tags
+    fileDialog,
   },
   data() {
     return {
-      text: '',
-      visibleAside: true
+      text: ''
     };
   },
   mounted() {
     ipcRenderer.on('new-post', () => {
-      const note = new Note();
-      this.$store.commit('changeCurrentFile', note.readPath());
-      this.$store.commit('updateTreeDatas');
+      this.$store.commit('createNewPost');
     });
-    ipcRenderer.on('toggle-aside', () => this.visibleAside = !this.visibleAside);
-    ipcRenderer.on('focus-search', () => this.visibleAside = true);
+
+    ipcRenderer.on('open-file', () => {
+      this.$store.commit('visualizeFileSearchBox', true)
+    });
+
+    ipcRenderer.on('toggle-view-mode', () => {
+      this.$store.commit('toggleViewMode');
+    });
   },
   methods: {
     changeText(text) {
       this.text = text;
+      this.$store.commit('updateIsUnsaved');
     }
   }
 }
 </script>
 
-<style scoped>
-  #screen {
-    display: flex;
-    height: 100%;
-  }
+<style lang="scss" scoped>
+main {
+  width: 100%;
+  height: 100%;
+}
 
-  #screen aside {
-    display: none;
-    width: 250px;
-  }
-
-  #screen main {
-    width: 100%;
-    height: 100%;
-  }
-
-  #screen.visible-aside aside {
-    display: block;
-  }
-
-  #screen.visible-aside main {
-    width: calc(100% - 250px);
-  }
-
-  .note {
-    display: flex;
-    height: calc(100% - 90px);
-  }
+.note {
+  height: calc(100% - 50px);
+  background-color: #fff;
+}
 </style>

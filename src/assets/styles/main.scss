@@ -17,3 +17,9 @@ body {
 button {
   outline: none;
 }
+
+// Element UIのdialogがアニメーションを止める設定がないためCSSで強制的に無効にする
+.el-dialog__wrapper,
+.v-modal {
+  animation: none !important;
+}

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="this.$store.state.mode === 'preview' || this.$store.state.mode === 'multi'"
+    v-show="isViewModePreview"
     class="preview-area"
   >
     <!-- eslint-disable vue/no-v-html -->
@@ -9,19 +9,15 @@
       v-html="markedText"
     />
     <!-- eslint-enable vue/no-v-html -->
-    <publish-button />
   </div>
 </template>
 
 <script>
 import Markdown from '@scripts/markdown/markdown.js';
-import publishButton from './PublishButton.vue';
 import '@styles/markdown.scss';
+import { VIEW_MODE } from '@constants/index.js'
 
 export default {
-  components: {
-    publishButton
-  },
   props: {
     text: {
       type: String,
@@ -29,6 +25,10 @@ export default {
     }
   },
   computed: {
+    isViewModePreview() {
+      return this.$store.state.viewMode === VIEW_MODE.PREVIEW
+    },
+
     markedText() {
       return this.markdown.render(this.text);
     }
