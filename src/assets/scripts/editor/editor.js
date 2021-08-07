@@ -6,8 +6,8 @@ class Editor {
     CodeMirror.keyMap.default['Shift-Tab'] = 'indentLess'
     this.editor = CodeMirror.fromTextArea(document.getElementById(id), option)
     this.focused = false
-    this.editor.on('focus', this.focused = true)
-    this.editor.on('blur', this.focused = false)
+    this.editor.on('focus', () => { this.focused = true })
+    this.editor.on('blur', () => { this.focused = false })
   }
 
   /**
