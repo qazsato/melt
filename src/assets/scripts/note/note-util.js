@@ -1,15 +1,15 @@
-import glob from 'glob';
-import Note from './note.js';
-import _ from 'lodash';
+import glob from 'glob'
+import Note from './note.js'
+import _ from 'lodash'
 
 class NoteUtil {
-  static readAllNotes(dir) {
+  static readAllNotes (dir) {
     const files = glob.sync(`${dir}/**/*.md`)
     const notes = files.map((f) => new Note(f))
-    return _.orderBy(notes, (n) => n.readTitle(), 'asc');
+    return _.orderBy(notes, (n) => n.readTitle(), 'asc')
   }
 
-  static readRecentlyOpenedNotes() {
+  static readRecentlyOpenedNotes () {
     if (!localStorage.browsingHistories) {
       return []
     }
@@ -29,4 +29,4 @@ class NoteUtil {
   }
 }
 
-export default NoteUtil;
+export default NoteUtil

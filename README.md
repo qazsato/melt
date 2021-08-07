@@ -1,5 +1,7 @@
 # Melt
 
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+
 My Markdown Editor.
 
 ![キャプチャ](https://raw.githubusercontent.com/wiki/qazsato/melt/melt.png)
@@ -8,15 +10,15 @@ My Markdown Editor.
 
 | Type			| Command 	|
 |:--------------|:----------|
-| HyperLink		| ⌘L      	| 
-| Image			| ⌘P      	| 
-| Bold      	| ⌘B       | 
-| Italic    	| ⌘I       | 
-| Strikethrough | ⇧⌘X	| 
-| Code    		| ⌘K		| 
-| Quote    		| ⌘U		| 
-| Bulleted List | ⇧⌘O		| 
-| Numbered List | ⇧⌘N		| 
-| Checked List 	| ⇧⌘Y		| 
-| Table        	| ⌘T		| 
-| New Post      | ⌘N		| 
+| HyperLink		| ⌘L      	|
+| Image			| ⇧⌘P      	|
+| Bold      	| ⌘B       |
+| Italic    	| ⌘I       |
+| Strikethrough | ⇧⌘X	|
+| Code    		| ⌘K		|
+| Quote    		| ⌘U		|
+| Bulleted List | ⇧⌘O		|
+| Numbered List | ⇧⌘N		|
+| Checked List 	| ⇧⌘Y		|
+| Table        	| ⌘T		|
+| New Post      | ⌘N		|

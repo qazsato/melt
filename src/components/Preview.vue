@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import Markdown from '@scripts/markdown/markdown.js';
-import '@styles/markdown.scss';
+import Markdown from '@scripts/markdown/markdown.js'
+import '@styles/markdown.scss'
 import { VIEW_MODE } from '@constants/index.js'
 
 export default {
@@ -27,33 +27,33 @@ export default {
   },
 
   computed: {
-    isViewModePreview() {
+    isViewModePreview () {
       return this.$store.state.viewMode === VIEW_MODE.PREVIEW
     },
 
-    markedText() {
-      return this.markdown.render(this.text);
+    markedText () {
+      return this.markdown.render(this.text)
     }
   },
 
   watch: {
-    text() {
+    text () {
       this.$nextTick().then(() => {
         const cbElements = this.$refs.markdown.querySelectorAll('.clipboard')
         cbElements.forEach((e) => e.addEventListener('click', this.copyClipboard))
-      });
+      })
     }
   },
 
-  created() {
-    this.markdown = new Markdown();
+  created () {
+    this.markdown = new Markdown()
   },
 
   methods: {
-    copyClipboard(event) {
+    copyClipboard (event) {
       const code = event.target.nextElementSibling.innerText // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
       navigator.clipboard.writeText(code).then(() => {
-        this.$message({ type: 'success', message: 'Copy to clipboard.', showClose: true });
+        this.$message({ type: 'success', message: 'Copy to clipboard.', showClose: true })
       })
     }
   }

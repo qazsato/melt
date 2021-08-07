@@ -132,28 +132,28 @@
 </template>
 
 <script>
-import {ipcRenderer} from 'electron';
-import axios from 'axios';
-import 'codemirror/lib/codemirror.css';
-import '@styles/melt-light.scss';
-import 'codemirror/mode/gfm/gfm.js';
-import 'codemirror/mode/htmlmixed/htmlmixed.js';
-import 'codemirror/mode/css/css.js';
-import 'codemirror/mode/javascript/javascript.js';
-import 'codemirror/mode/vue/vue.js';
-import 'codemirror/mode/jsx/jsx.js';
-import 'codemirror/mode/ruby/ruby.js';
-import 'codemirror/mode/go/go.js';
-import 'codemirror/mode/sql/sql.js';
-import 'codemirror/mode/shell/shell.js';
-import 'codemirror/addon/edit/continuelist.js';
-import setting from '@config/setting.json';
-import Editor from '@scripts/editor/markdown-editor.js';
-import Note from '@scripts/note/note.js';
+import { ipcRenderer } from 'electron'
+import axios from 'axios'
+import 'codemirror/lib/codemirror.css'
+import '@styles/melt-light.scss'
+import 'codemirror/mode/gfm/gfm.js'
+import 'codemirror/mode/htmlmixed/htmlmixed.js'
+import 'codemirror/mode/css/css.js'
+import 'codemirror/mode/javascript/javascript.js'
+import 'codemirror/mode/vue/vue.js'
+import 'codemirror/mode/jsx/jsx.js'
+import 'codemirror/mode/ruby/ruby.js'
+import 'codemirror/mode/go/go.js'
+import 'codemirror/mode/sql/sql.js'
+import 'codemirror/mode/shell/shell.js'
+import 'codemirror/addon/edit/continuelist.js'
+import setting from '@config/setting.json'
+import Editor from '@scripts/editor/markdown-editor.js'
+import Note from '@scripts/note/note.js'
 import { VIEW_MODE } from '@constants/index.js'
 
 export default {
-  data() {
+  data () {
     return {
       editor: null,
       linkTitle: '',
@@ -162,29 +162,30 @@ export default {
       imageUrl: '',
       tableRow: 3,
       tableColumn: 3
-    };
+    }
   },
+
   computed: {
-    isViewModeEditor() {
+    isViewModeEditor () {
       return this.$store.state.viewMode === VIEW_MODE.EDITOR
     },
 
-    file() {
-      return this.$store.state.currentFile;
+    file () {
+      return this.$store.state.currentFile
     }
   },
 
   watch: {
-    file(file) {
-      if (!file) return;
-      const content = this.$store.state.note.readContent();
-      this.editor.setText(content);
+    file (file) {
+      if (!file) return
+      const content = this.$store.state.note.readContent()
+      this.editor.setText(content)
     }
   },
 
-  mounted() {
-    this.editor = new Editor('editor');
-    this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
+  mounted () {
+    this.editor = new Editor('editor')
+    this.editor.on('change', () => this.$emit('changeText', this.editor.getText()))
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
       'Shift-Cmd-P': () => this.$store.commit('showImageDialog'),
@@ -198,8 +199,8 @@ export default {
       'Shift-Cmd-Y': () => this.editor.insertCheckedList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveFile()
-    });
-    this.$store.commit('setEditor', this.editor);
+    })
+    this.$store.commit('setEditor', this.editor)
 
     this.$store.watch(
       (state) => state.viewMode,
@@ -209,118 +210,130 @@ export default {
         if (newValue === VIEW_MODE.EDITOR) {
           // 未保存の情報を上書きしないように、保存済みの場合のみ設定する
           if (!this.$store.state.isUnsaved && this.$store.state.note) {
-            this.editor.setText(this.$store.state.note.readContent());
+            this.editor.setText(this.$store.state.note.readContent())
           }
         }
       }
     )
   },
+
   methods: {
-    insertLink() {
-      this.editor.insertLink(this.linkTitle, this.linkUrl);
-      this.closeLinkDialog();
+    insertLink () {
+      this.editor.insertLink(this.linkTitle, this.linkUrl)
+      this.closeLinkDialog()
     },
-    insertImage() {
-      this.editor.insertImage(this.imageAlt, this.imageUrl);
-      this.closeImageDialog();
+
+    insertImage () {
+      this.editor.insertImage(this.imageAlt, this.imageUrl)
+      this.closeImageDialog()
     },
-    insertTable() {
-      this.editor.insertTable(this.tableRow, this.tableColumn);
-      this.closeTableDialog();
+
+    insertTable () {
+      this.editor.insertTable(this.tableRow, this.tableColumn)
+      this.closeTableDialog()
     },
-    openLinkDialog() {
-      const text = this.editor.getSelection();
+
+    openLinkDialog () {
+      const text = this.editor.getSelection()
       if (text) {
         try {
-          new URL(text);
-          this.linkUrl = text;
-          const url = `${setting.api}/web/title?url=${this.linkUrl}`;
+          // eslint-disable-next-line no-new
+          new URL(text)
+          this.linkUrl = text
+          const url = `${setting.api}/web/title?url=${this.linkUrl}`
           axios.get(url).then((res) => {
             if (this.linkTitle === '' && this.$store.state.visibleLinkDialog === true) {
-              this.linkTitle = res.data.title;
+              this.linkTitle = res.data.title
             }
-          });
-          this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus());
-        } catch(e) {
-          this.linkTitle = text;
-          this.$nextTick().then(() => this.$refs.linkUrlInput.$refs.input.focus());
+          })
+          this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus())
+        } catch (e) {
+          this.linkTitle = text
+          this.$nextTick().then(() => this.$refs.linkUrlInput.$refs.input.focus())
         }
       } else {
-        this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus());
+        this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus())
       }
     },
-    closeLinkDialog() {
-      this.linkTitle = '';
-      this.linkUrl = '';
-      this.editor.focus();
-      this.$store.commit('hideLinkDialog');
+
+    closeLinkDialog () {
+      this.linkTitle = ''
+      this.linkUrl = ''
+      this.editor.focus()
+      this.$store.commit('hideLinkDialog')
     },
-    openImageDialog() {
-      const text = this.editor.getSelection();
+
+    openImageDialog () {
+      const text = this.editor.getSelection()
       if (text) {
         try {
-          new URL(text);
-          this.imageUrl = text;
-          this.$nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus());
-        } catch(e) {
-          this.imageAlt = text;
-          this.$nextTick().then(() => this.$refs.imageUrlInput.$refs.input.focus());
+          // eslint-disable-next-line no-new
+          new URL(text)
+          this.imageUrl = text
+          this.$nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus())
+        } catch (e) {
+          this.imageAlt = text
+          this.$nextTick().then(() => this.$refs.imageUrlInput.$refs.input.focus())
         }
       } else {
-        this.$nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus());
+        this.$nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus())
       }
     },
-    closeImageDialog() {
-      this.imageAlt = '';
-      this.imageUrl = '';
-      this.editor.focus();
-      this.$store.commit('hideImageDialog');
+
+    closeImageDialog () {
+      this.imageAlt = ''
+      this.imageUrl = ''
+      this.editor.focus()
+      this.$store.commit('hideImageDialog')
     },
-    openTableDialog() {
-      this.$nextTick().then(() => this.$refs.tableRowInput.$refs.input.focus());
+
+    openTableDialog () {
+      this.$nextTick().then(() => this.$refs.tableRowInput.$refs.input.focus())
     },
-    closeTableDialog() {
-      this.tableRow = 3;
-      this.tableColumn = 3;
-      this.editor.focus();
-      this.$store.commit('hideTableDialog');
+
+    closeTableDialog () {
+      this.tableRow = 3
+      this.tableColumn = 3
+      this.editor.focus()
+      this.$store.commit('hideTableDialog')
     },
-    saveFile() {
-      const content = this.editor.getText();
+
+    saveFile () {
+      const content = this.editor.getText()
       if (this.$store.state.currentFile) {
-        this.$store.state.note.updateContent(content);
-        this.$store.commit('updateIsUnsaved');
+        this.$store.state.note.updateContent(content)
+        this.$store.commit('updateIsUnsaved')
       } else {
         ipcRenderer.invoke('file-save', content)
           .then((data) => {
             // キャンセルで閉じた
             if (data.status === undefined) {
-              return;
+              return
             }
             // 保存できなかった
             if (data.status === false) {
-              alert(`ファイルが開けませんでした。\n${data.message}`);
-              return;
+              alert(`ファイルが開けませんでした。\n${data.message}`)
+              return
             }
-            const note = new Note(data.path);
-            this.$store.commit('changeFile', note.readPath());
+            const note = new Note(data.path)
+            this.$store.commit('changeFile', note.readPath())
           })
           .catch((err) => {
-            alert(err);
-          });
+            alert(err)
+          })
       }
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 .el-dialog__body {
   padding: 20px 20px 0;
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .editor-area {
   flex: 1;
   min-width: 50%;

@@ -5,4 +5,4 @@ global.document.createRange = () => ({
   setEnd: () => {},
   getBoundingClientRect: () => {},
   getClientRects: () => []
-});
+})

@@ -35,26 +35,26 @@
 </template>
 
 <script>
-import Note from '@scripts/note/note.js';
+import Note from '@scripts/note/note.js'
 
 export default {
-  data() {
+  data () {
     return {
       viewMode: this.$store.state.viewMode,
       isUnsaved: this.$store.state.isUnsaved
-    };
-  },
-
-  computed: {
-    fileName() {
-      if (this.$store.state.currentFile) {
-        return new Note(this.$store.state.currentFile).readTitle();
-      }
-      return 'Untitled';
     }
   },
 
-  mounted() {
+  computed: {
+    fileName () {
+      if (this.$store.state.currentFile) {
+        return new Note(this.$store.state.currentFile).readTitle()
+      }
+      return 'Untitled'
+    }
+  },
+
+  mounted () {
     this.$store.watch(
       (state) => state.viewMode,
       (newValue, oldValue) => {
@@ -71,8 +71,8 @@ export default {
   },
 
   methods: {
-    changeViewMode() {
-      this.$store.commit('changeViewMode', this.viewMode);
+    changeViewMode () {
+      this.$store.commit('changeViewMode', this.viewMode)
     }
   }
 }
@@ -99,7 +99,6 @@ export default {
   text-overflow: ellipsis;
 }
 </style>
-
 
 <style lang="scss">
 #toolbar {
