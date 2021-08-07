@@ -2,6 +2,29 @@
 @import '../../../node_modules/highlight.js/styles/github.css';
 @import '../../../node_modules/katex/dist/katex.min.css';
 
-.markdown-body .task-list-item input {
-  margin: 0 0.2em 0.25em -1.4em;
+.markdown-body {
+  padding: 15px 30px;
+
+  .task-list-item {
+    input {
+      margin: 0 0.2em 0.25em -1.4em;
+    }
+  }
+
+  // コードブロック内のコピーボタン (独自拡張)
+  pre {
+    position: relative;
+
+    .clipboard {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      font-size: 16px;
+      cursor: pointer;
+
+      &:hover {
+        opacity: .5;
+      }
+    }
+  }
 }

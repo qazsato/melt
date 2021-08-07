@@ -5,6 +5,7 @@
   >
     <!-- eslint-disable vue/no-v-html -->
     <article
+      ref="markdown"
       class="markdown-body"
       v-html="markedText"
     />
@@ -24,31 +25,49 @@ export default {
       required: true
     }
   },
+
   computed: {
     isViewModePreview() {
       return this.$store.state.viewMode === VIEW_MODE.PREVIEW
     },
 
     markedText() {
-      return this.markdown.render(this.text);
+      let htmlStr = this.markdown.render(this.text);
+      htmlStr = htmlStr.replace(/<pre>/g, '<pre><i class="clipboard el-icon-document-copy"></i>') // コードブロック内にコピーボタンを設置するため、iタグを挿入
+      return htmlStr
     }
   },
+
+  watch: {
+    text() {
+      this.$nextTick().then(() => {
+        const cbElements = this.$refs.markdown.querySelectorAll('.clipboard')
+        cbElements.forEach((e) => e.addEventListener('click', this.copyClipboard))
+      });
+    }
+  },
+
   created() {
     this.markdown = new Markdown();
+  },
+
+  methods: {
+    copyClipboard(event) {
+      const code = event.target.nextElementSibling.innerText // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
+      navigator.clipboard.writeText(code).then(() => {
+        this.$message({ type: 'success', message: 'Copy to clipboard.', showClose: true });
+      })
+    }
   }
 }
 </script>
 
-<style scoped>
-  .preview-area {
-    flex: 1;
-    min-width: 50%;
-    height: 100%;
-    overflow-y: scroll;
-    border-left: 1px solid #ebeef5;
-  }
-
-  .markdown-body {
-    padding: 15px 30px;
-  }
+<style lang="scss" scoped>
+.preview-area {
+  flex: 1;
+  min-width: 50%;
+  height: 100%;
+  overflow-y: scroll;
+  border-left: 1px solid #ebeef5;
+}
 </style>
