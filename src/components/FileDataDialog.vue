@@ -57,20 +57,22 @@ export default {
 
   methods: {
     queryFileDataSearch(queryString, cb) {
-      let results = [];
+      let filteredNotes = []
       if (queryString) {
-        const filteredNotes = this.notes.filter((n) => {
+        filteredNotes = this.notes.filter((n) => {
           return n.data.toLowerCase().includes(queryString.toLowerCase())
         })
-        results = filteredNotes.map((n) => {
-          const path = n.readPath()
-          return {
-            label: n.readTitle(),
-            path: path,
-            relativePath: path.split(setting.directory)[1]
-          }
-        })
+      } else {
+        filteredNotes = NoteUtil.readRecentlyOpenedNotes()
       }
+      const results = filteredNotes.map((n) => {
+        const path = n.readPath()
+        return {
+          label: n.readTitle(),
+          path: path,
+          relativePath: path.split(setting.directory)[1]
+        }
+      })
       cb(results);
     },
 

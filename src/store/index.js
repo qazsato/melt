@@ -37,6 +37,16 @@ const store = new Vuex.Store({
     changeFile(state, file) {
       state.currentFile = file;
       state.note = new Note(file);
+      // TODO: LS保存処理共通化
+      const browsingHistories = localStorage.browsingHistories ? JSON.parse(localStorage.browsingHistories) : []
+      const bh = browsingHistories.find((h) => h.file === file)
+      const time = new Date().getTime()
+      if (bh) {
+        bh.time = time
+      } else {
+        browsingHistories.push({file, time})
+      }
+      localStorage.browsingHistories = JSON.stringify(browsingHistories)
     },
 
     updateIsUnsaved(state) {
