@@ -133,7 +133,6 @@
 
 <script>
 import {ipcRenderer} from 'electron';
-import Vue from 'vue';
 import axios from 'axios';
 import 'codemirror/lib/codemirror.css';
 import '@styles/melt-light.scss';
@@ -246,13 +245,13 @@ export default {
               this.linkTitle = res.data.title;
             }
           });
-          Vue.nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus());
+          this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus());
         } catch(e) {
           this.linkTitle = text;
-          Vue.nextTick().then(() => this.$refs.linkUrlInput.$refs.input.focus());
+          this.$nextTick().then(() => this.$refs.linkUrlInput.$refs.input.focus());
         }
       } else {
-        Vue.nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus());
+        this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus());
       }
     },
     closeLinkDialog() {
@@ -267,13 +266,13 @@ export default {
         try {
           new URL(text);
           this.imageUrl = text;
-          Vue.nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus());
+          this.$nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus());
         } catch(e) {
           this.imageAlt = text;
-          Vue.nextTick().then(() => this.$refs.imageUrlInput.$refs.input.focus());
+          this.$nextTick().then(() => this.$refs.imageUrlInput.$refs.input.focus());
         }
       } else {
-        Vue.nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus());
+        this.$nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus());
       }
     },
     closeImageDialog() {
@@ -283,7 +282,7 @@ export default {
       this.$store.commit('visualizeImageDialog', false);
     },
     openTableDialog() {
-      Vue.nextTick().then(() => this.$refs.tableRowInput.$refs.input.focus());
+      this.$nextTick().then(() => this.$refs.tableRowInput.$refs.input.focus());
     },
     closeTableDialog() {
       this.tableRow = 3;
