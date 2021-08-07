@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Note from '@scripts/note/note.js';
-import setting from '@config/setting.json';
-import NoteUtil from '@scripts/note/note-util.js';
 import { VIEW_MODE } from '@constants/index.js'
 
 Vue.use(Vuex);
@@ -14,11 +12,10 @@ const store = new Vuex.Store({
     isUnsaved: false,
     viewMode: VIEW_MODE.EDITOR,
     editor: null,
-    treeDatas: null,
-    linkDialogVisible: false,
-    imageDialogVisible: false,
-    tableDialogVisible: false,
-    fileSearchBoxVisible: false,
+    visibleLinkDialog: false,
+    visibleImageDialog: false,
+    visibleTableDialog: false,
+    visibleFileNameSearch: false,
     visibleFileDataSearch: false
   },
   mutations: {
@@ -67,17 +64,36 @@ const store = new Vuex.Store({
       state.editor = editor;
     },
 
-    updateFiles(state) {
-      state.treeDatas = NoteUtil.readTree(setting.directory);
-      store.commit('updateIsUnsaved');
+    showLinkDialog(state) {
+      state.visibleLinkDialog = true;
     },
 
-    visualizeLinkDialog(state, visible) {
-      state.linkDialogVisible = visible;
+    hideLinkDialog(state) {
+      state.visibleLinkDialog = false;
     },
 
-    visualizeFileSearchBox(state, visible) {
-      state.fileSearchBoxVisible = visible;
+    showImageDialog(state) {
+      state.visibleImageDialog = true;
+    },
+
+    hideImageDialog(state) {
+      state.visibleImageDialog = false;
+    },
+
+    showTableDialog(state) {
+      state.visibleTableDialog = true;
+    },
+
+    hideTableDialog(state) {
+      state.visibleTableDialog = false;
+    },
+
+    showFileNameSearch(state) {
+      state.visibleFileNameSearch = true;
+    },
+
+    hideFileNameSearch(state) {
+      state.visibleFileNameSearch = false;
     },
 
     showFileDataSearch(state) {
@@ -86,14 +102,6 @@ const store = new Vuex.Store({
 
     hideFileDataSearch(state) {
       state.visibleFileDataSearch = false;
-    },
-
-    visualizeImageDialog(state, visible) {
-      state.imageDialogVisible = visible;
-    },
-
-    visualizeTableDialog(state, visible) {
-      state.tableDialogVisible = visible;
     }
   }
 });

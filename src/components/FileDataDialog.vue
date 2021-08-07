@@ -54,6 +54,7 @@ export default {
       }
     )
   },
+
   methods: {
     queryFileDataSearch(queryString, cb) {
       let results = [];
