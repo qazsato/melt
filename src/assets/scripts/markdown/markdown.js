@@ -19,7 +19,7 @@ class Markdown {
         } else {
           code = this.md.utils.escapeHtml(str)
         }
-        return '<pre class="codeblock"><i class="clipboard el-icon-document-copy"></i><div><code>' + code + '</code></div></pre>'
+        return '<pre class="codeblock"><i class="clipboard"></i><div><code>' + code + '</code></div></pre>'
       }
     });
     this.md.use(emoji);

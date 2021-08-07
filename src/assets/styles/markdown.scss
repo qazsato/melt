@@ -25,6 +25,12 @@
       background-color: #f6f8fa;
       cursor: pointer;
 
+      &:before {
+        content: "\e787";
+        font-family: 'element-icons';
+        font-style: normal;
+      }
+
       &:hover {
         color: #999;
       }
