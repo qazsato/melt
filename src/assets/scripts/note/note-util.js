@@ -1,21 +1,31 @@
-import setting from '@config/setting.json';
 import glob from 'glob';
 import Note from './note.js';
 import _ from 'lodash';
 
 class NoteUtil {
-  static readTree(dir) {
+  static readAllNotes(dir) {
     const files = glob.sync(`${dir}/**/*.md`)
-    let notes = files.map((f) => new Note(f))
-    notes = _.orderBy(notes, (n) => n.readTitle(), 'asc');
-    return notes.map((n) => {
-      const path = n.readPath()
-      return {
-        label: n.readTitle() || 'Untitled',
-        path: path,
-        relativePath: path.split(setting.directory)[1]
+    const notes = files.map((f) => new Note(f))
+    return _.orderBy(notes, (n) => n.readTitle(), 'asc');
+  }
+
+  static readRecentlyOpenedNotes() {
+    if (!localStorage.browsingHistories) {
+      return []
+    }
+    const browsingHistories = JSON.parse(localStorage.browsingHistories)
+    browsingHistories.sort((a, b) => b.time - a.time)
+    const files = browsingHistories.slice(0, 10).map((h) => h.file)
+    const notes = []
+    files.forEach((f) => {
+      try {
+        notes.push(new Note(f))
+      } catch (error) {
+        // 削除済みのファイルの場合は何もしない
+        console.warn(error)
       }
     })
+    return notes
   }
 }
 

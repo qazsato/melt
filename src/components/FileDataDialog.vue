@@ -1,9 +1,9 @@
 <template>
   <el-dialog
-    :visible.sync="$store.state.fileSearchBoxVisible"
+    :visible.sync="$store.state.visibleFileDataSearch"
     :show-close="false"
     :lock-scroll="false"
-    custom-class="file-dialog"
+    custom-class="file-data-dialog"
     width="400px"
     :before-close="closeDialog"
     @open="openDialog"
@@ -12,10 +12,10 @@
       ref="fileInput"
       v-model="filePath"
       class="autocomplete"
-      popper-class="autocomplete-popper"
-      :fetch-suggestions="queryFileSearch"
+      popper-class="file-data-popper"
+      :fetch-suggestions="queryFileDataSearch"
       :highlight-first-item="true"
-      placeholder="Search file to open"
+      placeholder="Find text in folder"
       @select="handleFileSelect"
     >
       <template slot-scope="{ item }">
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import setting from '@config/setting.json';
 import Note from '@scripts/note/note.js';
 import NoteUtil from '@scripts/note/note-util.js';
@@ -39,23 +38,15 @@ export default {
   data() {
     return {
       filePath: '',
-      treeData: []
+      notes: []
     };
   },
 
   mounted() {
-    const notes = NoteUtil.readTree(setting.directory);
-    this.treeData = notes.map((n) => {
-      return {
-        value: n.path,
-        label: n.label,
-        path: n.path,
-        relativePath: n.relativePath
-      }
-    })
+    this.notes = NoteUtil.readAllNotes(setting.directory);
 
     this.$store.watch(
-      (state) => state.fileSearchBoxVisible,
+      (state) => state.visibleFileDataSearch,
       (newValue, oldValue) => {
         if (newValue) {
           this.$refs.fileInput.$refs.input.focus();
@@ -63,12 +54,25 @@ export default {
       }
     )
   },
+
   methods: {
-    queryFileSearch(queryString, cb) {
-      let results = this.treeData;
+    queryFileDataSearch(queryString, cb) {
+      let filteredNotes = []
       if (queryString) {
-        results = this.treeData.filter((d) => d.relativePath.toLowerCase().includes(queryString.toLowerCase()))
+        filteredNotes = this.notes.filter((n) => {
+          return n.data.toLowerCase().includes(queryString.toLowerCase())
+        })
+      } else {
+        filteredNotes = NoteUtil.readRecentlyOpenedNotes()
       }
+      const results = filteredNotes.map((n) => {
+        const path = n.readPath()
+        return {
+          label: n.readTitle(),
+          path: path,
+          relativePath: path.split(setting.directory)[1]
+        }
+      })
       cb(results);
     },
 
@@ -80,7 +84,7 @@ export default {
           return
         }
       }
-      this.$store.commit('visualizeFileSearchBox', false);
+      this.$store.commit('hideFileDataSearch');
       const note = new Note(item.path);
       this.$store.commit('changeFile', note.readPath());
       this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW);
@@ -88,7 +92,7 @@ export default {
 
     openDialog() {
       // HACK: closeDialogで消えたままになっていることがあるため戻す
-      const element = document.querySelector('.autocomplete-popper')
+      const element = document.querySelector('.file-data-popper')
       if (element) {
        element.style.display = 'block';
       }
@@ -96,15 +100,15 @@ export default {
 
     closeDialog() {
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      document.querySelector('.autocomplete-popper').style.display = 'none';
-      this.$store.commit('visualizeFileSearchBox', false);
+      document.querySelector('.file-data-popper').style.display = 'none';
+      this.$store.commit('hideFileDataSearch');
     }
   }
 }
 </script>
 
 <style lang="scss">
-.file-dialog {
+.file-data-dialog {
   &.el-dialog {
     background: transparent;
   }
@@ -116,13 +120,13 @@ export default {
   .el-dialog__body {
     padding: 0;
   }
+
+  .autocomplete {
+    width: 100%;
+  }
 }
 
-.autocomplete {
-  width: 100%;
-}
-
-.autocomplete-popper {
+.file-data-popper {
   ul {
     li {
       line-height: normal;

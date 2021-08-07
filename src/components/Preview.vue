@@ -32,9 +32,7 @@ export default {
     },
 
     markedText() {
-      let htmlStr = this.markdown.render(this.text);
-      htmlStr = htmlStr.replace(/<pre>/g, '<pre><i class="clipboard el-icon-document-copy"></i>') // コードブロック内にコピーボタンを設置するため、iタグを挿入
-      return htmlStr
+      return this.markdown.render(this.text);
     }
   },
 

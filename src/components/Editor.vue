@@ -6,7 +6,7 @@
     <textarea id="editor" />
     <el-dialog
       title="Hyperlink"
-      :visible.sync="$store.state.linkDialogVisible"
+      :visible.sync="$store.state.visibleLinkDialog"
       :before-close="closeLinkDialog"
       :close-on-click-modal="false"
       width="400px"
@@ -47,7 +47,7 @@
     </el-dialog>
     <el-dialog
       title="Image"
-      :visible.sync="$store.state.imageDialogVisible"
+      :visible.sync="$store.state.visibleImageDialog"
       :close-on-click-modal="false"
       width="400px"
       :before-close="closeImageDialog"
@@ -88,7 +88,7 @@
     </el-dialog>
     <el-dialog
       title="Table"
-      :visible.sync="$store.state.tableDialogVisible"
+      :visible.sync="$store.state.visibleTableDialog"
       :close-on-click-modal="false"
       width="400px"
       :before-close="closeTableDialog"
@@ -186,8 +186,8 @@ export default {
     this.editor = new Editor('editor');
     this.editor.on('change', () => this.$emit('changeText', this.editor.getText()));
     this.editor.addKeyMap({
-      'Cmd-L': () => this.$store.commit('visualizeLinkDialog', true),
-      'Shift-Cmd-P': () => this.$store.commit('visualizeImageDialog', true),
+      'Cmd-L': () => this.$store.commit('showLinkDialog'),
+      'Shift-Cmd-P': () => this.$store.commit('showImageDialog'),
       'Cmd-B': () => this.editor.insertBold(),
       'Cmd-I': () => this.editor.insertItalic(),
       'Shift-Cmd-X': () => this.editor.insertStrikethrough(),
@@ -196,7 +196,7 @@ export default {
       'Shift-Cmd-O': () => this.editor.insertBulletedList(),
       'Shift-Cmd-N': () => this.editor.insertNumberedList(),
       'Shift-Cmd-Y': () => this.editor.insertCheckedList(),
-      'Cmd-T': () => this.$store.commit('visualizeTableDialog', true),
+      'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveFile()
     });
     this.$store.commit('setEditor', this.editor);
@@ -236,7 +236,7 @@ export default {
           this.linkUrl = text;
           const url = `${setting.api}/web/title?url=${this.linkUrl}`;
           axios.get(url).then((res) => {
-            if (this.linkTitle === '' && this.$store.state.linkDialogVisible === true) {
+            if (this.linkTitle === '' && this.$store.state.visibleLinkDialog === true) {
               this.linkTitle = res.data.title;
             }
           });
@@ -253,7 +253,7 @@ export default {
       this.linkTitle = '';
       this.linkUrl = '';
       this.editor.focus();
-      this.$store.commit('visualizeLinkDialog', false);
+      this.$store.commit('hideLinkDialog');
     },
     openImageDialog() {
       const text = this.editor.getSelection();
@@ -274,7 +274,7 @@ export default {
       this.imageAlt = '';
       this.imageUrl = '';
       this.editor.focus();
-      this.$store.commit('visualizeImageDialog', false);
+      this.$store.commit('hideImageDialog');
     },
     openTableDialog() {
       this.$nextTick().then(() => this.$refs.tableRowInput.$refs.input.focus());
@@ -283,13 +283,13 @@ export default {
       this.tableRow = 3;
       this.tableColumn = 3;
       this.editor.focus();
-      this.$store.commit('visualizeTableDialog', false);
+      this.$store.commit('hideTableDialog');
     },
     saveFile() {
       const content = this.editor.getText();
       if (this.$store.state.currentFile) {
         this.$store.state.note.updateContent(content);
-        this.$store.commit('updateFiles');
+        this.$store.commit('updateIsUnsaved');
       } else {
         ipcRenderer.invoke('file-save', content)
           .then((data) => {
@@ -304,7 +304,6 @@ export default {
             }
             const note = new Note(data.path);
             this.$store.commit('changeFile', note.readPath());
-            this.$store.commit('updateFiles');
           })
           .catch((err) => {
             alert(err);
