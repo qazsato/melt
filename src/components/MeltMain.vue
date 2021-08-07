@@ -10,7 +10,8 @@
 </template>
 
 <script>
-import {ipcRenderer} from 'electron';
+import { ipcRenderer, remote } from 'electron';
+import { FindInPage } from 'electron-find'
 import toolbar from './Toolbar.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
@@ -23,12 +24,27 @@ export default {
     preview,
     fileDialog,
   },
+
   data() {
     return {
-      text: ''
+      text: '',
+      findInPage: null
     };
   },
+
   mounted() {
+    this.findInPage = new FindInPage(remote.getCurrentWebContents(), {
+      offsetTop: 8,
+      boxBgColor: '#4a4a4a',
+      boxShadowColor: '#4a4a4a',
+      inputColor: '#aaa',
+      inputBgColor: '#222',
+      inputFocusColor: '#00b1b3',
+      textColor: '#aaa',
+      textHoverBgColor: '#555',
+      caseSelectedColor: '#555'
+    })
+
     ipcRenderer.on('new-post', () => {
       this.$store.commit('createNewPost');
     });
@@ -37,10 +53,15 @@ export default {
       this.$store.commit('visualizeFileSearchBox', true)
     });
 
+    ipcRenderer.on('search-text', () => {
+      this.findInPage.openFindWindow()
+    });
+
     ipcRenderer.on('toggle-view-mode', () => {
       this.$store.commit('toggleViewMode');
     });
   },
+
   methods: {
     changeText(text) {
       this.text = text;

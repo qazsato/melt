@@ -21,7 +21,8 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      enableRemoteModule: true
     }
   })
 
@@ -94,6 +95,13 @@ function createMenu() {
           accelerator: 'CmdOrCtrl+P',
           click() {
             mainWindow.webContents.send('open-file');
+          }
+        },
+        {
+          label: 'Search Text',
+          accelerator: 'CmdOrCtrl+F',
+          click() {
+            mainWindow.webContents.send('search-text');
           }
         }
       ]
