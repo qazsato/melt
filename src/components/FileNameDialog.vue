@@ -12,7 +12,7 @@
       ref="fileInput"
       v-model="filePath"
       class="autocomplete"
-      popper-class="autocomplete-popper"
+      popper-class="file-name-popper"
       :fetch-suggestions="queryFileNameSearch"
       :highlight-first-item="true"
       placeholder="Find name in folder"
@@ -93,7 +93,7 @@ export default {
 
     openDialog() {
       // HACK: closeDialogで消えたままになっていることがあるため戻す
-      const element = document.querySelector('.autocomplete-popper')
+      const element = document.querySelector('.file-name-popper')
       if (element) {
        element.style.display = 'block';
       }
@@ -101,7 +101,7 @@ export default {
 
     closeDialog() {
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      document.querySelector('.autocomplete-popper').style.display = 'none';
+      document.querySelector('.file-name-popper').style.display = 'none';
       this.$store.commit('hideFileNameSearch');
     }
   }
@@ -127,7 +127,7 @@ export default {
   }
 }
 
-.autocomplete-popper {
+.file-name-popper {
   ul {
     li {
       line-height: normal;
