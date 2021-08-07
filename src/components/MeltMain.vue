@@ -6,6 +6,7 @@
       <preview :text="text" />
     </section>
     <file-dialog />
+    <file-data-dialog />
   </main>
 </template>
 
@@ -16,6 +17,7 @@ import toolbar from './Toolbar.vue';
 import editor from './Editor.vue';
 import preview from './Preview.vue';
 import fileDialog from './FileDialog.vue';
+import fileDataDialog from './FileDataDialog.vue';
 
 export default {
   components: {
@@ -23,6 +25,7 @@ export default {
     editor,
     preview,
     fileDialog,
+    fileDataDialog,
   },
 
   data() {
@@ -55,6 +58,10 @@ export default {
 
     ipcRenderer.on('search-text', () => {
       this.findInPage.openFindWindow()
+    });
+
+    ipcRenderer.on('find-text-in-folder', () => {
+      this.$store.commit('showFileDataSearch')
     });
 
     ipcRenderer.on('toggle-view-mode', () => {

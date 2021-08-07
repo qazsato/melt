@@ -98,10 +98,17 @@ function createMenu() {
           }
         },
         {
-          label: 'Search Text',
+          label: 'Find Text',
           accelerator: 'CmdOrCtrl+F',
           click() {
             mainWindow.webContents.send('search-text');
+          }
+        },
+        {
+          label: 'Find Text in folder',
+          accelerator: 'CmdOrCtrl+Shift+F',
+          click() {
+            mainWindow.webContents.send('find-text-in-folder');
           }
         }
       ]

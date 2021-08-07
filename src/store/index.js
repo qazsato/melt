@@ -19,6 +19,7 @@ const store = new Vuex.Store({
     imageDialogVisible: false,
     tableDialogVisible: false,
     fileSearchBoxVisible: false,
+    visibleFileDataSearch: false
   },
   mutations: {
     createNewPost(state) {
@@ -77,6 +78,14 @@ const store = new Vuex.Store({
 
     visualizeFileSearchBox(state, visible) {
       state.fileSearchBoxVisible = visible;
+    },
+
+    showFileDataSearch(state) {
+      state.visibleFileDataSearch = true;
+    },
+
+    hideFileDataSearch(state) {
+      state.visibleFileDataSearch = false;
     },
 
     visualizeImageDialog(state, visible) {

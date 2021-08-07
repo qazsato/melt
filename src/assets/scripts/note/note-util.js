@@ -17,6 +17,12 @@ class NoteUtil {
       }
     })
   }
+
+  static readAllNotes(dir) {
+    const files = glob.sync(`${dir}/**/*.md`)
+    const notes = files.map((f) => new Note(f))
+    return _.orderBy(notes, (n) => n.readTitle(), 'asc');
+  }
 }
 
 export default NoteUtil;
