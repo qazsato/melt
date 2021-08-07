@@ -9,10 +9,10 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/assets/scripts/**/*.js',
-    'src/**/*.vue',
+    'src/**/*.vue'
   ],
   testPathIgnorePatterns: ['/node_modules/', '/release-builds/'],
   moduleNameMapper: {
-    "^@config(.*)$": "<rootDir>/config$1"
+    '^@config(.*)$': '<rootDir>/config$1'
   }
-};
+}

@@ -2,7 +2,8 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    node: true
+    node: true,
+    jest: true
   },
   extends: ['standard', 'plugin:vue/recommended'],
   overrides: [

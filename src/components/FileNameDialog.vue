@@ -29,34 +29,34 @@
 </template>
 
 <script>
-import setting from '@config/setting.json';
-import Note from '@scripts/note/note.js';
-import NoteUtil from '@scripts/note/note-util.js';
+import setting from '@config/setting.json'
+import Note from '@scripts/note/note.js'
+import NoteUtil from '@scripts/note/note-util.js'
 import { VIEW_MODE } from '@constants/index.js'
 
 export default {
-  data() {
+  data () {
     return {
       filePath: '',
-      notes: [],
-    };
+      notes: []
+    }
   },
 
-  mounted() {
-    this.notes = NoteUtil.readAllNotes(setting.directory);
+  mounted () {
+    this.notes = NoteUtil.readAllNotes(setting.directory)
 
     this.$store.watch(
       (state) => state.visibleFileNameSearch,
       (newValue, oldValue) => {
         if (newValue) {
-          this.$refs.fileInput.$refs.input.focus();
+          this.$refs.fileInput.$refs.input.focus()
         }
       }
     )
   },
 
   methods: {
-    queryFileNameSearch(queryString, cb) {
+    queryFileNameSearch (queryString, cb) {
       let filteredNotes = []
       if (queryString) {
         filteredNotes = this.notes.filter((n) => {
@@ -74,10 +74,10 @@ export default {
           relativePath: path.split(setting.directory)[1]
         }
       })
-      cb(results);
+      cb(results)
     },
 
-    handleFileSelect(item) {
+    handleFileSelect (item) {
       this.filePath = ''
       if (this.$store.state.isUnsaved) {
         if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
@@ -85,24 +85,24 @@ export default {
           return
         }
       }
-      this.$store.commit('hideFileNameSearch');
-      const note = new Note(item.path);
-      this.$store.commit('changeFile', note.readPath());
-      this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW);
+      this.$store.commit('hideFileNameSearch')
+      const note = new Note(item.path)
+      this.$store.commit('changeFile', note.readPath())
+      this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW)
     },
 
-    openDialog() {
+    openDialog () {
       // HACK: closeDialogで消えたままになっていることがあるため戻す
       const element = document.querySelector('.file-name-popper')
       if (element) {
-       element.style.display = 'block';
+        element.style.display = 'block'
       }
     },
 
-    closeDialog() {
+    closeDialog () {
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      document.querySelector('.file-name-popper').style.display = 'none';
-      this.$store.commit('hideFileNameSearch');
+      document.querySelector('.file-name-popper').style.display = 'none'
+      this.$store.commit('hideFileNameSearch')
     }
   }
 }

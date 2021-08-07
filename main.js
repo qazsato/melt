@@ -36,9 +36,9 @@ function createWindow () {
   }))
 
   mainWindow.webContents.on('new-window', (event, url) => {
-    event.preventDefault();
-    electron.shell.openExternal(url);
-  });
+    event.preventDefault()
+    electron.shell.openExternal(url)
+  })
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -78,7 +78,7 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-function createMenu() {
+function createMenu () {
   const template = [
     {
       label: 'File',
@@ -86,29 +86,29 @@ function createMenu() {
         {
           label: 'New Post',
           accelerator: 'CmdOrCtrl+N',
-          click() {
-            mainWindow.webContents.send('new-post');
+          click () {
+            mainWindow.webContents.send('new-post')
           }
         },
         {
           label: 'Open File',
           accelerator: 'CmdOrCtrl+P',
-          click() {
-            mainWindow.webContents.send('open-file');
+          click () {
+            mainWindow.webContents.send('open-file')
           }
         },
         {
           label: 'Find Text',
           accelerator: 'CmdOrCtrl+F',
-          click() {
-            mainWindow.webContents.send('search-text');
+          click () {
+            mainWindow.webContents.send('search-text')
           }
         },
         {
           label: 'Find Text in folder',
           accelerator: 'CmdOrCtrl+Shift+F',
-          click() {
-            mainWindow.webContents.send('find-text-in-folder');
+          click () {
+            mainWindow.webContents.send('find-text-in-folder')
           }
         }
       ]
@@ -116,13 +116,13 @@ function createMenu() {
     {
       label: 'Edit',
       submenu: [
-        {role: 'undo'},
-        {role: 'redo'},
-        {type: 'separator'},
-        {role: 'cut'},
-        {role: 'copy'},
-        {role: 'paste'},
-        {role: 'selectall'}
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'selectall' }
       ]
     },
     {
@@ -131,26 +131,26 @@ function createMenu() {
         {
           label: 'Toggle View Mode',
           accelerator: 'CmdOrCtrl+E',
-          click() {
-            mainWindow.webContents.send('toggle-view-mode');
+          click () {
+            mainWindow.webContents.send('toggle-view-mode')
           }
         },
-        {role: 'reload'},
-        {role: 'forcereload'},
-        {role: 'toggledevtools'},
-        {type: 'separator'},
-        {role: 'resetzoom'},
-        {role: 'zoomin'},
-        {role: 'zoomout'},
-        {type: 'separator'},
-        {role: 'togglefullscreen'}
+        { role: 'reload' },
+        { role: 'forcereload' },
+        { role: 'toggledevtools' },
+        { type: 'separator' },
+        { role: 'resetzoom' },
+        { role: 'zoomin' },
+        { role: 'zoomout' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
       ]
     },
     {
       role: 'window',
       submenu: [
-        {role: 'minimize'},
-        {role: 'close'}
+        { role: 'minimize' },
+        { role: 'close' }
       ]
     },
     {
@@ -168,25 +168,25 @@ function createMenu() {
     template.unshift({
       label: app.getName(),
       submenu: [
-        {role: 'about'},
-        {type: 'separator'},
-        {role: 'services', submenu: []},
-        {type: 'separator'},
-        {role: 'hide'},
-        {role: 'hideothers'},
-        {role: 'unhide'},
-        {type: 'separator'},
-        {role: 'quit'}
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services', submenu: [] },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideothers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' }
       ]
     })
 
     // Window menu
     template[4].submenu = [
-      {role: 'close'},
-      {role: 'minimize'},
-      {role: 'zoom'},
-      {type: 'separator'},
-      {role: 'front'}
+      { role: 'close' },
+      { role: 'minimize' },
+      { role: 'zoom' },
+      { type: 'separator' },
+      { role: 'front' }
     ]
   }
 
@@ -212,12 +212,12 @@ ipcMain.handle('file-save', async (event, data) => {
   }
 
   try {
-    fs.writeFileSync(path, data);
+    fs.writeFileSync(path, data)
     return {
       status: true,
       path: path
     }
-  } catch(error) {
+  } catch (error) {
     return {
       status: false,
       message: error.message

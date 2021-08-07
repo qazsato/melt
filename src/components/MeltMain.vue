@@ -11,13 +11,13 @@
 </template>
 
 <script>
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer, remote } from 'electron'
 import { FindInPage } from 'electron-find'
-import toolbar from './Toolbar.vue';
-import editor from './Editor.vue';
-import preview from './Preview.vue';
-import fileNameDialog from './FileNameDialog.vue';
-import fileDataDialog from './FileDataDialog.vue';
+import toolbar from './Toolbar.vue'
+import editor from './Editor.vue'
+import preview from './Preview.vue'
+import fileNameDialog from './FileNameDialog.vue'
+import fileDataDialog from './FileDataDialog.vue'
 
 export default {
   components: {
@@ -25,17 +25,17 @@ export default {
     editor,
     preview,
     fileNameDialog,
-    fileDataDialog,
+    fileDataDialog
   },
 
-  data() {
+  data () {
     return {
       text: '',
       findInPage: null
-    };
+    }
   },
 
-  mounted() {
+  mounted () {
     this.findInPage = new FindInPage(remote.getCurrentWebContents(), {
       offsetTop: 8,
       boxBgColor: '#4a4a4a',
@@ -49,30 +49,30 @@ export default {
     })
 
     ipcRenderer.on('new-post', () => {
-      this.$store.commit('createNewPost');
-    });
+      this.$store.commit('createNewPost')
+    })
 
     ipcRenderer.on('open-file', () => {
       this.$store.commit('showFileNameSearch')
-    });
+    })
 
     ipcRenderer.on('search-text', () => {
       this.findInPage.openFindWindow()
-    });
+    })
 
     ipcRenderer.on('find-text-in-folder', () => {
       this.$store.commit('showFileDataSearch')
-    });
+    })
 
     ipcRenderer.on('toggle-view-mode', () => {
-      this.$store.commit('toggleViewMode');
-    });
+      this.$store.commit('toggleViewMode')
+    })
   },
 
   methods: {
-    changeText(text) {
-      this.text = text;
-      this.$store.commit('updateIsUnsaved');
+    changeText (text) {
+      this.text = text
+      this.$store.commit('updateIsUnsaved')
     }
   }
 }
