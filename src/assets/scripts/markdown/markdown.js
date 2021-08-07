@@ -12,11 +12,14 @@ class Markdown {
       html: true,
       breaks: true,
       linkify: true,
-      highlight: (code, lang) => {
-        if (lang) {
-          return highlight.highlightAuto(code, [lang]).value;
+      highlight: (str, lang) => {
+        let code = ''
+        if (lang && highlight.getLanguage(lang)) {
+          code = highlight.highlight(str, { language: lang, ignoreIllegals: true }).value
+        } else {
+          code = this.md.utils.escapeHtml(str)
         }
-        return code;
+        return '<pre class="codeblock"><i class="clipboard el-icon-document-copy"></i><div><code>' + code + '</code></div></pre>'
       }
     });
     this.md.use(emoji);

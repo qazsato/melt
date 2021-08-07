@@ -12,19 +12,27 @@
   }
 
   // コードブロック内のコピーボタン (独自拡張)
-  pre {
+  .codeblock {
     position: relative;
+    overflow: hidden;
+    padding: 0;
 
     .clipboard {
       position: absolute;
       right: 16px;
       top: 16px;
       font-size: 16px;
+      background-color: #f6f8fa;
       cursor: pointer;
 
       &:hover {
-        opacity: .5;
+        color: #999;
       }
+    }
+
+    > div {
+      overflow: auto;
+      padding: 16px;
     }
   }
 }
