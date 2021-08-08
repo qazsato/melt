@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@scripts/*": ["./src/assets/scripts/*"]
+      "@scripts/*": ["./src/assets/scripts/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@utils/*": ["./src/utils/*"],
     }
   },
   "exclude": ["node_modules", "release-builds", "dist"]
