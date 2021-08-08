@@ -1,85 +1,49 @@
-const electron = require('electron')
-// Module to control application life.
-const app = electron.app
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
-const Menu = electron.Menu
-const ipcMain = electron.ipcMain
-const dialog = electron.dialog
-
+const { app, BrowserWindow, Menu, ipcMain, dialog, shell } = require('electron')
 const fs = require('fs')
-const path = require('path')
-const url = require('url')
 const setting = require('./config/setting.json')
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
 function createWindow () {
-  // Create the browser window.
   mainWindow = new BrowserWindow({
+    minWidth: 480,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true
     }
   })
-
+  mainWindow.loadFile('index.html')
   mainWindow.maximize()
-
-  // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
 
   mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault()
-    electron.shell.openExternal(url)
+    shell.openExternal(url)
   })
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
-
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools()
+  }
 
   createMenu()
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
-
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('activate', function () {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
 function createMenu () {
   const template = [
+    {
+      label: app.getName(),
+      submenu: [
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services', submenu: [] },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideothers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    },
     {
       label: 'File',
       submenu: [
@@ -97,6 +61,7 @@ function createMenu () {
             mainWindow.webContents.send('open-file')
           }
         },
+        { type: 'separator' },
         {
           label: 'Find Text',
           accelerator: 'CmdOrCtrl+F',
@@ -135,22 +100,22 @@ function createMenu () {
             mainWindow.webContents.send('toggle-view-mode')
           }
         },
-        { role: 'reload' },
-        { role: 'forcereload' },
-        { role: 'toggledevtools' },
         { type: 'separator' },
         { role: 'resetzoom' },
         { role: 'zoomin' },
         { role: 'zoomout' },
         { type: 'separator' },
-        { role: 'togglefullscreen' }
+        { role: 'togglefullscreen' },
+        { type: 'separator' },
+        { role: 'toggledevtools' }
       ]
     },
     {
       role: 'window',
       submenu: [
         { role: 'minimize' },
-        { role: 'close' }
+        { type: 'separator' },
+        { role: 'front' }
       ]
     },
     {
@@ -158,41 +123,48 @@ function createMenu () {
       submenu: [
         {
           label: 'GitHub',
-          click () { electron.shell.openExternal('https://github.com/qazsato/melt') }
+          click () { shell.openExternal('https://github.com/qazsato/melt') }
         }
       ]
     }
   ]
 
-  if (process.platform === 'darwin') {
-    template.unshift({
-      label: app.getName(),
-      submenu: [
-        { role: 'about' },
-        { type: 'separator' },
-        { role: 'services', submenu: [] },
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideothers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        { role: 'quit' }
-      ]
-    })
-
-    // Window menu
-    template[4].submenu = [
-      { role: 'close' },
-      { role: 'minimize' },
-      { role: 'zoom' },
-      { type: 'separator' },
-      { role: 'front' }
-    ]
+  if (process.env.NODE_ENV === 'development') {
+    template[3].submenu.push({ role: 'reload' })
+    template[3].submenu.push({ role: 'forcereload' })
   }
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
+
+app.whenReady().then(() => {
+  createWindow()
+
+  app.on('before-quit', function (event) {
+    const selected = dialog.showMessageBoxSync({
+      message: 'Meltを終了します',
+      buttons: ['OK', 'Cancel'],
+      cancelId: -1 // Esc押下時の値
+    })
+    // OK以外は終了させない
+    if (selected !== 0) {
+      event.preventDefault()
+    }
+  })
+
+  // For Widows and Linux
+  // https://www.electronjs.org/docs/tutorial/quick-start#quit-the-app-when-all-windows-are-closed-windows--linux
+  app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin') app.quit()
+  })
+
+  // For MacOS
+  // https://www.electronjs.org/docs/tutorial/quick-start#open-a-window-if-none-are-open-macos
+  app.on('activate', function () {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+})
 
 // 新規ファイル保存
 ipcMain.handle('file-save', async (event, data) => {

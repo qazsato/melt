@@ -53,7 +53,7 @@
     "webpack-cli": "3.3.6"
   },
   "scripts": {
-    "start": "electron .",
+    "start": "NODE_ENV=development electron .",
     "dev": "NODE_ENV=development webpack --watch",
     "prepack:mac": "NODE_ENV=production webpack",
     "pack:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icon.icns --prune=true --out=release-builds",
