@@ -23,6 +23,13 @@
           {{ item.label }}
         </div>
         <span class="path">.{{ item.relativePath }}</span>
+        <li
+          v-for="(row, index) in item.rows"
+          :key="index"
+          class="row"
+        >
+          {{ row }}
+        </li>
       </template>
     </el-autocomplete>
   </el-dialog>
@@ -42,8 +49,6 @@ export default {
   },
 
   mounted () {
-    this.notes = readAllNotes(setting.directory)
-
     this.$store.watch(
       (state) => state.visibleFindContentDialog,
       (value) => {
@@ -58,9 +63,7 @@ export default {
     queryFindContent (queryString, cb) {
       let filteredNotes = []
       if (queryString) {
-        filteredNotes = this.notes.filter((n) => {
-          return n.content.toLowerCase().includes(queryString.toLowerCase())
-        })
+        filteredNotes = this.notes.filter((n) => n.find(queryString).length > 0)
       } else {
         filteredNotes = readRecentlyOpenedNotes()
       }
@@ -68,7 +71,8 @@ export default {
         return {
           label: n.fileName,
           path: n.filePath,
-          relativePath: n.filePath.split(setting.directory)[1]
+          relativePath: n.filePath.split(setting.directory)[1],
+          rows: queryString ? n.find(queryString) : []
         }
       })
       cb(results)
@@ -88,6 +92,7 @@ export default {
     },
 
     openDialog () {
+      this.notes = readAllNotes(setting.directory)
       // HACK: closeDialogで消えたままになっていることがあるため戻す
       const element = document.querySelector('.find-content-popper')
       if (element) {
@@ -124,8 +129,8 @@ export default {
 }
 
 .find-content-popper {
-  ul {
-    li {
+  .el-autocomplete-suggestion__list {
+    > li {
       line-height: normal;
       padding: 7px 14px;
 
@@ -133,9 +138,17 @@ export default {
         text-overflow: ellipsis;
         overflow: hidden;
       }
-      .path {
+
+      .path,
+      .row {
         font-size: 12px;
         color: #b4b4b4;
+      }
+
+      .row {
+        margin: 6px 14px;
+        padding: 0;
+        line-height: normal;
       }
     }
   }

@@ -42,8 +42,6 @@ export default {
   },
 
   mounted () {
-    this.notes = readAllNotes(setting.directory)
-
     this.$store.watch(
       (state) => state.visibleFindTitleDialog,
       (value) => {
@@ -89,6 +87,7 @@ export default {
     },
 
     openDialog () {
+      this.notes = readAllNotes(setting.directory)
       // HACK: closeDialogで消えたままになっていることがあるため戻す
       const element = document.querySelector('.find-title-popper')
       if (element) {

@@ -11,7 +11,7 @@ import { getBrowsingHistories } from '@utils/localStorage.js'
 export const readAllNotes = (dir) => {
   const files = glob.sync(`${dir}/**/*.md`)
   const notes = files.map((f) => new Note(f))
-  return _.orderBy(notes, (n) => n.fileName, 'asc')
+  return _.orderBy(notes, (n) => n.fileStats.mtime, 'desc')
 }
 
 /**
