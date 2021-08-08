@@ -6,11 +6,11 @@
           :content="$store.state.note.filePath"
           :open-delay="200"
         >
-          <div>{{ $store.state.note.fileName }}</div>
+          <div>{{ $store.state.note.title }}</div>
         </el-tooltip>
       </template>
       <template v-else>
-        <div>{{ $store.state.note.fileName }}</div>
+        <div>{{ $store.state.note.title }}</div>
       </template>
       <span
         v-if="isSaved === false"

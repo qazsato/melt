@@ -59,7 +59,7 @@ export default {
       let filteredNotes = []
       if (queryString) {
         filteredNotes = this.notes.filter((n) => {
-          return n.currentContent.toLowerCase().includes(queryString.toLowerCase())
+          return n.content.toLowerCase().includes(queryString.toLowerCase())
         })
       } else {
         filteredNotes = NoteUtil.readRecentlyOpenedNotes()

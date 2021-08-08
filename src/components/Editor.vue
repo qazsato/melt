@@ -176,7 +176,7 @@ export default {
 
   watch: {
     note (note) {
-      this.editor.setText(note.currentContent)
+      this.editor.setText(note.content)
     }
   },
 
@@ -209,7 +209,7 @@ export default {
         if (newValue === VIEW_MODE.EDITOR) {
           // 未保存の情報を上書きしないように、保存済みの場合のみ設定する
           if (this.$store.state.note.isSaved) {
-            this.editor.setText(this.$store.state.note.currentContent)
+            this.editor.setText(this.$store.state.note.content)
           }
         }
       }

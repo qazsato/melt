@@ -21,7 +21,7 @@ import { VIEW_MODE } from '@constants/index.js'
 export default {
   computed: {
     text () {
-      return this.$store.state.note.currentContent
+      return this.$store.state.note.content
     },
 
     isViewModePreview () {

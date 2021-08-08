@@ -3,7 +3,7 @@ import fs from 'fs'
 class File {
   constructor (path) {
     this.filePath = path
-    this.fileName = path ? path.split('/').reverse()[0] : 'Untitled'
+    this.fileName = path ? path.split('/').reverse()[0] : ''
     this.fileContent = this.readContent(path)
     this.fileStats = this.readStats(path)
   }
@@ -26,8 +26,7 @@ class File {
     if (!path) {
       return false
     }
-    const fileName = path.split('/').reverse()[0]
-    const filExt = fileName.split('.').reverse()[0]
+    const filExt = this.fileName.split('.').reverse()[0]
     if (filExt !== 'md') {
       throw new Error('file extension must be md.')
     }
@@ -41,6 +40,7 @@ class File {
 
   reload (path) {
     this.filePath = path
+    this.fileName = path.split('/').reverse()[0]
     this.fileContent = this.readContent(path)
     this.fileStats = this.readStats(path)
   }
