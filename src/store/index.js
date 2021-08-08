@@ -13,8 +13,8 @@ const store = new Vuex.Store({
     visibleLinkDialog: false,
     visibleImageDialog: false,
     visibleTableDialog: false,
-    visibleFileNameSearch: false,
-    visibleFileDataSearch: false
+    visibleFindTitleDialog: false,
+    visibleFindContentDialog: false
   },
 
   mutations: {
@@ -98,20 +98,20 @@ const store = new Vuex.Store({
       state.visibleTableDialog = false
     },
 
-    showFileNameSearch (state) {
-      state.visibleFileNameSearch = true
+    showFindTitleDialog (state) {
+      state.visibleFindTitleDialog = true
     },
 
-    hideFileNameSearch (state) {
-      state.visibleFileNameSearch = false
+    hideFindTitleDialog (state) {
+      state.visibleFindTitleDialog = false
     },
 
-    showFileDataSearch (state) {
-      state.visibleFileDataSearch = true
+    showFindContentDialog (state) {
+      state.visibleFindContentDialog = true
     },
 
-    hideFileDataSearch (state) {
-      state.visibleFileDataSearch = false
+    hideFindContentDialog (state) {
+      state.visibleFindContentDialog = false
     }
   }
 })

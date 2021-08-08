@@ -5,8 +5,8 @@
       <editor />
       <preview />
     </section>
-    <file-name-dialog />
-    <file-data-dialog />
+    <find-title-dialog />
+    <find-content-dialog />
   </main>
 </template>
 
@@ -16,16 +16,16 @@ import { FindInPage } from 'electron-find'
 import toolbar from './Toolbar.vue'
 import editor from './Editor.vue'
 import preview from './Preview.vue'
-import fileNameDialog from './FileNameDialog.vue'
-import fileDataDialog from './FileDataDialog.vue'
+import findTitleDialog from './FindTitleDialog.vue'
+import findContentDialog from './FindContentDialog.vue'
 
 export default {
   components: {
     toolbar,
     editor,
     preview,
-    fileNameDialog,
-    fileDataDialog
+    findTitleDialog,
+    findContentDialog
   },
 
   data () {
@@ -53,7 +53,7 @@ export default {
     })
 
     ipcRenderer.on('open-note', () => {
-      this.$store.commit('showFileNameSearch')
+      this.$store.commit('showFindTitleDialog')
     })
 
     ipcRenderer.on('search-text', () => {
@@ -61,7 +61,7 @@ export default {
     })
 
     ipcRenderer.on('find-text-in-folder', () => {
-      this.$store.commit('showFileDataSearch')
+      this.$store.commit('showFindContentDialog')
     })
 
     ipcRenderer.on('toggle-view-mode', () => {
