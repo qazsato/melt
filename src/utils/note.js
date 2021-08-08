@@ -1,20 +1,25 @@
 import glob from 'glob'
-import Note from '@scripts/note/note.js'
 import _ from 'lodash'
+import Note from '@scripts/note/note.js'
+import { getBrowsingHistories } from '@utils/localStorage.js'
 
+/**
+ * ディレクトリ配下の全てのノートを取得
+ * @param {String} dir ディレクトリパス
+ * @returns notes
+ */
 export const readAllNotes = (dir) => {
   const files = glob.sync(`${dir}/**/*.md`)
   const notes = files.map((f) => new Note(f))
   return _.orderBy(notes, (n) => n.fileName, 'asc')
 }
 
+/**
+ * 最近開いたノートを取得
+ * @returns notes
+ */
 export const readRecentlyOpenedNotes = () => {
-  if (!localStorage.browsingHistories) {
-    return []
-  }
-  const browsingHistories = JSON.parse(localStorage.browsingHistories)
-  browsingHistories.sort((a, b) => b.time - a.time)
-  const paths = browsingHistories.slice(0, 10).map((h) => h.path)
+  const paths = getBrowsingHistories()
   const notes = []
   paths.forEach((p) => {
     try {

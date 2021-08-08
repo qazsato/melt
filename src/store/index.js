@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Note from '@scripts/note/note.js'
 import { VIEW_MODE } from '@constants/index.js'
+import { updateBrowsingHistory } from '@utils/localStorage.js'
 
 Vue.use(Vuex)
 
@@ -34,16 +35,7 @@ const store = new Vuex.Store({
 
     changeNote (state, path) {
       state.note = new Note(path)
-      // TODO: LS保存処理共通化
-      const browsingHistories = localStorage.browsingHistories ? JSON.parse(localStorage.browsingHistories) : []
-      const bh = browsingHistories.find((h) => h.path === path)
-      const time = new Date().getTime()
-      if (bh) {
-        bh.time = time
-      } else {
-        browsingHistories.push({ path, time })
-      }
-      localStorage.browsingHistories = JSON.stringify(browsingHistories)
+      updateBrowsingHistory(path)
     },
 
     updateNote (state, content) {
