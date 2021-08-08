@@ -1,5 +1,5 @@
 import glob from 'glob'
-import Note from '../assets/scripts/note/note.js'
+import Note from '@scripts/note/note.js'
 import _ from 'lodash'
 
 export const readAllNotes = (dir) => {
