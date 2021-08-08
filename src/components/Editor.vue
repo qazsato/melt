@@ -182,7 +182,9 @@ export default {
 
   mounted () {
     this.editor = new Editor('editor')
-    this.editor.on('change', () => this.$emit('changeText', this.editor.getText()))
+    this.editor.on('change', () => {
+      this.$store.commit('updateNote', this.editor.getText())
+    })
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
       'Shift-Cmd-P': () => this.$store.commit('showImageDialog'),

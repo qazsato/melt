@@ -2,8 +2,8 @@
   <main>
     <toolbar />
     <section class="note">
-      <editor @changeText="changeText" />
-      <preview :text="text" />
+      <editor />
+      <preview />
     </section>
     <file-name-dialog />
     <file-data-dialog />
@@ -67,13 +67,6 @@ export default {
     ipcRenderer.on('toggle-view-mode', () => {
       this.$store.commit('toggleViewMode')
     })
-  },
-
-  methods: {
-    changeText (text) {
-      this.text = text
-      this.$store.commit('updateNote', text)
-    }
   }
 }
 </script>
