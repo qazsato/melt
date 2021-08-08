@@ -30,7 +30,7 @@
 
 <script>
 import setting from '@config/setting.json'
-import NoteUtil from '@scripts/note/note-util.js'
+import { readAllNotes, readRecentlyOpenedNotes } from '@utils/note.js'
 import { VIEW_MODE } from '@constants/index.js'
 
 export default {
@@ -42,7 +42,7 @@ export default {
   },
 
   mounted () {
-    this.notes = NoteUtil.readAllNotes(setting.directory)
+    this.notes = readAllNotes(setting.directory)
 
     this.$store.watch(
       (state) => state.visibleFindContentDialog,
@@ -62,7 +62,7 @@ export default {
           return n.content.toLowerCase().includes(queryString.toLowerCase())
         })
       } else {
-        filteredNotes = NoteUtil.readRecentlyOpenedNotes()
+        filteredNotes = readRecentlyOpenedNotes()
       }
       const results = filteredNotes.map((n) => {
         return {
