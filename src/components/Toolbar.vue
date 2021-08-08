@@ -1,19 +1,19 @@
 <template>
   <section id="toolbar">
     <h1 class="file-name">
-      <template v-if="$store.state.currentFile">
+      <template v-if="$store.state.note.filePath">
         <el-tooltip
-          :content="$store.state.currentFile"
+          :content="$store.state.note.filePath"
           :open-delay="200"
         >
-          <div>{{ fileName }}</div>
+          <div>{{ $store.state.note.fileName }}</div>
         </el-tooltip>
       </template>
       <template v-else>
-        <div>{{ fileName }}</div>
+        <div>{{ $store.state.note.fileName }}</div>
       </template>
       <span
-        v-if="isUnsaved"
+        v-if="isSaved === false"
         class="unsaved"
       >*</span>
     </h1>
@@ -35,37 +35,26 @@
 </template>
 
 <script>
-import Note from '@scripts/note/note.js'
-
 export default {
   data () {
     return {
       viewMode: this.$store.state.viewMode,
-      isUnsaved: this.$store.state.isUnsaved
-    }
-  },
-
-  computed: {
-    fileName () {
-      if (this.$store.state.currentFile) {
-        return new Note(this.$store.state.currentFile).readTitle()
-      }
-      return 'Untitled'
+      isSaved: null
     }
   },
 
   mounted () {
     this.$store.watch(
       (state) => state.viewMode,
-      (newValue, oldValue) => {
-        this.viewMode = newValue
+      (value) => {
+        this.viewMode = value
       }
     )
 
     this.$store.watch(
-      (state) => state.isUnsaved,
-      (newValue, oldValue) => {
-        this.isUnsaved = newValue
+      (state) => state.note.isSaved,
+      (value) => {
+        this.isSaved = value
       }
     )
   },

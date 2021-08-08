@@ -30,7 +30,6 @@
 
 <script>
 import setting from '@config/setting.json'
-import Note from '@scripts/note/note.js'
 import NoteUtil from '@scripts/note/note-util.js'
 import { VIEW_MODE } from '@constants/index.js'
 
@@ -60,17 +59,16 @@ export default {
       let filteredNotes = []
       if (queryString) {
         filteredNotes = this.notes.filter((n) => {
-          return n.data.toLowerCase().includes(queryString.toLowerCase())
+          return n.currentContent.toLowerCase().includes(queryString.toLowerCase())
         })
       } else {
         filteredNotes = NoteUtil.readRecentlyOpenedNotes()
       }
       const results = filteredNotes.map((n) => {
-        const path = n.readPath()
         return {
-          label: n.readTitle(),
-          path: path,
-          relativePath: path.split(setting.directory)[1]
+          label: n.fileName,
+          path: n.filePath,
+          relativePath: n.filePath.split(setting.directory)[1]
         }
       })
       cb(results)
@@ -78,15 +76,14 @@ export default {
 
     handleFileSelect (item) {
       this.filePath = ''
-      if (this.$store.state.isUnsaved) {
+      if (!this.$store.state.note.isSaved) {
         if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
           this.$refs.fileInput.$refs.input.blur()
           return
         }
       }
       this.$store.commit('hideFileDataSearch')
-      const note = new Note(item.path)
-      this.$store.commit('changeFile', note.readPath())
+      this.$store.commit('changeNote', item.path)
       this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW)
     },
 

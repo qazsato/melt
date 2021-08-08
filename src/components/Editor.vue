@@ -149,7 +149,6 @@ import 'codemirror/mode/shell/shell.js'
 import 'codemirror/addon/edit/continuelist.js'
 import setting from '@config/setting.json'
 import Editor from '@scripts/editor/markdown-editor.js'
-import Note from '@scripts/note/note.js'
 import { VIEW_MODE } from '@constants/index.js'
 
 export default {
@@ -170,16 +169,14 @@ export default {
       return this.$store.state.viewMode === VIEW_MODE.EDITOR
     },
 
-    file () {
-      return this.$store.state.currentFile
+    note () {
+      return this.$store.state.note
     }
   },
 
   watch: {
-    file (file) {
-      if (!file) return
-      const content = this.$store.state.note.readContent()
-      this.editor.setText(content)
+    note (note) {
+      this.editor.setText(note.currentContent)
     }
   },
 
@@ -209,8 +206,8 @@ export default {
         // その問題を回避するため、ここで再度テキストを設定して変更後の情報にする。
         if (newValue === VIEW_MODE.EDITOR) {
           // 未保存の情報を上書きしないように、保存済みの場合のみ設定する
-          if (!this.$store.state.isUnsaved && this.$store.state.note) {
-            this.editor.setText(this.$store.state.note.readContent())
+          if (this.$store.state.note.isSaved) {
+            this.editor.setText(this.$store.state.note.currentContent)
           }
         }
       }
@@ -300,9 +297,9 @@ export default {
 
     saveFile () {
       const content = this.editor.getText()
-      if (this.$store.state.currentFile) {
-        this.$store.state.note.updateContent(content)
-        this.$store.commit('updateIsUnsaved')
+      if (this.$store.state.note.filePath) {
+        this.$store.commit('updateNote', content)
+        this.$store.commit('saveNote')
       } else {
         ipcRenderer.invoke('file-save', content)
           .then((data) => {
@@ -315,8 +312,8 @@ export default {
               alert(`ファイルが開けませんでした。\n${data.message}`)
               return
             }
-            const note = new Note(data.path)
-            this.$store.commit('changeFile', note.readPath())
+            this.$store.commit('saveNote', data.path)
+            this.$store.commit('changeNote', this.$store.state.note.filePath)
           })
           .catch((err) => {
             alert(err)

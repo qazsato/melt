@@ -48,11 +48,11 @@ export default {
       caseSelectedColor: '#555'
     })
 
-    ipcRenderer.on('new-post', () => {
-      this.$store.commit('createNewPost')
+    ipcRenderer.on('new-note', () => {
+      this.$store.commit('createNewNote')
     })
 
-    ipcRenderer.on('open-file', () => {
+    ipcRenderer.on('open-note', () => {
       this.$store.commit('showFileNameSearch')
     })
 
@@ -72,7 +72,7 @@ export default {
   methods: {
     changeText (text) {
       this.text = text
-      this.$store.commit('updateIsUnsaved')
+      this.$store.commit('updateNote', text)
     }
   }
 }

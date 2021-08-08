@@ -1,29 +1,30 @@
-import fs from 'fs'
-class Note {
+import file from './file'
+
+class Note extends file {
   constructor (path) {
-    this.path = path
-    this.data = fs.readFileSync(this.path, 'utf-8')
+    super(path)
+    this.currentContent = this.fileContent || ''
+    this.isSaved = this.checkSaved()
   }
 
-  delete () {
-    fs.unlinkSync(this.path)
+  find (word) {
+    const w = word.toLowerCase()
+    const rows = this.currentContent.split('\n')
+    return rows.filter((r) => r.toLowerCase().includes(w))
   }
 
-  readPath () {
-    return this.path
+  update (content) {
+    this.currentContent = content
+    this.isSaved = this.checkSaved()
   }
 
-  readTitle () {
-    return this.path.split('/').reverse()[0]
+  save (path = this.filePath) {
+    this.writeContent(this.currentContent, path)
+    this.isSaved = this.checkSaved()
   }
 
-  readContent () {
-    return this.data
-  }
-
-  updateContent (content) {
-    this.data = content
-    fs.writeFileSync(this.path, this.data)
+  checkSaved () {
+    return this.currentContent === this.fileContent
   }
 }
 
