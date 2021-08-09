@@ -1,8 +1,5 @@
 import MarkdownIt from 'markdown-it'
 import emoji from 'markdown-it-emoji'
-import katex from 'markdown-it-katex'
-import plantuml from 'markdown-it-plantuml'
-import footnote from 'markdown-it-footnote'
 import checkbox from 'markdown-it-task-checkbox'
 import highlight from 'highlight.js'
 
@@ -23,9 +20,6 @@ class Markdown {
       }
     })
     this.md.use(emoji)
-    this.md.use(katex)
-    this.md.use(plantuml)
-    this.md.use(footnote)
     this.md.use(checkbox, { disabled: true })
     this.changeLinkOpenRule()
   }

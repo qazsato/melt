@@ -33,7 +33,7 @@ class File {
     return true
   }
 
-  writeContent (content, path = this.filePath) {
+  writeContent (content, path) {
     fs.writeFileSync(path, content)
     this.reload(path)
   }

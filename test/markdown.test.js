@@ -21,20 +21,32 @@ test('URL文字列がリンクになる(linkify=true)', () => {
 })
 
 test('コードが挿入される(言語指定あり)', () => {
-  const text = '```javascript\nvar a = 0;\n```'
-  const html = '<pre><code class="language-javascript"><span class="hljs-keyword">var</span> a = <span class="hljs-number">0</span>;\n</code></pre>\n'
+  const text = '```js\nvar a = 0;\n```'
+  const html = '<pre class="codeblock"><i class="clipboard"></i><div><code><span class="hljs-keyword">var</span> a = <span class="hljs-number">0</span>;\n</code></div></pre>\n'
   expect(markdown.render(text)).toBe(html)
 })
 
 test('コードが挿入される(言語指定なし)', () => {
   const text = '```\nvar a = 0;\n```'
-  const html = '<pre><code>var a = 0;\n</code></pre>\n'
+  const html = '<pre class="codeblock"><i class="clipboard"></i><div><code>var a = 0;\n</code></div></pre>\n'
   expect(markdown.render(text)).toBe(html)
 })
 
 test('絵文字が挿入される', () => {
   const text = ':smile:'
   const html = '<p>😄</p>\n'
+  expect(markdown.render(text)).toBe(html)
+})
+
+test('絵文字が挿入される', () => {
+  const text = ':smile:'
+  const html = '<p>😄</p>\n'
+  expect(markdown.render(text)).toBe(html)
+})
+
+test('タスクリストが挿入される', () => {
+  const text = '- [ ] test'
+  const html = '<ul class="task-list">\n<li class="task-list-item"><input type="checkbox" id="cbx_0" disabled="true"><label for="cbx_0"> test</label></li>\n</ul>\n'
   expect(markdown.render(text)).toBe(html)
 })
 
