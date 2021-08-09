@@ -20,7 +20,7 @@ import { VIEW_MODE } from '@constants/index.js'
 
 export default {
   computed: {
-    text () {
+    content () {
       return this.$store.state.note.content
     },
 
@@ -29,7 +29,7 @@ export default {
     },
 
     markedText () {
-      return this.markdown.render(this.text)
+      return this.markdown.render(this.content)
     }
   },
 
