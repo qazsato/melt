@@ -1,23 +1,19 @@
 <template>
   <section class="status-bar">
     <div class="paragraph">
-      <span>¶:</span>
+      <span>¶ </span>
       <span>{{ paragraph }}</span>
     </div>
     <div class="line">
-      <span>L:</span>
+      <span>L </span>
       <span>{{ line }}</span>
-    </div>
-    <div class="char">
-      <span>C:</span>
-      <span>{{ char }}</span>
     </div>
     <div class="spacer" />
     <div
       v-if="lastModifiedAt"
       class="last-modified"
     >
-      <span>Last modified : </span>
+      <i class="el-icon-refresh" />
       <span>{{ lastModifiedAt }}</span>
     </div>
   </section>
@@ -31,7 +27,6 @@ export default {
     return {
       paragraph: 0,
       line: 0,
-      char: 0,
       lastModifiedAt: null
     }
   },
@@ -48,16 +43,13 @@ export default {
 
   watch: {
     note (note) {
-      console.log('note', note)
       this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
     },
 
     text (value) {
       const note = this.$store.state.note
-      console.log('note', note)
       this.paragraph = note.tableOfContents.length
       this.line = value.split('\n').length
-      this.char = value.length
       if (note.fileStats) {
         this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
       }
@@ -82,8 +74,7 @@ export default {
 }
 
 .paragraph,
-.line,
-.char {
+.line {
   margin-right: 5px;
 }
 </style>
