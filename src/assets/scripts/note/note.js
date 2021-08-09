@@ -22,6 +22,7 @@ class Note extends file {
   }
 
   save (path = this.filePath) {
+    if (this.checkSaved()) return // 保存済み(=差分なし)の場合は何もしない
     this.writeContent(this.content, path)
     this.title = this.fileName
     this.tableOfContents = this.createTableOfContents()
@@ -37,17 +38,17 @@ class Note extends file {
     const rows = this.content.split('\n')
     rows.forEach((r) => {
       if (r.indexOf('# ') === 0) {
-        tocs.push({ heading: 1, text: r.split('# ')[1] })
+        tocs.push({ heading: 1, text: r.replace('# ', '') })
       } else if (r.indexOf('## ') === 0) {
-        tocs.push({ heading: 2, text: r.split('## ')[1] })
+        tocs.push({ heading: 2, text: r.replace('## ', '') })
       } else if (r.indexOf('### ') === 0) {
-        tocs.push({ heading: 3, text: r.split('### ')[1] })
+        tocs.push({ heading: 3, text: r.replace('### ', '') })
       } else if (r.indexOf('#### ') === 0) {
-        tocs.push({ heading: 4, text: r.split('#### ')[1] })
+        tocs.push({ heading: 4, text: r.replace('#### ', '') })
       } else if (r.indexOf('##### ') === 0) {
-        tocs.push({ heading: 5, text: r.split('##### ')[1] })
+        tocs.push({ heading: 5, text: r.replace('##### ', '') })
       } else if (r.indexOf('###### ') === 0) {
-        tocs.push({ heading: 6, text: r.split('###### ')[1] })
+        tocs.push({ heading: 6, text: r.replace('###### ', '') })
       }
     })
     return tocs

@@ -32,21 +32,22 @@ export default {
   },
 
   computed: {
-    note () {
-      return this.$store.state.note
+    isSaved () {
+      return this.$store.state.note.isSaved
     },
 
-    text () {
+    content () {
       return this.$store.state.note.content
     }
   },
 
   watch: {
-    note (note) {
+    isSaved () {
+      const note = this.$store.state.note
       this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
     },
 
-    text (value) {
+    content (value) {
       const note = this.$store.state.note
       this.paragraph = note.tableOfContents.length
       this.line = value.split('\n').length
@@ -61,7 +62,8 @@ export default {
 <style lang="scss" scoped>
 .status-bar {
   display: flex;
-  padding: 4px 8px;
+  align-items: center;
+  padding: 0 10px;
   height: 100%;
   background-color: #f6f8fa;
   color: #24292e;
