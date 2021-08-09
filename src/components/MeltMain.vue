@@ -1,12 +1,15 @@
 <template>
   <section class="melt">
     <header>
-      <toolbar />
+      <tool-bar />
     </header>
     <main>
       <editor />
       <preview />
     </main>
+    <footer>
+      <status-bar />
+    </footer>
     <section>
       <find-title-dialog />
       <find-content-dialog />
@@ -20,9 +23,10 @@
 <script>
 import { ipcRenderer, remote } from 'electron'
 import { FindInPage } from 'electron-find'
-import toolbar from './Toolbar.vue'
+import toolBar from './ToolBar.vue'
 import editor from './Editor.vue'
 import preview from './Preview.vue'
+import statusBar from './StatusBar.vue'
 import findTitleDialog from './dialog/FindTitleDialog.vue'
 import findContentDialog from './dialog/FindContentDialog.vue'
 import imageDialog from './dialog/ImageDialog.vue'
@@ -31,9 +35,10 @@ import tableDialog from './dialog/TableDialog.vue'
 
 export default {
   components: {
-    toolbar,
+    toolBar,
     editor,
     preview,
+    statusBar,
     findTitleDialog,
     findContentDialog,
     imageDialog,
@@ -89,8 +94,16 @@ export default {
   height: 100%;
 }
 
+header {
+  height: 50px;
+}
+
 main {
-  height: calc(100% - 50px);
+  height: calc(100% - 70px);
   background-color: #fff;
+}
+
+footer {
+  height: 20px;
 }
 </style>
