@@ -1,4 +1,5 @@
 module.exports = {
+  testEnvironment: 'jsdom',
   setupFiles: ['./test/jsdom-polyfill.js'],
   moduleFileExtensions: ['js', 'json', 'vue'],
   transform: {
@@ -9,6 +10,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/assets/scripts/**/*.js',
+    'src/utils/**/*.js',
     'src/**/*.vue'
   ],
   testPathIgnorePatterns: ['/node_modules/', '/release-builds/'],
