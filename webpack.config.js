@@ -43,10 +43,10 @@ module.exports = {
     alias: {
       vue$: 'vue/dist/vue.esm.js',
       '@config': path.resolve(__dirname, 'config'),
-      '@fonts': path.resolve(__dirname, 'src/assets/fonts'),
       '@scripts': path.resolve(__dirname, 'src/assets/scripts'),
       '@styles': path.resolve(__dirname, 'src/assets/styles'),
-      '@constants': path.resolve(__dirname, 'src/constants')
+      '@constants': path.resolve(__dirname, 'src/constants'),
+      '@utils': path.resolve(__dirname, 'src/utils')
     }
   },
   plugins: [

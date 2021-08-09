@@ -2,31 +2,30 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Note from '@scripts/note/note.js'
 import { VIEW_MODE } from '@constants/index.js'
+import { updateBrowsingHistory } from '@utils/localStorage.js'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    note: null,
-    currentFile: '',
-    isUnsaved: false,
-    viewMode: VIEW_MODE.EDITOR,
+    note: new Note(),
     editor: null,
+    viewMode: VIEW_MODE.EDITOR,
     visibleLinkDialog: false,
     visibleImageDialog: false,
     visibleTableDialog: false,
-    visibleFileNameSearch: false,
-    visibleFileDataSearch: false
+    visibleFindTitleDialog: false,
+    visibleFindContentDialog: false
   },
+
   mutations: {
-    createNewPost (state) {
-      if (state.isUnsaved) {
+    createNewNote (state) {
+      if (!state.note.isSaved) {
         if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
           return
         }
       }
-      state.note = null
-      state.currentFile = ''
+      state.note = new Note()
       state.viewMode = VIEW_MODE.EDITOR
       Vue.nextTick().then(() => {
         state.editor.setText('')
@@ -34,24 +33,17 @@ const store = new Vuex.Store({
       })
     },
 
-    changeFile (state, file) {
-      state.currentFile = file
-      state.note = new Note(file)
-      // TODO: LS保存処理共通化
-      const browsingHistories = localStorage.browsingHistories ? JSON.parse(localStorage.browsingHistories) : []
-      const bh = browsingHistories.find((h) => h.file === file)
-      const time = new Date().getTime()
-      if (bh) {
-        bh.time = time
-      } else {
-        browsingHistories.push({ file, time })
-      }
-      localStorage.browsingHistories = JSON.stringify(browsingHistories)
+    changeNote (state, path) {
+      state.note = new Note(path)
+      updateBrowsingHistory(path)
     },
 
-    updateIsUnsaved (state) {
-      const content = state.note ? state.note.readContent() : ''
-      state.isUnsaved = state.editor.getText() !== content
+    updateNote (state, content) {
+      state.note.update(content)
+    },
+
+    saveNote (state, path) {
+      state.note.save(path)
     },
 
     toggleViewMode (state) {
@@ -98,20 +90,20 @@ const store = new Vuex.Store({
       state.visibleTableDialog = false
     },
 
-    showFileNameSearch (state) {
-      state.visibleFileNameSearch = true
+    showFindTitleDialog (state) {
+      state.visibleFindTitleDialog = true
     },
 
-    hideFileNameSearch (state) {
-      state.visibleFileNameSearch = false
+    hideFindTitleDialog (state) {
+      state.visibleFindTitleDialog = false
     },
 
-    showFileDataSearch (state) {
-      state.visibleFileDataSearch = true
+    showFindContentDialog (state) {
+      state.visibleFindContentDialog = true
     },
 
-    hideFileDataSearch (state) {
-      state.visibleFileDataSearch = false
+    hideFindContentDialog (state) {
+      state.visibleFindContentDialog = false
     }
   }
 })
