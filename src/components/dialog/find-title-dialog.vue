@@ -41,15 +41,18 @@ export default {
     }
   },
 
-  mounted () {
-    this.$store.watch(
-      (state) => state.visibleFindTitleDialog,
-      (value) => {
-        if (value) {
-          this.$refs.noteInput.$refs.input.focus()
-        }
+  computed: {
+    visibleFindTitleDialog () {
+      return this.$store.state.visibleFindTitleDialog
+    }
+  },
+
+  watch: {
+    visibleFindTitleDialog (value) {
+      if (value) {
+        this.$nextTick().then(() => this.$refs.noteInput.$refs.input.focus())
       }
-    )
+    }
   },
 
   methods: {

@@ -44,7 +44,9 @@ export default {
   watch: {
     isSaved () {
       const note = this.$store.state.note
-      this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
+      if (note.fileStats) {
+        this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
+      }
     },
 
     content (value) {

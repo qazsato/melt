@@ -48,15 +48,18 @@ export default {
     }
   },
 
-  mounted () {
-    this.$store.watch(
-      (state) => state.visibleFindContentDialog,
-      (value) => {
-        if (value) {
-          this.$refs.noteInput.$refs.input.focus()
-        }
+  computed: {
+    visibleFindContentDialog () {
+      return this.$store.state.visibleFindContentDialog
+    }
+  },
+
+  watch: {
+    visibleFindContentDialog (value) {
+      if (value) {
+        this.$nextTick().then(() => this.$refs.noteInput.$refs.input.focus())
       }
-    )
+    }
   },
 
   methods: {

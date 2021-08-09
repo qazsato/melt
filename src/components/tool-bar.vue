@@ -36,27 +36,14 @@
 
 <script>
 export default {
-  data () {
-    return {
-      viewMode: this.$store.state.viewMode,
-      isSaved: null
+  computed: {
+    viewMode () {
+      return this.$store.state.viewMode
+    },
+
+    isSaved () {
+      return this.$store.state.note.isSaved
     }
-  },
-
-  mounted () {
-    this.$store.watch(
-      (state) => state.viewMode,
-      (value) => {
-        this.viewMode = value
-      }
-    )
-
-    this.$store.watch(
-      (state) => state.note.isSaved,
-      (value) => {
-        this.isSaved = value
-      }
-    )
   },
 
   methods: {

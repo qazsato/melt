@@ -37,12 +37,27 @@ export default {
       return this.$store.state.viewMode === VIEW_MODE.EDITOR
     },
 
+    viewMode () {
+      return this.$store.state.viewMode
+    },
+
     note () {
       return this.$store.state.note
     }
   },
 
   watch: {
+    viewMode (value) {
+      // NOTE: HTMLモードでファイル変更し、TEXTモードに切り替えた場合、変更前の情報が表示されたままとなってしまう。
+      // その問題を回避するため、ここで再度テキストを設定して変更後の情報にする。
+      if (value === VIEW_MODE.EDITOR) {
+        // 未保存の情報を上書きしないように、保存済みの場合のみ設定する
+        if (this.$store.state.note.isSaved) {
+          this.$nextTick().then(() => this.editor.setText(this.$store.state.note.content))
+        }
+      }
+    },
+
     note (note) {
       this.editor.setText(note.content)
     }
@@ -68,20 +83,6 @@ export default {
       'Cmd-S': () => this.saveFile()
     })
     this.$store.commit('setEditor', this.editor)
-
-    this.$store.watch(
-      (state) => state.viewMode,
-      (newValue, oldValue) => {
-        // NOTE: HTMLモードでファイル変更し、TEXTモードに切り替えた場合、変更前の情報が表示されたままとなってしまう。
-        // その問題を回避するため、ここで再度テキストを設定して変更後の情報にする。
-        if (newValue === VIEW_MODE.EDITOR) {
-          // 未保存の情報を上書きしないように、保存済みの場合のみ設定する
-          if (this.$store.state.note.isSaved) {
-            this.editor.setText(this.$store.state.note.content)
-          }
-        }
-      }
-    )
   },
 
   methods: {
