@@ -69,41 +69,44 @@ export default {
 
 <style lang="scss" scoped>
 #toolbar {
+  position: relative;
   background-color: #4a4a4a;
-}
 
-.file-name {
-  display: flex;
-  align-items: center;
-  margin: 0 15px;
-  height: 50px;
-  color: #fff;
-}
+  .file-name {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+    height: 50px;
+    color: #fff;
 
-.file-name div {
-  font-size: 18px;
-  font-weight: bold;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+    div {
+      font-size: 18px;
+      font-weight: bold;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .unsaved {
+    padding-top: 9px;
+    padding-left: 5px;
+  }
+
+  .checkbox-mode {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+  }
 }
 </style>
 
 <style lang="scss">
 #toolbar {
   .checkbox-mode {
-    position: absolute;
-    top: 12px;
-    right: 15px;
-
     .el-radio-button__inner {
       padding: 6px 10px;
     }
   }
-}
-
-.unsaved {
-  padding-top: 9px;
-  padding-left: 5px;
 }
 </style>
