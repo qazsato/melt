@@ -7,6 +7,9 @@
     </section>
     <find-title-dialog />
     <find-content-dialog />
+    <image-dialog />
+    <link-dialog />
+    <table-dialog />
   </main>
 </template>
 
@@ -16,8 +19,11 @@ import { FindInPage } from 'electron-find'
 import toolbar from './Toolbar.vue'
 import editor from './Editor.vue'
 import preview from './Preview.vue'
-import findTitleDialog from './FindTitleDialog.vue'
-import findContentDialog from './FindContentDialog.vue'
+import findTitleDialog from './dialog/FindTitleDialog.vue'
+import findContentDialog from './dialog/FindContentDialog.vue'
+import imageDialog from './dialog/ImageDialog.vue'
+import linkDialog from './dialog/LinkDialog.vue'
+import tableDialog from './dialog/TableDialog.vue'
 
 export default {
   components: {
@@ -25,12 +31,14 @@ export default {
     editor,
     preview,
     findTitleDialog,
-    findContentDialog
+    findContentDialog,
+    imageDialog,
+    linkDialog,
+    tableDialog
   },
 
   data () {
     return {
-      text: '',
       findInPage: null
     }
   },
