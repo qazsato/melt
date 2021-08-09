@@ -36,14 +36,25 @@
 
 <script>
 export default {
-  computed: {
-    viewMode () {
-      return this.$store.state.viewMode
-    },
+  data () {
+    return {
+      viewMode: this.$store.state.viewMode
+    }
+  },
 
+  computed: {
     isSaved () {
       return this.$store.state.note.isSaved
     }
+  },
+
+  mounted () {
+    this.$store.watch(
+      (state) => state.viewMode,
+      (value) => {
+        this.viewMode = value
+      }
+    )
   },
 
   methods: {
