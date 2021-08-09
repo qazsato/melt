@@ -48,17 +48,17 @@ function createMenu () {
       label: 'File',
       submenu: [
         {
-          label: 'New Post',
+          label: 'New Note',
           accelerator: 'CmdOrCtrl+N',
           click () {
-            mainWindow.webContents.send('new-post')
+            mainWindow.webContents.send('new-note')
           }
         },
         {
-          label: 'Open File',
+          label: 'Open Note',
           accelerator: 'CmdOrCtrl+P',
           click () {
-            mainWindow.webContents.send('open-file')
+            mainWindow.webContents.send('open-note')
           }
         },
         { type: 'separator' },

@@ -1,36 +1,53 @@
 <template>
-  <main>
-    <toolbar />
-    <section class="note">
-      <editor @changeText="changeText" />
-      <preview :text="text" />
+  <section class="melt">
+    <header>
+      <tool-bar />
+    </header>
+    <main>
+      <editor />
+      <preview />
+    </main>
+    <footer>
+      <status-bar />
+    </footer>
+    <section>
+      <find-title-dialog />
+      <find-content-dialog />
+      <image-dialog />
+      <link-dialog />
+      <table-dialog />
     </section>
-    <file-name-dialog />
-    <file-data-dialog />
-  </main>
+  </section>
 </template>
 
 <script>
 import { ipcRenderer, remote } from 'electron'
 import { FindInPage } from 'electron-find'
-import toolbar from './Toolbar.vue'
+import toolBar from './ToolBar.vue'
 import editor from './Editor.vue'
 import preview from './Preview.vue'
-import fileNameDialog from './FileNameDialog.vue'
-import fileDataDialog from './FileDataDialog.vue'
+import statusBar from './StatusBar.vue'
+import findTitleDialog from './dialog/FindTitleDialog.vue'
+import findContentDialog from './dialog/FindContentDialog.vue'
+import imageDialog from './dialog/ImageDialog.vue'
+import linkDialog from './dialog/LinkDialog.vue'
+import tableDialog from './dialog/TableDialog.vue'
 
 export default {
   components: {
-    toolbar,
+    toolBar,
     editor,
     preview,
-    fileNameDialog,
-    fileDataDialog
+    statusBar,
+    findTitleDialog,
+    findContentDialog,
+    imageDialog,
+    linkDialog,
+    tableDialog
   },
 
   data () {
     return {
-      text: '',
       findInPage: null
     }
   },
@@ -48,12 +65,12 @@ export default {
       caseSelectedColor: '#555'
     })
 
-    ipcRenderer.on('new-post', () => {
-      this.$store.commit('createNewPost')
+    ipcRenderer.on('new-note', () => {
+      this.$store.commit('createNewNote')
     })
 
-    ipcRenderer.on('open-file', () => {
-      this.$store.commit('showFileNameSearch')
+    ipcRenderer.on('open-note', () => {
+      this.$store.commit('showFindTitleDialog')
     })
 
     ipcRenderer.on('search-text', () => {
@@ -61,31 +78,32 @@ export default {
     })
 
     ipcRenderer.on('find-text-in-folder', () => {
-      this.$store.commit('showFileDataSearch')
+      this.$store.commit('showFindContentDialog')
     })
 
     ipcRenderer.on('toggle-view-mode', () => {
       this.$store.commit('toggleViewMode')
     })
-  },
-
-  methods: {
-    changeText (text) {
-      this.text = text
-      this.$store.commit('updateIsUnsaved')
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-main {
+.melt {
   width: 100%;
   height: 100%;
 }
 
-.note {
-  height: calc(100% - 50px);
+header {
+  height: 50px;
+}
+
+main {
+  height: calc(100% - 70px);
   background-color: #fff;
+}
+
+footer {
+  height: 20px;
 }
 </style>

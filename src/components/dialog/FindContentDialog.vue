@@ -1,28 +1,35 @@
 <template>
   <el-dialog
-    :visible.sync="$store.state.visibleFileDataSearch"
+    :visible.sync="$store.state.visibleFindContentDialog"
     :show-close="false"
     :lock-scroll="false"
-    custom-class="file-data-dialog"
+    custom-class="find-content-dialog"
     width="400px"
     :before-close="closeDialog"
     @open="openDialog"
   >
     <el-autocomplete
-      ref="fileInput"
-      v-model="filePath"
+      ref="noteInput"
+      v-model="notePath"
       class="autocomplete"
-      popper-class="file-data-popper"
-      :fetch-suggestions="queryFileDataSearch"
+      popper-class="find-content-popper"
+      :fetch-suggestions="queryFindContent"
       :highlight-first-item="true"
       placeholder="Find text in folder"
-      @select="handleFileSelect"
+      @select="handleNoteSelect"
     >
       <template slot-scope="{ item }">
         <div class="label">
           {{ item.label }}
         </div>
         <span class="path">.{{ item.relativePath }}</span>
+        <li
+          v-for="(row, index) in item.rows"
+          :key="index"
+          class="row"
+        >
+          {{ row }}
+        </li>
       </template>
     </el-autocomplete>
   </el-dialog>
@@ -30,69 +37,64 @@
 
 <script>
 import setting from '@config/setting.json'
-import Note from '@scripts/note/note.js'
-import NoteUtil from '@scripts/note/note-util.js'
+import { readAllNotes, readRecentlyOpenedNotes } from '@utils/note.js'
 import { VIEW_MODE } from '@constants/index.js'
 
 export default {
   data () {
     return {
-      filePath: '',
+      notePath: '',
       notes: []
     }
   },
 
   mounted () {
-    this.notes = NoteUtil.readAllNotes(setting.directory)
-
     this.$store.watch(
-      (state) => state.visibleFileDataSearch,
-      (newValue, oldValue) => {
-        if (newValue) {
-          this.$refs.fileInput.$refs.input.focus()
+      (state) => state.visibleFindContentDialog,
+      (value) => {
+        if (value) {
+          this.$refs.noteInput.$refs.input.focus()
         }
       }
     )
   },
 
   methods: {
-    queryFileDataSearch (queryString, cb) {
+    queryFindContent (queryString, cb) {
       let filteredNotes = []
       if (queryString) {
-        filteredNotes = this.notes.filter((n) => {
-          return n.data.toLowerCase().includes(queryString.toLowerCase())
-        })
+        filteredNotes = this.notes.filter((n) => n.find(queryString).length > 0)
       } else {
-        filteredNotes = NoteUtil.readRecentlyOpenedNotes()
+        filteredNotes = readRecentlyOpenedNotes()
       }
       const results = filteredNotes.map((n) => {
-        const path = n.readPath()
         return {
-          label: n.readTitle(),
-          path: path,
-          relativePath: path.split(setting.directory)[1]
+          label: n.fileName,
+          path: n.filePath,
+          relativePath: n.filePath.split(setting.directory)[1],
+          rows: queryString ? n.find(queryString) : []
         }
       })
       cb(results)
     },
 
-    handleFileSelect (item) {
-      this.filePath = ''
-      if (this.$store.state.isUnsaved) {
+    handleNoteSelect (item) {
+      this.notePath = ''
+      if (!this.$store.state.note.isSaved) {
         if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
-          this.$refs.fileInput.$refs.input.blur()
+          this.$refs.noteInput.$refs.input.blur()
           return
         }
       }
-      this.$store.commit('hideFileDataSearch')
-      const note = new Note(item.path)
-      this.$store.commit('changeFile', note.readPath())
+      this.$store.commit('hideFindContentDialog')
+      this.$store.commit('changeNote', item.path)
       this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW)
     },
 
     openDialog () {
+      this.notes = readAllNotes(setting.directory)
       // HACK: closeDialogで消えたままになっていることがあるため戻す
-      const element = document.querySelector('.file-data-popper')
+      const element = document.querySelector('.find-content-popper')
       if (element) {
         element.style.display = 'block'
       }
@@ -100,15 +102,15 @@ export default {
 
     closeDialog () {
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      document.querySelector('.file-data-popper').style.display = 'none'
-      this.$store.commit('hideFileDataSearch')
+      document.querySelector('.find-content-popper').style.display = 'none'
+      this.$store.commit('hideFindContentDialog')
     }
   }
 }
 </script>
 
 <style lang="scss">
-.file-data-dialog {
+.find-content-dialog {
   &.el-dialog {
     background: transparent;
   }
@@ -126,9 +128,9 @@ export default {
   }
 }
 
-.file-data-popper {
-  ul {
-    li {
+.find-content-popper {
+  .el-autocomplete-suggestion__list {
+    > li {
       line-height: normal;
       padding: 7px 14px;
 
@@ -136,9 +138,17 @@ export default {
         text-overflow: ellipsis;
         overflow: hidden;
       }
-      .path {
+
+      .path,
+      .row {
         font-size: 12px;
         color: #b4b4b4;
+      }
+
+      .row {
+        margin: 6px 14px;
+        padding: 0;
+        line-height: normal;
       }
     }
   }

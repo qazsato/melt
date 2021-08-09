@@ -1,22 +1,22 @@
 <template>
   <el-dialog
-    :visible.sync="$store.state.visibleFileNameSearch"
+    :visible.sync="$store.state.visibleFindTitleDialog"
     :show-close="false"
     :lock-scroll="false"
-    custom-class="file-name-dialog"
+    custom-class="find-title-dialog"
     width="400px"
     :before-close="closeDialog"
     @open="openDialog"
   >
     <el-autocomplete
-      ref="fileInput"
-      v-model="filePath"
+      ref="noteInput"
+      v-model="notePath"
       class="autocomplete"
-      popper-class="file-name-popper"
-      :fetch-suggestions="queryFileNameSearch"
+      popper-class="find-title-popper"
+      :fetch-suggestions="queryFindTitle"
       :highlight-first-item="true"
       placeholder="Find name in folder"
-      @select="handleFileSelect"
+      @select="handleNoteSelect"
     >
       <template slot-scope="{ item }">
         <div class="label">
@@ -30,70 +30,66 @@
 
 <script>
 import setting from '@config/setting.json'
-import Note from '@scripts/note/note.js'
-import NoteUtil from '@scripts/note/note-util.js'
+import { readAllNotes, readRecentlyOpenedNotes } from '@utils/note.js'
 import { VIEW_MODE } from '@constants/index.js'
 
 export default {
   data () {
     return {
-      filePath: '',
+      notePath: '',
       notes: []
     }
   },
 
   mounted () {
-    this.notes = NoteUtil.readAllNotes(setting.directory)
-
     this.$store.watch(
-      (state) => state.visibleFileNameSearch,
-      (newValue, oldValue) => {
-        if (newValue) {
-          this.$refs.fileInput.$refs.input.focus()
+      (state) => state.visibleFindTitleDialog,
+      (value) => {
+        if (value) {
+          this.$refs.noteInput.$refs.input.focus()
         }
       }
     )
   },
 
   methods: {
-    queryFileNameSearch (queryString, cb) {
+    queryFindTitle (queryString, cb) {
       let filteredNotes = []
       if (queryString) {
         filteredNotes = this.notes.filter((n) => {
-          const relativePath = n.readPath().split(setting.directory)[1]
+          const relativePath = n.filePath.split(setting.directory)[1]
           return relativePath.toLowerCase().includes(queryString.toLowerCase())
         })
       } else {
-        filteredNotes = NoteUtil.readRecentlyOpenedNotes()
+        filteredNotes = readRecentlyOpenedNotes()
       }
       const results = filteredNotes.map((n) => {
-        const path = n.readPath()
         return {
-          label: n.readTitle(),
-          path: path,
-          relativePath: path.split(setting.directory)[1]
+          label: n.fileName,
+          path: n.filePath,
+          relativePath: n.filePath.split(setting.directory)[1]
         }
       })
       cb(results)
     },
 
-    handleFileSelect (item) {
-      this.filePath = ''
-      if (this.$store.state.isUnsaved) {
+    handleNoteSelect (item) {
+      this.notePath = ''
+      if (!this.$store.state.note.isSaved) {
         if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
-          this.$refs.fileInput.$refs.input.blur()
+          this.$refs.noteInput.$refs.input.blur()
           return
         }
       }
-      this.$store.commit('hideFileNameSearch')
-      const note = new Note(item.path)
-      this.$store.commit('changeFile', note.readPath())
+      this.$store.commit('hideFindTitleDialog')
+      this.$store.commit('changeNote', item.path)
       this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW)
     },
 
     openDialog () {
+      this.notes = readAllNotes(setting.directory)
       // HACK: closeDialogで消えたままになっていることがあるため戻す
-      const element = document.querySelector('.file-name-popper')
+      const element = document.querySelector('.find-title-popper')
       if (element) {
         element.style.display = 'block'
       }
@@ -101,15 +97,15 @@ export default {
 
     closeDialog () {
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      document.querySelector('.file-name-popper').style.display = 'none'
-      this.$store.commit('hideFileNameSearch')
+      document.querySelector('.find-title-popper').style.display = 'none'
+      this.$store.commit('hideFindTitleDialog')
     }
   }
 }
 </script>
 
 <style lang="scss">
-.file-name-dialog {
+.find-title-dialog {
   &.el-dialog {
     background: transparent;
   }
@@ -127,7 +123,7 @@ export default {
   }
 }
 
-.file-name-popper {
+.find-title-popper {
   ul {
     li {
       line-height: normal;

@@ -19,14 +19,11 @@ import '@styles/markdown.scss'
 import { VIEW_MODE } from '@constants/index.js'
 
 export default {
-  props: {
-    text: {
-      type: String,
-      required: true
-    }
-  },
-
   computed: {
+    text () {
+      return this.$store.state.note.content
+    },
+
     isViewModePreview () {
       return this.$store.state.viewMode === VIEW_MODE.PREVIEW
     },
