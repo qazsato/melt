@@ -1,16 +1,20 @@
 <template>
-  <main>
-    <toolbar />
-    <section class="note">
+  <section class="melt">
+    <header>
+      <toolbar />
+    </header>
+    <main>
       <editor />
       <preview />
+    </main>
+    <section>
+      <find-title-dialog />
+      <find-content-dialog />
+      <image-dialog />
+      <link-dialog />
+      <table-dialog />
     </section>
-    <find-title-dialog />
-    <find-content-dialog />
-    <image-dialog />
-    <link-dialog />
-    <table-dialog />
-  </main>
+  </section>
 </template>
 
 <script>
@@ -80,12 +84,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-main {
+.melt {
   width: 100%;
   height: 100%;
 }
 
-.note {
+main {
   height: calc(100% - 50px);
   background-color: #fff;
 }
