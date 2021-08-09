@@ -1,7 +1,7 @@
 import glob from 'glob'
 import _ from 'lodash'
 import Note from '@scripts/note/note.js'
-import { getBrowsingHistories } from '@utils/localStorage.js'
+import { getBrowsingHistories } from '@utils/local-storage.js'
 
 /**
  * ディレクトリ配下の全てのノートを取得

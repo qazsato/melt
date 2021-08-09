@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Note from '@scripts/note/note.js'
 import { VIEW_MODE } from '@constants/index.js'
-import { updateBrowsingHistory } from '@utils/localStorage.js'
+import { updateBrowsingHistory } from '@utils/local-storage.js'
 
 Vue.use(Vuex)
 

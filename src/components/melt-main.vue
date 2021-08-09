@@ -23,15 +23,15 @@
 <script>
 import { ipcRenderer, remote } from 'electron'
 import { FindInPage } from 'electron-find'
-import toolBar from './ToolBar.vue'
-import editor from './Editor.vue'
-import preview from './Preview.vue'
-import statusBar from './StatusBar.vue'
-import findTitleDialog from './dialog/FindTitleDialog.vue'
-import findContentDialog from './dialog/FindContentDialog.vue'
-import imageDialog from './dialog/ImageDialog.vue'
-import linkDialog from './dialog/LinkDialog.vue'
-import tableDialog from './dialog/TableDialog.vue'
+import toolBar from './tool-bar.vue'
+import editor from './editor.vue'
+import preview from './preview.vue'
+import statusBar from './status-bar.vue'
+import findTitleDialog from './dialog/find-title-dialog.vue'
+import findContentDialog from './dialog/find-content-dialog.vue'
+import imageDialog from './dialog/image-dialog.vue'
+import linkDialog from './dialog/link-dialog.vue'
+import tableDialog from './dialog/table-dialog.vue'
 
 export default {
   components: {

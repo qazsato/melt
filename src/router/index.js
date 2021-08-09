@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import MeltMain from '../components/MeltMain.vue'
+import MeltMain from '../components/melt-main.vue'
 
 Vue.use(VueRouter)
 
