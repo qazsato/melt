@@ -69,8 +69,7 @@ export default {
   height: 100%;
   background-color: #f6f8fa;
   color: #24292e;
-  font-size: 10px;
-  text-align: right;
+  font-size: 11px;
 }
 
 .spacer {
