@@ -14,7 +14,6 @@
       class="autocomplete"
       popper-class="find-title-popper"
       :fetch-suggestions="queryFindTitle"
-      :highlight-first-item="true"
       placeholder="Find name in folder"
       @select="handleNoteSelect"
     >

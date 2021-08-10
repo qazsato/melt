@@ -14,7 +14,6 @@
       class="autocomplete"
       popper-class="find-content-popper"
       :fetch-suggestions="queryFindContent"
-      :highlight-first-item="true"
       placeholder="Find text in folder"
       @select="handleNoteSelect"
     >

@@ -14,7 +14,6 @@
       class="autocomplete"
       popper-class="find-paragraph-popper"
       :fetch-suggestions="queryFindParagraph"
-      :highlight-first-item="true"
       placeholder="Find paragraph in note"
       @select="handleParagraphSelect"
     >
@@ -63,7 +62,9 @@ export default {
       callback(results)
     },
 
-    handleParagraphSelect (item) {
+    handleParagraphSelect (item, event) {
+      console.log('item', item)
+      console.log('event', event)
       // TODO TEXTの場合は、行数にジャンプするようにする
       let i = 0
       const tocs = this.tableOfContents.slice(0, item.index)
