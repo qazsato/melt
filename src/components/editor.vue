@@ -70,7 +70,7 @@ export default {
     })
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
-      'Shift-Cmd-P': () => this.$store.commit('showImageDialog'),
+      'Shift-Cmd-L': () => this.$store.commit('showImageDialog'),
       'Cmd-B': () => this.editor.insertBold(),
       'Cmd-I': () => this.editor.insertItalic(),
       'Shift-Cmd-X': () => this.editor.insertStrikethrough(),

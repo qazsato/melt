@@ -63,10 +63,17 @@ function createMenu () {
         },
         { type: 'separator' },
         {
+          label: 'Find Paragraph',
+          accelerator: 'CmdOrCtrl+Shift+P',
+          click () {
+            mainWindow.webContents.send('find-paragraph')
+          }
+        },
+        {
           label: 'Find Text',
           accelerator: 'CmdOrCtrl+F',
           click () {
-            mainWindow.webContents.send('search-text')
+            mainWindow.webContents.send('find-text')
           }
         },
         {

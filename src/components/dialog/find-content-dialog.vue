@@ -63,10 +63,10 @@ export default {
   },
 
   methods: {
-    queryFindContent (queryString, cb) {
+    queryFindContent (query, callback) {
       let filteredNotes = []
-      if (queryString) {
-        filteredNotes = this.notes.filter((n) => n.find(queryString).length > 0)
+      if (query) {
+        filteredNotes = this.notes.filter((n) => n.find(query).length > 0)
       } else {
         filteredNotes = readRecentlyOpenedNotes()
       }
@@ -75,10 +75,10 @@ export default {
           label: n.fileName,
           path: n.filePath,
           relativePath: n.filePath.split(setting.directory)[1],
-          rows: queryString ? n.find(queryString) : []
+          rows: query ? n.find(query) : []
         }
       })
-      cb(results)
+      callback(results)
     },
 
     handleNoteSelect (item) {
