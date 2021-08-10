@@ -4,14 +4,12 @@
 
 My Markdown Editor.
 
-![キャプチャ](https://raw.githubusercontent.com/wiki/qazsato/melt/melt.png)
-
 # Keybindings
 
 | Type			| Command 	|
 |:--------------|:----------|
 | HyperLink		| ⌘L      	|
-| Image			| ⇧⌘P      	|
+| Image			| ⇧⌘L      	|
 | Bold      	| ⌘B       |
 | Italic    	| ⌘I       |
 | Strikethrough | ⇧⌘X	|

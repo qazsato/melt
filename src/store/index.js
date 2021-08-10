@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     visibleLinkDialog: false,
     visibleImageDialog: false,
     visibleTableDialog: false,
+    visibleFindParagraphDialog: false,
     visibleFindTitleDialog: false,
     visibleFindContentDialog: false
   },
@@ -88,6 +89,14 @@ const store = new Vuex.Store({
 
     hideTableDialog (state) {
       state.visibleTableDialog = false
+    },
+
+    showFindParagraphDialog (state) {
+      state.visibleFindParagraphDialog = true
+    },
+
+    hideFindParagraphDialog (state) {
+      state.visibleFindParagraphDialog = false
     },
 
     showFindTitleDialog (state) {

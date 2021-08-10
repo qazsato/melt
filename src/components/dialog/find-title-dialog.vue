@@ -56,12 +56,12 @@ export default {
   },
 
   methods: {
-    queryFindTitle (queryString, cb) {
+    queryFindTitle (query, callback) {
       let filteredNotes = []
-      if (queryString) {
+      if (query) {
         filteredNotes = this.notes.filter((n) => {
           const relativePath = n.filePath.split(setting.directory)[1]
-          return relativePath.toLowerCase().includes(queryString.toLowerCase())
+          return relativePath.toLowerCase().includes(query.toLowerCase())
         })
       } else {
         filteredNotes = readRecentlyOpenedNotes()
@@ -73,7 +73,7 @@ export default {
           relativePath: n.filePath.split(setting.directory)[1]
         }
       })
-      cb(results)
+      callback(results)
     },
 
     handleNoteSelect (item) {
@@ -136,6 +136,7 @@ export default {
         text-overflow: ellipsis;
         overflow: hidden;
       }
+
       .path {
         font-size: 12px;
         color: #b4b4b4;

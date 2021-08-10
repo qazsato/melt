@@ -1,5 +1,5 @@
 <template>
-  <section class="melt">
+  <div class="melt">
     <header>
       <tool-bar />
     </header>
@@ -10,14 +10,15 @@
     <footer>
       <status-bar />
     </footer>
-    <section>
+    <div>
+      <find-paragraph-dialog />
       <find-title-dialog />
       <find-content-dialog />
       <image-dialog />
       <link-dialog />
       <table-dialog />
-    </section>
-  </section>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -27,6 +28,7 @@ import toolBar from './tool-bar.vue'
 import editor from './editor.vue'
 import preview from './preview.vue'
 import statusBar from './status-bar.vue'
+import findParagraphDialog from './dialog/find-paragraph-dialog.vue'
 import findTitleDialog from './dialog/find-title-dialog.vue'
 import findContentDialog from './dialog/find-content-dialog.vue'
 import imageDialog from './dialog/image-dialog.vue'
@@ -39,6 +41,7 @@ export default {
     editor,
     preview,
     statusBar,
+    findParagraphDialog,
     findTitleDialog,
     findContentDialog,
     imageDialog,
@@ -73,7 +76,11 @@ export default {
       this.$store.commit('showFindTitleDialog')
     })
 
-    ipcRenderer.on('search-text', () => {
+    ipcRenderer.on('find-paragraph', () => {
+      this.$store.commit('showFindParagraphDialog')
+    })
+
+    ipcRenderer.on('find-text', () => {
       this.findInPage.openFindWindow()
     })
 
