@@ -56,6 +56,7 @@ export default {
       const results = filteredParagraphs.map((t, i) => {
         return {
           label: `H${t.heading} ${t.text}`,
+          heading: t.heading,
           index: i
         }
       })
@@ -63,7 +64,13 @@ export default {
     },
 
     handleParagraphSelect (item) {
-      console.log('select', item)
+      // TODO TEXTの場合は、行数にジャンプするようにする
+      let i = 0
+      const tocs = this.tableOfContents.slice(0, item.index)
+      tocs.forEach((t) => {
+        if (t.heading === item.heading) i++
+      })
+      document.getElementsByTagName(`h${item.heading}`)[i].scrollIntoView()
       this.$store.commit('hideFindParagraphDialog')
     },
 
