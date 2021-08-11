@@ -20,8 +20,13 @@
       @select="onSelect"
     >
       <template slot-scope="{ item }">
-        <div class="label">
-          {{ item.label }}
+        <div class="item">
+          <div class="heading">
+            H{{ item.heading }}
+          </div>
+          <div class="text">
+            {{ item.text }}
+          </div>
         </div>
       </template>
     </el-autocomplete>
@@ -57,7 +62,7 @@ export default {
       const filteredParagraphs = query ? this.tableOfContents.filter((t) => t.text.toLowerCase().includes(query.toLowerCase())) : this.tableOfContents
       const results = filteredParagraphs.map((t, i) => {
         return {
-          label: `H${t.heading} ${t.text}`,
+          text: t.text,
           heading: t.heading,
           index: i
         }
@@ -130,9 +135,27 @@ export default {
       line-height: normal;
       padding: 7px 14px;
 
-      .label {
-        text-overflow: ellipsis;
-        overflow: hidden;
+      .item {
+        display: flex;
+
+        .heading {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 20px;
+          width: 26px;
+          margin-right: 10px;
+          background: #ccc;
+          color: #fff;
+          font-size: 12px;
+          line-height: 12px;
+          border-radius: 3px;
+        }
+
+        .text {
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
       }
     }
   }
