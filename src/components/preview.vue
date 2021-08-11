@@ -34,7 +34,7 @@ export default {
   },
 
   watch: {
-    text () {
+    content () {
       this.$nextTick().then(() => {
         const cbElements = this.$refs.markdown.querySelectorAll('.clipboard')
         cbElements.forEach((e) => e.addEventListener('click', this.copyClipboard))
@@ -48,7 +48,7 @@ export default {
 
   methods: {
     copyClipboard (event) {
-      const code = event.target.nextElementSibling.innerText // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
+      const code = event.target.nextElementSibling.innerText.trim() // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
       navigator.clipboard.writeText(code).then(() => {
         this.$message({ type: 'success', message: 'Copy to clipboard.', showClose: true })
       })
