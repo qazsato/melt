@@ -15,7 +15,9 @@
       popper-class="find-title-popper"
       :fetch-suggestions="queryFindTitle"
       placeholder="Find name in folder"
-      @select="handleNoteSelect"
+      :highlight-first-item="true"
+      @keydown.native="onKeydown"
+      @select="onSelect"
     >
       <template slot-scope="{ item }">
         <div class="label">
@@ -36,7 +38,8 @@ export default {
   data () {
     return {
       notePath: '',
-      notes: []
+      notes: [],
+      isComposing: false // 日本語入力(IME)が未確定か否か
     }
   },
 
@@ -75,17 +78,28 @@ export default {
       callback(results)
     },
 
-    handleNoteSelect (item) {
-      this.notePath = ''
-      if (!this.$store.state.note.isSaved) {
-        if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
-          this.$refs.noteInput.$refs.input.blur()
+    onKeydown (e) {
+      this.isComposing = e.isComposing
+    },
+
+    onSelect (item) {
+      // HACK: イベント処理順を keydown => select としたいためタイミングをずらしている
+      setTimeout(() => {
+        if (this.isComposing) {
           return
         }
-      }
-      this.$store.commit('hideFindTitleDialog')
-      this.$store.commit('changeNote', item.path)
-      this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW)
+
+        this.notePath = ''
+        if (!this.$store.state.note.isSaved) {
+          if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
+            this.$refs.noteInput.$refs.input.blur()
+            return
+          }
+        }
+        this.$store.commit('hideFindTitleDialog')
+        this.$store.commit('changeNote', item.path)
+        this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW)
+      })
     },
 
     openDialog () {

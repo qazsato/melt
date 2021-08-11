@@ -15,7 +15,9 @@
       popper-class="find-paragraph-popper"
       :fetch-suggestions="queryFindParagraph"
       placeholder="Find paragraph in note"
-      @select="handleParagraphSelect"
+      :highlight-first-item="true"
+      @keydown.native="onKeydown"
+      @select="onSelect"
     >
       <template slot-scope="{ item }">
         <div class="label">
@@ -31,7 +33,8 @@ export default {
   data () {
     return {
       paragraphText: '',
-      tableOfContents: []
+      tableOfContents: [],
+      isComposing: false // 日本語入力(IME)が未確定か否か
     }
   },
 
@@ -62,17 +65,26 @@ export default {
       callback(results)
     },
 
-    handleParagraphSelect (item, event) {
-      console.log('item', item)
-      console.log('event', event)
-      // TODO TEXTの場合は、行数にジャンプするようにする
-      let i = 0
-      const tocs = this.tableOfContents.slice(0, item.index)
-      tocs.forEach((t) => {
-        if (t.heading === item.heading) i++
+    onKeydown (e) {
+      this.isComposing = e.isComposing
+    },
+
+    onSelect (item) {
+      // HACK: イベント処理順を keydown => select としたいためタイミングをずらしている
+      setTimeout(() => {
+        if (this.isComposing) {
+          return
+        }
+
+        // TODO TEXTの場合は、行数にジャンプするようにする
+        let i = 0
+        const tocs = this.tableOfContents.slice(0, item.index)
+        tocs.forEach((t) => {
+          if (t.heading === item.heading) i++
+        })
+        document.getElementsByTagName(`h${item.heading}`)[i].scrollIntoView()
+        this.$store.commit('hideFindParagraphDialog')
       })
-      document.getElementsByTagName(`h${item.heading}`)[i].scrollIntoView()
-      this.$store.commit('hideFindParagraphDialog')
     },
 
     openDialog () {
