@@ -22,4 +22,3 @@ Based on the GitHub Flavored Markdown Spec.
 | Numbered List | ⇧⌘N		|
 | Checked List 	| ⇧⌘Y		|
 | Table        	| ⌘T		|
-| New Post      | ⌘N		|
