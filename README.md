@@ -5,7 +5,7 @@
 My Markdown Editor.
 Based on the GitHub Flavored Markdown Spec.
 
-![melt](https://user-images.githubusercontent.com/5030713/128953205-125fa953-d981-4319-baff-448d10baef77.png)
+![melt](https://user-images.githubusercontent.com/5030713/129121411-7cbbc0a5-abaa-4963-96d8-1c5a7dfc1bb1.png)
 
 # Keybindings
 
