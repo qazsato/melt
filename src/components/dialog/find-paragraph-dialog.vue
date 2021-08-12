@@ -39,6 +39,7 @@ export default {
     return {
       paragraphText: '',
       tableOfContents: [],
+      suggestions: [],
       isComposing: false // 日本語入力(IME)が未確定か否か
     }
   },
@@ -60,14 +61,14 @@ export default {
   methods: {
     queryFindParagraph (query, callback) {
       const filteredParagraphs = query ? this.tableOfContents.filter((t) => t.text.toLowerCase().includes(query.toLowerCase())) : this.tableOfContents
-      const results = filteredParagraphs.map((t, i) => {
+      this.suggestions = filteredParagraphs.map((t, i) => {
         return {
           text: t.text,
           heading: t.heading,
           index: i
         }
       })
-      callback(results)
+      callback(this.suggestions)
     },
 
     onKeydown (e) {
@@ -80,7 +81,6 @@ export default {
         if (this.isComposing) {
           return
         }
-
         // TODO TEXTの場合は、行数にジャンプするようにする
         let i = 0
         const tocs = this.tableOfContents.slice(0, item.index)
@@ -94,14 +94,15 @@ export default {
 
     openDialog () {
       this.tableOfContents = this.$store.state.note.tableOfContents
-      // HACK: closeDialogで消えたままになっていることがあるため戻す
+      // HACK: closeDialogで消えたままになっているため戻す
       const element = document.querySelector('.find-paragraph-popper')
-      if (element) {
+      if (element && this.suggestions.length > 0) {
         element.style.display = 'block'
       }
     },
 
     closeDialog () {
+      this.paragraphText = ''
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
       document.querySelector('.find-paragraph-popper').style.display = 'none'
       this.$store.commit('hideFindParagraphDialog')

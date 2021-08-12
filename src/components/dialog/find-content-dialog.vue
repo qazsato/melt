@@ -46,6 +46,7 @@ export default {
     return {
       notePath: '',
       notes: [],
+      suggestions: [],
       isComposing: false // 日本語入力(IME)が未確定か否か
     }
   },
@@ -72,7 +73,7 @@ export default {
       } else {
         filteredNotes = readRecentlyOpenedNotes()
       }
-      const results = filteredNotes.map((n) => {
+      this.suggestions = filteredNotes.map((n) => {
         return {
           label: n.fileName,
           path: n.filePath,
@@ -80,7 +81,7 @@ export default {
           rows: query ? n.find(query) : []
         }
       })
-      callback(results)
+      callback(this.suggestions)
     },
 
     onKeydown (e) {
@@ -93,8 +94,6 @@ export default {
         if (this.isComposing) {
           return
         }
-
-        this.notePath = ''
         if (!this.$store.state.note.isSaved) {
           if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
             this.$refs.noteInput.$refs.input.blur()
@@ -109,14 +108,15 @@ export default {
 
     openDialog () {
       this.notes = readAllNotes(setting.directory)
-      // HACK: closeDialogで消えたままになっていることがあるため戻す
+      // HACK: closeDialogで消えたままになっているため戻す
       const element = document.querySelector('.find-content-popper')
-      if (element) {
+      if (element && this.suggestions.length > 0) {
         element.style.display = 'block'
       }
     },
 
     closeDialog () {
+      this.notePath = ''
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
       document.querySelector('.find-content-popper').style.display = 'none'
       this.$store.commit('hideFindContentDialog')
