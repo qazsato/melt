@@ -50,7 +50,10 @@
     text-decoration: none;
   }
 
-  .cm-formatting + .cm-keyword {
+  // リスト文字の色設定。IME未確定時に色が変わるので上書きしている
+  .cm-formatting + .cm-keyword,
+  .cm-formatting + .cm-keyword + .cm-keyword,
+  .cm-formatting + .cm-keyword + .cm-keyword + .cm-keyword {
     color: rgba(0,0,0,.75);
   }
 
