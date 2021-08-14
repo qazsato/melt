@@ -3,6 +3,7 @@ const fs = require('fs')
 const setting = require('./config/setting.json')
 
 let mainWindow
+let isNoteSaved = false // ファイル保存状態
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -149,6 +150,9 @@ app.whenReady().then(() => {
   createWindow()
 
   app.on('before-quit', function (event) {
+    if (isNoteSaved) {
+      return
+    }
     const selected = dialog.showMessageBoxSync({
       message: 'Meltを終了します',
       buttons: ['OK', 'Cancel'],
@@ -173,8 +177,8 @@ app.whenReady().then(() => {
   })
 })
 
-// 新規ファイル保存
-ipcMain.handle('file-save', async (event, data) => {
+// 新規ノート保存
+ipcMain.handle('new-note-save', async (event, data) => {
   const path = dialog.showSaveDialogSync(mainWindow, {
     defaultPath: `${setting.directory}/Untitled`,
     filters: [
@@ -202,4 +206,9 @@ ipcMain.handle('file-save', async (event, data) => {
       message: error.message
     }
   }
+})
+
+// ノートの保存状態の更新
+ipcMain.handle('is-note-saved', async (event, saved) => {
+  isNoteSaved = saved
 })

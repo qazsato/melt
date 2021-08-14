@@ -55,6 +55,18 @@ export default {
     }
   },
 
+  computed: {
+    isSaved () {
+      return this.$store.state.note.isSaved
+    }
+  },
+
+  watch: {
+    isSaved (value) {
+      ipcRenderer.invoke('is-note-saved', value)
+    }
+  },
+
   mounted () {
     this.findInPage = new FindInPage(remote.getCurrentWebContents(), {
       offsetTop: 8,

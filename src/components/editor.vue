@@ -80,19 +80,19 @@ export default {
       'Shift-Cmd-N': () => this.editor.insertNumberedList(),
       'Shift-Cmd-Y': () => this.editor.insertCheckedList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
-      'Cmd-S': () => this.saveFile()
+      'Cmd-S': () => this.saveNote()
     })
     this.$store.commit('setEditor', this.editor)
   },
 
   methods: {
-    saveFile () {
+    saveNote () {
       const content = this.editor.getText()
       if (this.$store.state.note.filePath) {
         this.$store.commit('updateNote', content)
         this.$store.commit('saveNote')
       } else {
-        ipcRenderer.invoke('file-save', content)
+        ipcRenderer.invoke('new-note-save', content)
           .then((data) => {
             // キャンセルで閉じた
             if (data.status === undefined) {
