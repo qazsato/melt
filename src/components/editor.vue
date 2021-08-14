@@ -73,12 +73,12 @@ export default {
       'Shift-Cmd-L': () => this.$store.commit('showImageDialog'),
       'Cmd-B': () => this.editor.insertBold(),
       'Cmd-I': () => this.editor.insertItalic(),
-      'Shift-Cmd-X': () => this.editor.insertStrikethrough(),
+      'Cmd-D': () => this.editor.insertStrikethrough(),
       'Cmd-K': () => this.editor.insertCode(),
       'Cmd-U': () => this.editor.insertQuote(),
-      'Shift-Cmd-O': () => this.editor.insertBulletedList(),
-      'Shift-Cmd-N': () => this.editor.insertNumberedList(),
-      'Shift-Cmd-Y': () => this.editor.insertCheckedList(),
+      'Shift-Cmd-U': () => this.editor.insertBulletedList(),
+      'Shift-Cmd-O': () => this.editor.insertNumberedList(),
+      'Shift-Cmd-X': () => this.editor.insertCheckedList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveNote()
     })
