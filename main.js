@@ -28,7 +28,16 @@ function createWindow () {
 
   win.on('close', (event) => {
     const win = BrowserWindow.getFocusedWindow()
-    const unsaved = !windowState[win.id].isNoteSaved
+    // win が null なのは、アプリケーション非表示でアプリ終了したケース。
+    // そのため win の有無それぞれで、ノートの未保存判定を下記のようにおこなう。
+    // 有 : 現在表示しているウィンドウのノートが未保存かどうか
+    // 無 : 全ウィンドウのノートに一つでも未保存があるかどうか
+    let unsaved
+    if (win) {
+      unsaved = windowState[win.id] && !windowState[win.id].isNoteSaved
+    } else {
+      unsaved = Object.values(windowState).some((d) => !d.isNoteSaved)
+    }
     if (unsaved) {
       const closable = showCloseConfirm()
       if (closable) {
