@@ -123,7 +123,15 @@ function createMenu () {
       submenu: [
         { role: 'minimize' },
         { type: 'separator' },
-        { role: 'front' }
+        { role: 'front' },
+        {
+          type: 'checkbox',
+          label: 'Always On Top',
+          checked: mainWindow.isAlwaysOnTop(),
+          click () {
+            mainWindow.setAlwaysOnTop(!mainWindow.isAlwaysOnTop())
+          }
+        }
       ]
     },
     {
