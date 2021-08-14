@@ -6,7 +6,8 @@ const windowState = {} // key: win.id, value: object
 
 function createWindow () {
   const win = new BrowserWindow({
-    minWidth: 480,
+    minWidth: 420,
+    minHeight: 420,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
