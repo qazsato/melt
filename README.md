@@ -15,10 +15,10 @@ Based on the GitHub Flavored Markdown Spec.
 | Image			| ⇧⌘L      	|
 | Bold      	| ⌘B       |
 | Italic    	| ⌘I       |
-| Strikethrough | ⇧⌘X	|
+| Strikethrough | ⌘D	|
 | Code    		| ⌘K		|
 | Quote    		| ⌘U		|
-| Bulleted List | ⇧⌘O		|
-| Numbered List | ⇧⌘N		|
-| Checked List 	| ⇧⌘Y		|
+| Bulleted List | ⇧⌘U		|
+| Numbered List | ⇧⌘O		|
+| Checked List 	| ⇧⌘X		|
 | Table        	| ⌘T		|

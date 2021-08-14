@@ -2,11 +2,10 @@ const { app, BrowserWindow, Menu, ipcMain, dialog, shell } = require('electron')
 const fs = require('fs')
 const setting = require('./config/setting.json')
 
-let mainWindow
-let isNoteSaved = false // ファイル保存状態
+const windowState = {} // key: win.id, value: object
 
 function createWindow () {
-  mainWindow = new BrowserWindow({
+  const win = new BrowserWindow({
     minWidth: 480,
     webPreferences: {
       nodeIntegration: true,
@@ -14,17 +13,22 @@ function createWindow () {
       enableRemoteModule: true
     }
   })
-  mainWindow.loadFile('index.html')
-  mainWindow.maximize()
+  win.loadFile('index.html')
+  win.maximize()
 
-  mainWindow.webContents.on('new-window', (event, url) => {
+  win.webContents.on('new-window', (event, url) => {
     event.preventDefault()
     shell.openExternal(url)
   })
 
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.webContents.openDevTools()
+    win.webContents.openDevTools()
   }
+
+  win.on('close', () => {
+    const win = BrowserWindow.getFocusedWindow()
+    delete windowState[win.id]
+  })
 
   createMenu()
 }
@@ -52,14 +56,24 @@ function createMenu () {
           label: 'New Note',
           accelerator: 'CmdOrCtrl+N',
           click () {
-            mainWindow.webContents.send('new-note')
+            const win = BrowserWindow.getFocusedWindow()
+            win.webContents.send('new-note')
           }
         },
+        {
+          label: 'New Window',
+          accelerator: 'CmdOrCtrl+Shift+N',
+          click () {
+            createWindow()
+          }
+        },
+        { type: 'separator' },
         {
           label: 'Open Note',
           accelerator: 'CmdOrCtrl+P',
           click () {
-            mainWindow.webContents.send('open-note')
+            const win = BrowserWindow.getFocusedWindow()
+            win.webContents.send('open-note')
           }
         },
         { type: 'separator' },
@@ -67,21 +81,24 @@ function createMenu () {
           label: 'Find Paragraph',
           accelerator: 'CmdOrCtrl+Shift+P',
           click () {
-            mainWindow.webContents.send('find-paragraph')
+            const win = BrowserWindow.getFocusedWindow()
+            win.webContents.send('find-paragraph')
           }
         },
         {
           label: 'Find Text',
           accelerator: 'CmdOrCtrl+F',
           click () {
-            mainWindow.webContents.send('find-text')
+            const win = BrowserWindow.getFocusedWindow()
+            win.webContents.send('find-text')
           }
         },
         {
           label: 'Find Text in folder',
           accelerator: 'CmdOrCtrl+Shift+F',
           click () {
-            mainWindow.webContents.send('find-text-in-folder')
+            const win = BrowserWindow.getFocusedWindow()
+            win.webContents.send('find-text-in-folder')
           }
         }
       ]
@@ -105,7 +122,8 @@ function createMenu () {
           label: 'Toggle View Mode',
           accelerator: 'CmdOrCtrl+E',
           click () {
-            mainWindow.webContents.send('toggle-view-mode')
+            const win = BrowserWindow.getFocusedWindow()
+            win.webContents.send('toggle-view-mode')
           }
         },
         { type: 'separator' },
@@ -127,9 +145,10 @@ function createMenu () {
         {
           type: 'checkbox',
           label: 'Always On Top',
-          checked: mainWindow.isAlwaysOnTop(),
+          checked: false,
           click () {
-            mainWindow.setAlwaysOnTop(!mainWindow.isAlwaysOnTop())
+            const win = BrowserWindow.getFocusedWindow()
+            win.setAlwaysOnTop(!win.isAlwaysOnTop())
           }
         }
       ]
@@ -158,17 +177,18 @@ app.whenReady().then(() => {
   createWindow()
 
   app.on('before-quit', function (event) {
-    if (isNoteSaved) {
-      return
-    }
-    const selected = dialog.showMessageBoxSync({
-      message: 'Meltを終了します',
-      buttons: ['OK', 'Cancel'],
-      cancelId: -1 // Esc押下時の値
-    })
-    // OK以外は終了させない
-    if (selected !== 0) {
-      event.preventDefault()
+    // 一つでも未保存のノートがある場合 confirm を表示する
+    const unsaved = Object.values(windowState).some((d) => !d.isNoteSaved)
+    if (unsaved) {
+      const selected = dialog.showMessageBoxSync({
+        message: 'Meltを終了します',
+        buttons: ['OK', 'Cancel'],
+        cancelId: -1 // Esc押下時の値
+      })
+      // OK以外は終了させない
+      if (selected !== 0) {
+        event.preventDefault()
+      }
     }
   })
 
@@ -187,7 +207,8 @@ app.whenReady().then(() => {
 
 // 新規ノート保存
 ipcMain.handle('new-note-save', async (event, data) => {
-  const path = dialog.showSaveDialogSync(mainWindow, {
+  const win = BrowserWindow.getFocusedWindow()
+  const path = dialog.showSaveDialogSync(win, {
     defaultPath: `${setting.directory}/Untitled`,
     filters: [
       { name: 'Text', extensions: ['md'] }
@@ -218,5 +239,6 @@ ipcMain.handle('new-note-save', async (event, data) => {
 
 // ノートの保存状態の更新
 ipcMain.handle('is-note-saved', async (event, saved) => {
-  isNoteSaved = saved
+  const win = BrowserWindow.getFocusedWindow()
+  windowState[win.id] = Object.assign(windowState[win.id] || {}, { isNoteSaved: saved })
 })
