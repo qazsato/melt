@@ -25,9 +25,18 @@ function createWindow () {
     win.webContents.openDevTools()
   }
 
-  win.on('close', () => {
+  win.on('close', (event) => {
     const win = BrowserWindow.getFocusedWindow()
-    delete windowState[win.id]
+    const unsaved = !windowState[win.id].isNoteSaved
+    if (unsaved) {
+      const closable = showCloseConfirm()
+      if (closable) {
+        const win = BrowserWindow.getFocusedWindow()
+        delete windowState[win.id]
+      } else {
+        event.preventDefault()
+      }
+    }
   })
 
   createMenu()
@@ -180,13 +189,8 @@ app.whenReady().then(() => {
     // 一つでも未保存のノートがある場合 confirm を表示する
     const unsaved = Object.values(windowState).some((d) => !d.isNoteSaved)
     if (unsaved) {
-      const selected = dialog.showMessageBoxSync({
-        message: 'Meltを終了します',
-        buttons: ['OK', 'Cancel'],
-        cancelId: -1 // Esc押下時の値
-      })
-      // OK以外は終了させない
-      if (selected !== 0) {
+      const closable = showCloseConfirm()
+      if (!closable) {
         event.preventDefault()
       }
     }
@@ -242,3 +246,12 @@ ipcMain.handle('is-note-saved', async (event, saved) => {
   const win = BrowserWindow.getFocusedWindow()
   windowState[win.id] = Object.assign(windowState[win.id] || {}, { isNoteSaved: saved })
 })
+
+function showCloseConfirm () {
+  const selected = dialog.showMessageBoxSync({
+    message: 'Meltを終了します',
+    buttons: ['OK', 'Cancel'],
+    cancelId: -1 // Esc押下時の値
+  })
+  return selected === 0
+}
