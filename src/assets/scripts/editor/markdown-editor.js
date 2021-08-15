@@ -20,14 +20,19 @@ class MarkdownEditor extends Editor {
           if (cm.somethingSelected()) {
             cm.indentSelection('add')
           } else {
-            if (this.isBulletedList(text) || this.isNumberedList(text) || this.isCheckedList(text)) {
-              cm.execCommand('goLineStart')
-              cm.execCommand('insertTab')
-              cm.execCommand('goLineEnd')
+            if (this.isList(text)) {
+              if (this.isIndentableList(pos.line)) {
+                cm.execCommand('goLineStart')
+                cm.execCommand('insertTab')
+                cm.execCommand('goLineEnd')
+              }
             } else {
               cm.execCommand('insertTab')
             }
           }
+        },
+        'Shift-Tab': (cm) => {
+          cm.execCommand('indentLess')
         }
       }
     }
@@ -124,6 +129,13 @@ class MarkdownEditor extends Editor {
   }
 
   /**
+   * リストか判定します。
+   */
+  isList (text) {
+    return this.isBulletedList(text) || this.isNumberedList(text) || this.isCheckedList(text)
+  }
+
+  /**
    * 箇条書きリストか判定します。
    */
   isBulletedList (lineText) {
@@ -161,6 +173,29 @@ class MarkdownEditor extends Editor {
       return true
     }
     return false
+  }
+
+  /**
+   * 対象行のリストがインデント可能か判定します。
+   */
+  isIndentableList (lineNumber) {
+    // 先頭行の場合、字下げ不要
+    if (lineNumber === 0) {
+      return false
+    }
+    const text = this.editor.getLine(lineNumber)
+    const prevText = this.editor.getLine(lineNumber - 1)
+    // 前の行がリストでない場合、字下げ不要
+    if (!this.isList(prevText)) {
+      return false
+    }
+    const tabCount = (text.match(/\t/g) || []).length
+    const prevTabCount = (prevText.match(/\t/g) || []).length
+    // タブ数が前の行より1以上開くことはないため、字下げ不要
+    if (tabCount - prevTabCount >= 1) {
+      return false
+    }
+    return true
   }
 
   /**
