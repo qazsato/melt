@@ -53,9 +53,7 @@ export default {
       const note = this.$store.state.note
       this.paragraph = note.tableOfContents.length
       this.line = value.split('\n').length
-      if (note.fileStats) {
-        this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
-      }
+      this.lastModifiedAt = note.fileStats ? dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss') : null
     }
   }
 }
