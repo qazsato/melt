@@ -1,12 +1,12 @@
 {
   "name": "melt",
   "productName": "Melt",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "My Markdown Editor. Based on the GitHub Flavored Markdown Spec.",
   "main": "main.js",
   "dependencies": {
     "axios": "0.21.1",
-    "codemirror": "5.62.2",
+    "codemirror": "5.62.3",
     "dayjs": "1.10.6",
     "electron-find": "1.0.7",
     "element-ui": "2.15.5",
@@ -28,11 +28,11 @@
     "babel-jest": "27.0.6",
     "babel-loader": "8.2.2",
     "css-loader": "5.2.7",
-    "electron": "13.1.9",
+    "electron": "13.2.1",
     "electron-packager": "15.3.0",
     "eslint": "7.32.0",
     "eslint-config-standard": "16.0.3",
-    "eslint-plugin-import": "2.24.0",
+    "eslint-plugin-import": "2.24.1",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "5.1.0",
     "eslint-plugin-vue": "7.16.0",
@@ -45,8 +45,8 @@
     "vue-jest": "3.0.7",
     "vue-loader": "15.9.8",
     "vue-template-compiler": "2.6.14",
-    "webpack": "5.50.0",
-    "webpack-cli": "4.7.2"
+    "webpack": "5.51.1",
+    "webpack-cli": "4.8.0"
   },
   "scripts": {
     "start": "NODE_ENV=development electron .",

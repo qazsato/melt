@@ -3,10 +3,13 @@ import file from './file'
 class Note extends file {
   constructor (path) {
     super(path)
-    this.title = this.fileName || 'Untitled'
     this.content = this.fileContent || ''
     this.tableOfContents = this.createTableOfContents()
     this.isSaved = this.checkSaved()
+  }
+
+  get title () {
+    return this.fileName || 'Untitled'
   }
 
   find (word) {
@@ -23,10 +26,16 @@ class Note extends file {
 
   save (path = this.filePath) {
     if (this.checkSaved()) return // 保存済み(=差分なし)の場合は何もしない
-    this.writeContent(this.content, path)
-    this.title = this.fileName
+    this.writeFile(this.content, path)
     this.tableOfContents = this.createTableOfContents()
     this.isSaved = true
+  }
+
+  delete () {
+    this.content = null
+    this.tableOfContents = null
+    this.isSaved = true
+    this.unlink()
   }
 
   checkSaved () {

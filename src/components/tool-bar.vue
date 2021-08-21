@@ -2,18 +2,44 @@
   <section class="tool-bar">
     <h1 class="file-name">
       <template v-if="$store.state.note.filePath">
-        <el-tooltip
-          :content="$store.state.note.filePath"
-          :open-delay="200"
+        <el-popover
+          v-model="visiblePopover"
+          placement="right"
+          trigger="click"
+          popper-class="file-name-popper"
+          :disabled="!isSaved"
         >
-          <div>{{ $store.state.note.title }}</div>
-        </el-tooltip>
+          <el-row>
+            <el-link
+              type="primary"
+              icon="el-icon-edit"
+              @click="onClickEdit"
+            >
+              rename
+            </el-link>
+          </el-row>
+          <el-row>
+            <el-link
+              type="danger"
+              icon="el-icon-delete"
+              @click="onClickDelete"
+            >
+              delete
+            </el-link>
+          </el-row>
+          <div
+            slot="reference"
+            :class="{ 'editable': isSaved }"
+          >
+            {{ $store.state.note.title }}
+          </div>
+        </el-popover>
       </template>
       <template v-else>
         <div>{{ $store.state.note.title }}</div>
       </template>
       <span
-        v-if="isSaved === false"
+        v-if="!isSaved"
         class="unsaved"
       >*</span>
     </h1>
@@ -38,7 +64,8 @@
 export default {
   data () {
     return {
-      viewMode: this.$store.state.viewMode
+      viewMode: this.$store.state.viewMode,
+      visiblePopover: false
     }
   },
 
@@ -60,6 +87,19 @@ export default {
   methods: {
     changeViewMode () {
       this.$store.commit('changeViewMode', this.viewMode)
+    },
+
+    onClickEdit () {
+      this.visiblePopover = false
+      this.$store.commit('showRenameDialog')
+    },
+
+    onClickDelete () {
+      this.visiblePopover = false
+      if (window.confirm(`${this.$store.state.note.title}を削除しますか`)) {
+        this.$store.commit('deleteNote')
+        this.$store.commit('createNewNote')
+      }
     }
   }
 }
@@ -76,6 +116,13 @@ export default {
     margin: 0 15px;
     height: 50px;
     color: #fff;
+
+    .editable {
+      cursor: pointer;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
 
     div {
       font-size: 18px;
@@ -105,6 +152,21 @@ export default {
     .el-radio-button__inner {
       padding: 6px 10px;
     }
+  }
+}
+
+.file-name-popper {
+  &.el-popover {
+    padding: 8px 16px;
+    min-width: auto;
+  }
+
+  &.el-popper[x-placement^="right"] {
+    margin-left: 20px;
+  }
+
+  .el-row {
+    margin-bottom: 5px;
   }
 }
 </style>

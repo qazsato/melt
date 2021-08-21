@@ -16,7 +16,8 @@ const store = new Vuex.Store({
     visibleTableDialog: false,
     visibleFindParagraphDialog: false,
     visibleFindTitleDialog: false,
-    visibleFindContentDialog: false
+    visibleFindContentDialog: false,
+    visibleRenameDialog: false
   },
 
   mutations: {
@@ -45,6 +46,22 @@ const store = new Vuex.Store({
 
     saveNote (state, path) {
       state.note.save(path)
+    },
+
+    renameNote (state, path) {
+      try {
+        state.note.rename(path)
+      } catch (e) {
+        if (e.message === 'file path is exists.') {
+          window.alert('同名のノートが存在しています')
+        } else {
+          window.alert('名前の変更に失敗しました')
+        }
+      }
+    },
+
+    deleteNote (state) {
+      state.note.delete()
     },
 
     toggleViewMode (state) {
@@ -113,6 +130,14 @@ const store = new Vuex.Store({
 
     hideFindContentDialog (state) {
       state.visibleFindContentDialog = false
+    },
+
+    showRenameDialog (state) {
+      state.visibleRenameDialog = true
+    },
+
+    hideRenameDialog (state) {
+      state.visibleRenameDialog = false
     }
   }
 })
