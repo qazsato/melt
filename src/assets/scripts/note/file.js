@@ -37,8 +37,20 @@ class File {
   }
 
   rename (path) {
+    if (this.isExist(path)) {
+      throw new Error('file path is exists.')
+    }
     fs.renameSync(this.filePath, path)
     this.load(path)
+  }
+
+  isExist (path) {
+    try {
+      this.stat(path)
+      return true
+    } catch (e) {
+      return false
+    }
   }
 
   validatePath (path) {

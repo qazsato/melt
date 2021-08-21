@@ -49,7 +49,11 @@ const store = new Vuex.Store({
     },
 
     renameNote (state, path) {
-      state.note.rename(path)
+      try {
+        state.note.rename(path)
+      } catch (e) {
+        window.alert('同名のファイルが存在しています')
+      }
     },
 
     deleteNote (state) {
