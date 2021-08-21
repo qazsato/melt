@@ -7,7 +7,7 @@
           trigger="click"
           popper-class="file-name-popper"
         >
-          <!-- <el-row>
+          <el-row>
             <el-link
               type="primary"
               icon="el-icon-edit"
@@ -15,7 +15,7 @@
             >
               rename
             </el-link>
-          </el-row> -->
+          </el-row>
           <el-row>
             <el-link
               type="danger"
@@ -87,7 +87,7 @@ export default {
     },
 
     onClickEdit () {
-      console.log('onClickEdit')
+      this.$store.commit('showRenameDialog')
     },
 
     onClickDelete () {

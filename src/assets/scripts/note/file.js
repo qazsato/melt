@@ -36,6 +36,11 @@ class File {
     this.load()
   }
 
+  rename (path) {
+    fs.renameSync(this.filePath, path)
+    this.load(path)
+  }
+
   validatePath (path) {
     if (!path) {
       return false

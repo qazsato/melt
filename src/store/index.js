@@ -16,7 +16,8 @@ const store = new Vuex.Store({
     visibleTableDialog: false,
     visibleFindParagraphDialog: false,
     visibleFindTitleDialog: false,
-    visibleFindContentDialog: false
+    visibleFindContentDialog: false,
+    visibleRenameDialog: false
   },
 
   mutations: {
@@ -45,6 +46,10 @@ const store = new Vuex.Store({
 
     saveNote (state, path) {
       state.note.save(path)
+    },
+
+    renameNote (state, path) {
+      state.note.rename(path)
     },
 
     deleteNote (state) {
@@ -117,6 +122,14 @@ const store = new Vuex.Store({
 
     hideFindContentDialog (state) {
       state.visibleFindContentDialog = false
+    },
+
+    showRenameDialog (state) {
+      state.visibleRenameDialog = true
+    },
+
+    hideRenameDialog (state) {
+      state.visibleRenameDialog = false
     }
   }
 })

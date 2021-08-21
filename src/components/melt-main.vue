@@ -17,6 +17,7 @@
       <image-dialog />
       <link-dialog />
       <table-dialog />
+      <rename-dialog />
     </div>
   </div>
 </template>
@@ -34,6 +35,7 @@ import findContentDialog from './dialog/find-content-dialog.vue'
 import imageDialog from './dialog/image-dialog.vue'
 import linkDialog from './dialog/link-dialog.vue'
 import tableDialog from './dialog/table-dialog.vue'
+import renameDialog from './dialog/rename-dialog.vue'
 
 export default {
   components: {
@@ -46,7 +48,8 @@ export default {
     findContentDialog,
     imageDialog,
     linkDialog,
-    tableDialog
+    tableDialog,
+    renameDialog
   },
 
   data () {
