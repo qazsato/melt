@@ -23,10 +23,18 @@ class Note extends file {
 
   save (path = this.filePath) {
     if (this.checkSaved()) return // 保存済み(=差分なし)の場合は何もしない
-    this.writeContent(this.content, path)
+    this.writeFile(this.content, path)
     this.title = this.fileName
     this.tableOfContents = this.createTableOfContents()
     this.isSaved = true
+  }
+
+  delete () {
+    this.title = null
+    this.content = null
+    this.tableOfContents = null
+    this.isSaved = true
+    this.unlink()
   }
 
   checkSaved () {

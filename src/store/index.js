@@ -47,6 +47,10 @@ const store = new Vuex.Store({
       state.note.save(path)
     },
 
+    deleteNote (state) {
+      state.note.delete()
+    },
+
     toggleViewMode (state) {
       if (state.viewMode === VIEW_MODE.EDITOR) {
         state.viewMode = VIEW_MODE.PREVIEW
