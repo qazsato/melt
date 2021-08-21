@@ -22,7 +22,7 @@ const store = new Vuex.Store({
 
   mutations: {
     createNewNote (state) {
-      if (!state.note.isSaved) {
+      if (state.note.isChanged) {
         if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
           return
         }

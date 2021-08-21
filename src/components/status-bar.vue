@@ -32,8 +32,8 @@ export default {
   },
 
   computed: {
-    isSaved () {
-      return this.$store.state.note.isSaved
+    isChanged () {
+      return this.$store.state.note.isChanged
     },
 
     content () {
@@ -42,7 +42,7 @@ export default {
   },
 
   watch: {
-    isSaved () {
+    isChanged () {
       const note = this.$store.state.note
       if (note.fileStats) {
         this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')

@@ -5,7 +5,7 @@ class Note extends file {
     super(path)
     this.content = this.fileContent || ''
     this.tableOfContents = this.createTableOfContents()
-    this.isSaved = this.checkSaved()
+    this.isChanged = this.checkChanged()
   }
 
   get title () {
@@ -21,25 +21,25 @@ class Note extends file {
   update (content) {
     this.content = content
     this.tableOfContents = this.createTableOfContents()
-    this.isSaved = this.checkSaved()
+    this.isChanged = this.checkChanged()
   }
 
   save (path = this.filePath) {
-    if (this.checkSaved()) return // 保存済み(=差分なし)の場合は何もしない
+    if (!this.checkChanged()) return // 差分なし(=保存済み)の場合は何もしない
     this.writeFile(this.content, path)
     this.tableOfContents = this.createTableOfContents()
-    this.isSaved = true
+    this.isChanged = false
   }
 
   delete () {
     this.content = null
     this.tableOfContents = null
-    this.isSaved = true
+    this.isChanged = false
     this.unlink()
   }
 
-  checkSaved () {
-    return this.content === this.fileContent
+  checkChanged () {
+    return this.content !== this.fileContent
   }
 
   createTableOfContents () {

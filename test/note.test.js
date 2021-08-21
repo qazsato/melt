@@ -6,7 +6,7 @@ test('新規ノートを作成されること', () => {
   expect(note.title).toBe('Untitled')
   expect(note.content).toBe('')
   expect(note.tableOfContents).toEqual([])
-  expect(note.isSaved).toBe(true) // この結果微妙...
+  expect(note.isChanged).toBe(false)
 })
 
 test('新規ノートが更新されること', () => {
@@ -16,7 +16,7 @@ test('新規ノートが更新されること', () => {
   expect(note.title).toBe('Untitled')
   expect(note.content).toBe(content)
   expect(note.tableOfContents).toEqual([])
-  expect(note.isSaved).toBe(false)
+  expect(note.isChanged).toBe(true)
 })
 
 test('新規ノートが保存されること', () => {
@@ -28,7 +28,7 @@ test('新規ノートが保存されること', () => {
   expect(note.title).toBe(fileName)
   expect(note.content).toBe(content)
   expect(note.tableOfContents).toEqual([])
-  expect(note.isSaved).toBe(true)
+  expect(note.isChanged).toBe(false)
 })
 
 test('既存ノートが作成されること', () => {
@@ -37,7 +37,7 @@ test('既存ノートが作成されること', () => {
   expect(note.title).toBe(fileName)
   expect(note.content).toBe('test')
   expect(note.tableOfContents).toEqual([])
-  expect(note.isSaved).toBe(true)
+  expect(note.isChanged).toBe(false)
 })
 
 test('ノートを変更せず保存した場合何も変わらないこと', () => {
@@ -47,7 +47,7 @@ test('ノートを変更せず保存した場合何も変わらないこと', ()
   expect(note.title).toBe(fileName)
   expect(note.content).toBe('test')
   expect(note.tableOfContents).toEqual([])
-  expect(note.isSaved).toBe(true)
+  expect(note.isChanged).toBe(false)
 })
 
 test('拡張子がmd以外のファイル読み込みでエラーとなること', () => {

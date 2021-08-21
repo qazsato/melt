@@ -59,14 +59,14 @@ export default {
   },
 
   computed: {
-    isSaved () {
-      return this.$store.state.note.isSaved
+    isChanged () {
+      return this.$store.state.note.isChanged
     }
   },
 
   watch: {
-    isSaved (value) {
-      ipcRenderer.invoke('is-note-saved', value)
+    isChanged (value) {
+      ipcRenderer.invoke('is-note-changed', value)
     }
   },
 

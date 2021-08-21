@@ -252,9 +252,9 @@ ipcMain.handle('new-note-save', async (event, data) => {
 })
 
 // ノートの保存状態の更新
-ipcMain.handle('is-note-saved', async (event, saved) => {
+ipcMain.handle('is-note-changed', async (event, changed) => {
   const win = BrowserWindow.getFocusedWindow()
-  windowState[win.id] = Object.assign(windowState[win.id] || {}, { isNoteSaved: saved })
+  windowState[win.id] = Object.assign(windowState[win.id] || {}, { isNoteSaved: !changed })
 })
 
 function showCloseConfirm () {

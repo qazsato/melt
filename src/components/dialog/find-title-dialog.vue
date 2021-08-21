@@ -89,7 +89,7 @@ export default {
         if (this.isComposing) {
           return
         }
-        if (!this.$store.state.note.isSaved) {
+        if (this.$store.state.note.isChanged) {
           if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
             this.$refs.noteInput.$refs.input.blur()
             return
