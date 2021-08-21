@@ -1,4 +1,16 @@
 import Editor from './editor.js'
+import '@styles/melt-light.scss'
+import 'codemirror/mode/gfm/gfm.js'
+import 'codemirror/mode/htmlmixed/htmlmixed.js'
+import 'codemirror/mode/css/css.js'
+import 'codemirror/mode/javascript/javascript.js'
+import 'codemirror/mode/vue/vue.js'
+import 'codemirror/mode/jsx/jsx.js'
+import 'codemirror/mode/ruby/ruby.js'
+import 'codemirror/mode/go/go.js'
+import 'codemirror/mode/sql/sql.js'
+import 'codemirror/mode/shell/shell.js'
+import 'codemirror/addon/edit/continuelist.js'
 
 class MarkdownEditor extends Editor {
   constructor (id) {
