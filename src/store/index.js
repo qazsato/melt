@@ -52,7 +52,11 @@ const store = new Vuex.Store({
       try {
         state.note.rename(path)
       } catch (e) {
-        window.alert('同名のファイルが存在しています')
+        if (e.message === 'file path is exists.') {
+          window.alert('同名のノートが存在しています')
+        } else {
+          window.alert('名前の変更に失敗しました')
+        }
       }
     },
 
