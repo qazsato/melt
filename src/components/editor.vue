@@ -11,6 +11,8 @@
 import { ipcRenderer } from 'electron'
 import Editor from '@scripts/editor/markdown-editor.js'
 import { VIEW_MODE } from '@constants/index.js'
+import 'codemirror/lib/codemirror.css'
+import '@styles/melt-light.scss'
 
 export default {
   data () {

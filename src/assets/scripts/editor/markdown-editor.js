@@ -1,6 +1,5 @@
 import { LIST_TYPE } from '@constants/index.js'
 import Editor from './editor.js'
-import '@styles/melt-light.scss'
 import 'codemirror/mode/gfm/gfm.js'
 import 'codemirror/mode/htmlmixed/htmlmixed.js'
 import 'codemirror/mode/css/css.js'

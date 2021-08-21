@@ -15,6 +15,7 @@ module.exports = {
   ],
   testPathIgnorePatterns: ['/node_modules/', '/release-builds/'],
   moduleNameMapper: {
-    '^@config(.*)$': '<rootDir>/config$1'
+    '^@config(.*)$': '<rootDir>/config$1',
+    '^@constants(.*)$': '<rootDir>/src/constants$1'
   }
 }
