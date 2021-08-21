@@ -18,7 +18,7 @@ Based on the GitHub Flavored Markdown Spec.
 | Strikethrough | ⌘D	|
 | Code    		| ⌘K		|
 | Quote    		| ⌘U		|
-| Bulleted List | ⇧⌘U		|
-| Numbered List | ⇧⌘O		|
-| Checked List 	| ⇧⌘X		|
+| Bullet List | ⇧⌘U		|
+| Ordered List | ⇧⌘O		|
+| Task List 	| ⇧⌘X		|
 | Table        	| ⌘T		|

@@ -63,9 +63,9 @@ export default {
       'Cmd-D': () => this.editor.insertStrikethrough(),
       'Cmd-K': () => this.editor.insertCode(),
       'Cmd-U': () => this.editor.insertQuote(),
-      'Shift-Cmd-U': () => this.editor.insertBulletedList(),
-      'Shift-Cmd-O': () => this.editor.insertNumberedList(),
-      'Shift-Cmd-X': () => this.editor.insertCheckedList(),
+      'Shift-Cmd-U': () => this.editor.insertBulletList(),
+      'Shift-Cmd-O': () => this.editor.insertOrderedList(),
+      'Shift-Cmd-X': () => this.editor.insertTaskList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveNote()
     })

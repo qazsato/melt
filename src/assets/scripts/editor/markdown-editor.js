@@ -1,3 +1,4 @@
+import { LIST_TYPE } from '@constants/index.js'
 import Editor from './editor.js'
 import '@styles/melt-light.scss'
 import 'codemirror/mode/gfm/gfm.js'
@@ -26,29 +27,39 @@ class MarkdownEditor extends Editor {
       indentWithTabs: true,
       extraKeys: {
         Enter: 'newlineAndIndentContinueMarkdownList',
-        Tab: (cm) => {
-          const pos = this.editor.getCursor()
-          const text = this.editor.getLine(pos.line)
-          if (cm.somethingSelected()) {
-            cm.indentSelection('add')
-          } else {
-            if (this.isList(text)) {
-              if (this.isIndentableList(pos.line)) {
-                cm.execCommand('goLineStart')
-                cm.execCommand('insertTab')
-                cm.execCommand('goLineEnd')
-              }
-            } else {
-              cm.execCommand('insertTab')
-            }
-          }
-        },
-        'Shift-Tab': (cm) => {
-          cm.execCommand('indentLess')
-        }
+        Tab: (cm) => { this.onPressTab(cm) },
+        'Shift-Tab': (cm) => { this.onPressShiftTab(cm) }
       }
     }
     super(id, option)
+  }
+
+  /**
+   * Tabのハンドラ
+   */
+  onPressTab (cm) {
+    const pos = this.editor.getCursor()
+    const text = this.editor.getLine(pos.line)
+    if (cm.somethingSelected()) {
+      cm.indentSelection('add')
+    } else {
+      if (this.isList(text)) {
+        if (this.isIndentableList(pos.line)) {
+          cm.execCommand('goLineStart')
+          cm.execCommand('insertTab')
+          cm.execCommand('goLineEnd')
+        }
+      } else {
+        cm.execCommand('insertTab')
+      }
+    }
+  }
+
+  /**
+   * Shift + Tab のハンドラ
+   */
+  onPressShiftTab (cm) {
+    cm.execCommand('indentLess')
   }
 
   /**
@@ -122,22 +133,22 @@ class MarkdownEditor extends Editor {
   /**
    * 箇条書きリストを挿入します。
    */
-  insertBulletedList () {
-    this.insertList('bullet')
+  insertBulletList () {
+    this.insertList(LIST_TYPE.BULLET)
   }
 
   /**
    * 番号付きリストを挿入します。
    */
-  insertNumberedList () {
-    this.insertList('number')
+  insertOrderedList () {
+    this.insertList(LIST_TYPE.ORDERED)
   }
 
   /**
-   * チェックリストを挿入します。
+   * タスクリストを挿入します。
    */
-  insertCheckedList () {
-    this.insertList('check')
+  insertTaskList () {
+    this.insertList(LIST_TYPE.TASK)
   }
 
   /**
@@ -302,11 +313,11 @@ class MarkdownEditor extends Editor {
    * @param {number} number
    */
   getListPrefix (type, number = 1) {
-    if (type === 'bullet') {
+    if (type === LIST_TYPE.BULLET) {
       return '- '
-    } else if (type === 'number') {
+    } else if (type === LIST_TYPE.ORDERED) {
       return `${number}. `
-    } else if (type === 'check') {
+    } else if (type === LIST_TYPE.TASK) {
       return '- [ ] '
     }
   }

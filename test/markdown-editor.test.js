@@ -58,21 +58,21 @@ test('引用を挿入する', () => {
 test('箇条書きリストを挿入する', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  editor.insertBulletedList()
+  editor.insertBulletList()
   expect(editor.getText()).toBe('- ')
 })
 
 test('番号付きリストを挿入する', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  editor.insertNumberedList()
+  editor.insertOrderedList()
   expect(editor.getText()).toBe('1. ')
 })
 
-test('チェックリストを挿入する', () => {
+test('タスクリストを挿入する', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  editor.insertCheckedList()
+  editor.insertTaskList()
   expect(editor.getText()).toBe('- [ ] ')
 })
 
