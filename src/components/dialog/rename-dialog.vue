@@ -64,7 +64,8 @@ export default {
         return
       }
       const note = this.$store.state.note
-      const path = note.filePath.replace(note.fileName, `${this.fileName}.md`)
+      const regexp = new RegExp(`${note.fileName}$`) // 末尾の文字列のみ置換対象とする
+      const path = note.filePath.replace(regexp, `${this.fileName}.md`)
       this.$store.commit('renameNote', path)
       this.closeDialog()
     }
