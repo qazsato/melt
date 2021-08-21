@@ -79,43 +79,43 @@ test('タスクリストを挿入する', () => {
 test('箇条書きリストか判定する(true)', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  expect(editor.isBulletedList('- test')).toBeTruthy()
+  expect(editor.isBulletList('- test')).toBeTruthy()
 })
 
 test('箇条書きリストか判定する(false)', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  expect(editor.isBulletedList('test')).toBeFalsy()
+  expect(editor.isBulletList('test')).toBeFalsy()
 })
 
 test('番号付きリストか判定する(true)', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  expect(editor.isNumberedList('1. test')).toBeTruthy()
+  expect(editor.isOrderedList('1. test')).toBeTruthy()
 })
 
 test('番号付きリストか判定する(false)', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  expect(editor.isNumberedList('test')).toBeFalsy()
+  expect(editor.isOrderedList('test')).toBeFalsy()
 })
 
-test('チェックリストか判定する チェック未(true)', () => {
+test('タスクリストか判定する チェック未(true)', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  expect(editor.isCheckedList('- [ ] test')).toBeTruthy()
+  expect(editor.isTaskList('- [ ] test')).toBeTruthy()
 })
 
-test('チェックリストか判定する チェック済(true)', () => {
+test('タスクリストか判定する チェック済(true)', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  expect(editor.isCheckedList('- [x] test')).toBeTruthy()
+  expect(editor.isTaskList('- [x] test')).toBeTruthy()
 })
 
-test('チェックリストか判定する(false)', () => {
+test('タスクリストか判定する(false)', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor')
-  expect(editor.isCheckedList('test')).toBeFalsy()
+  expect(editor.isTaskList('test')).toBeFalsy()
 })
 
 test('テーブルを挿入する', () => {

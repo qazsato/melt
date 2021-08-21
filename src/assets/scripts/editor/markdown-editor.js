@@ -154,13 +154,13 @@ class MarkdownEditor extends Editor {
    * リストか判定します。
    */
   isList (text) {
-    return this.isBulletedList(text) || this.isNumberedList(text) || this.isCheckedList(text)
+    return this.isBulletList(text) || this.isOrderedList(text) || this.isTaskList(text)
   }
 
   /**
    * 箇条書きリストか判定します。
    */
-  isBulletedList (lineText) {
+  isBulletList (lineText) {
     const trimed = lineText.trimLeft()
     if (trimed.indexOf('- ') === 0 ||
         trimed.indexOf('* ') === 0 ||
@@ -173,7 +173,7 @@ class MarkdownEditor extends Editor {
   /**
    * 番号付きリストか判定します。
    */
-  isNumberedList (lineText) {
+  isOrderedList (lineText) {
     const trimed = lineText.trimLeft()
     if (trimed.search(/^[0-9]+\./) !== -1) {
       return true
@@ -182,9 +182,9 @@ class MarkdownEditor extends Editor {
   }
 
   /**
-   * チェックリストか判定します。
+   * タスクリストか判定します。
    */
-  isCheckedList (lineText) {
+  isTaskList (lineText) {
     const trimed = lineText.trimLeft()
     if (trimed.indexOf('- [ ]') === 0 ||
         trimed.indexOf('* [ ]') === 0 ||
