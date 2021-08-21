@@ -3,6 +3,9 @@
  * @param {String} path ファイルパス
  */
 export const updateBrowsingHistory = (path) => {
+  if (!path) {
+    return
+  }
   const browsingHistories = localStorage.browsingHistories ? JSON.parse(localStorage.browsingHistories) : []
   const bh = browsingHistories.find((h) => h.path === path)
   const time = new Date().getTime()

@@ -104,7 +104,7 @@ export default {
               return
             }
             this.$store.commit('saveNote', data.path)
-            this.$store.commit('changeNote', this.$store.state.note.filePath)
+            this.$store.commit('changeNote', data.path)
           })
           .catch((err) => {
             alert(err)
