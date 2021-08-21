@@ -7,6 +7,7 @@
           placement="right"
           trigger="click"
           popper-class="file-name-popper"
+          :disabled="!isSaved"
         >
           <el-row>
             <el-link
@@ -28,7 +29,7 @@
           </el-row>
           <div
             slot="reference"
-            class="editable"
+            :class="{ 'editable': isSaved }"
           >
             {{ $store.state.note.title }}
           </div>
@@ -38,7 +39,7 @@
         <div>{{ $store.state.note.title }}</div>
       </template>
       <span
-        v-if="isSaved === false"
+        v-if="!isSaved"
         class="unsaved"
       >*</span>
     </h1>
