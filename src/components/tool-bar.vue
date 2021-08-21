@@ -3,6 +3,7 @@
     <h1 class="file-name">
       <template v-if="$store.state.note.filePath">
         <el-popover
+          v-model="visiblePopover"
           placement="right"
           trigger="click"
           popper-class="file-name-popper"
@@ -62,7 +63,8 @@
 export default {
   data () {
     return {
-      viewMode: this.$store.state.viewMode
+      viewMode: this.$store.state.viewMode,
+      visiblePopover: false
     }
   },
 
@@ -87,10 +89,12 @@ export default {
     },
 
     onClickEdit () {
+      this.visiblePopover = false
       this.$store.commit('showRenameDialog')
     },
 
     onClickDelete () {
+      this.visiblePopover = false
       if (window.confirm(`${this.$store.state.note.title}を削除しますか`)) {
         this.$store.commit('deleteNote')
         this.$store.commit('createNewNote')
