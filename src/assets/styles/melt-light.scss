@@ -36,6 +36,10 @@
     opacity: 0.2;
   }
 
+  .cm-link {
+    word-break: break-all;
+  }
+
   .cm-link.cm-variable-2,
   .cm-link.cm-variable-3 {
     text-decoration: none;
