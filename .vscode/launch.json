@@ -5,12 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "MELT APP",
       "type": "node",
       "request": "launch",
-      "name": "MELT APP",
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
-      "program": "${workspaceFolder}/main.js",
-      "protocol": "inspector"
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"]
     }
   ]
 }
