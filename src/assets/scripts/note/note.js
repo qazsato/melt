@@ -1,4 +1,5 @@
 import file from './file'
+import Markdown from '@scripts/markdown/markdown.js'
 
 class Note extends file {
   constructor (path) {
@@ -44,20 +45,21 @@ class Note extends file {
 
   createTableOfContents () {
     const tocs = []
-    const rows = this.content.split('\n')
+    const htmlText = new Markdown().render(this.content)
+    const rows = htmlText.split('\n')
     rows.forEach((r) => {
-      if (r.indexOf('# ') === 0) {
-        tocs.push({ heading: 1, text: r.replace('# ', '') })
-      } else if (r.indexOf('## ') === 0) {
-        tocs.push({ heading: 2, text: r.replace('## ', '') })
-      } else if (r.indexOf('### ') === 0) {
-        tocs.push({ heading: 3, text: r.replace('### ', '') })
-      } else if (r.indexOf('#### ') === 0) {
-        tocs.push({ heading: 4, text: r.replace('#### ', '') })
-      } else if (r.indexOf('##### ') === 0) {
-        tocs.push({ heading: 5, text: r.replace('##### ', '') })
-      } else if (r.indexOf('###### ') === 0) {
-        tocs.push({ heading: 6, text: r.replace('###### ', '') })
+      if (r.indexOf('<h1>') === 0) {
+        tocs.push({ heading: 1, text: r.replace('<h1>', '').replace('</h1>', '') })
+      } else if (r.indexOf('<h2>') === 0) {
+        tocs.push({ heading: 2, text: r.replace('<h2>', '').replace('</h2>', '') })
+      } else if (r.indexOf('<h3>') === 0) {
+        tocs.push({ heading: 3, text: r.replace('<h3>', '').replace('</h3>', '') })
+      } else if (r.indexOf('<h4>') === 0) {
+        tocs.push({ heading: 4, text: r.replace('<h4>', '').replace('</h4>', '') })
+      } else if (r.indexOf('<h5>') === 0) {
+        tocs.push({ heading: 5, text: r.replace('<h5>', '').replace('</h5>', '') })
+      } else if (r.indexOf('<h6>') === 0) {
+        tocs.push({ heading: 6, text: r.replace('<h6>', '').replace('</h6>', '') })
       }
     })
     return tocs
