@@ -1,6 +1,9 @@
 name-template: 'v$NEXT_PATCH_VERSION'
 tag-template: 'v$NEXT_PATCH_VERSION'
 categories:
+  - title: '❗ Breaking Changes'
+    labels:
+      - 'breaking-change'
   - title: '🚀 Features'
     labels:
       - 'feature'
@@ -14,8 +17,10 @@ categories:
     labels:
       - 'chore'
       - 'meta'
+      - 'maintenance'
+  - title: '📦 Dependencies'
+    labels:
+      - 'dependencies'
 change-template: '- $TITLE (#$NUMBER)'
 template: |
-  ## Changes
-
   $CHANGES
