@@ -47,7 +47,7 @@ test('ノートを変更せず保存した場合何も変わらないこと', ()
   expect(note.title).toBe(fileName)
   expect(note.content).toBe('test')
   expect(note.tableOfContents).toEqual([])
-  expect(note.isChanged).toBe(false)
+  expect(note.isChanged).toBe(true)
 })
 
 test('拡張子がmd以外のファイル読み込みでエラーとなること', () => {
