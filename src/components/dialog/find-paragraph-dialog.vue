@@ -144,7 +144,7 @@ export default {
           align-items: center;
           justify-content: center;
           height: 20px;
-          width: 26px;
+          min-width: 26px;
           margin-right: 10px;
           background: #ccc;
           color: #fff;
