@@ -8,3 +8,5 @@ export const LIST_TYPE = {
   BULLET: 'bullet',
   TASK: 'task'
 }
+
+export const ALLOW_DROP_FILE_TYPES = ['image/png', 'image/jpeg', 'image/gif']

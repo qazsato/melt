@@ -8,9 +8,11 @@
 </template>
 
 <script>
+import setting from '@config/setting.json'
+import axios from 'axios'
 import { ipcRenderer } from 'electron'
 import Editor from '@scripts/editor/markdown-editor.js'
-import { VIEW_MODE } from '@constants/index.js'
+import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@constants/index.js'
 import 'codemirror/lib/codemirror.css'
 import '@styles/melt-light.scss'
 
@@ -56,6 +58,24 @@ export default {
     this.editor = new Editor('editor')
     this.editor.on('change', () => {
       this.$store.commit('updateNote', this.editor.getText())
+    })
+    this.editor.on('drop', (editor, e) => {
+      const files = e.dataTransfer.files
+      if (files.length > 1) {
+        return
+      }
+      const file = files[0]
+      if (!ALLOW_DROP_FILE_TYPES.includes(file.type)) {
+        return
+      }
+      const data = new FormData()
+      data.append('file', file)
+      const headers = { 'content-type': 'multipart/form-data' }
+      axios.post(`${setting.api}/images`, data, { headers }).then((res) => {
+        // TODO: URLをエディタに反映する
+        const url = res.data.url
+        console.log(url)
+      })
     })
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
