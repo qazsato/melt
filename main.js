@@ -254,6 +254,7 @@ ipcMain.handle('new-note-save', async (event, data) => {
 // ノートの保存状態の更新
 ipcMain.handle('is-note-changed', async (event, changed) => {
   const win = BrowserWindow.getFocusedWindow()
+  if (!win) return // NOTE: 画像をドラッグ&ドロップした場合はフォーカス状態とならないため null となる
   windowState[win.id] = Object.assign(windowState[win.id] || {}, { isNoteSaved: !changed })
 })
 

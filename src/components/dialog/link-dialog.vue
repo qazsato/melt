@@ -62,7 +62,7 @@ export default {
           // eslint-disable-next-line no-new
           new URL(text)
           this.linkUrl = text
-          const url = `${setting.api}/web/title?url=${this.linkUrl}`
+          const url = `${setting.api}/sites/metadata?url=${this.linkUrl}`
           axios.get(url).then((res) => {
             if (this.linkTitle === '' && this.$store.state.visibleLinkDialog === true) {
               this.linkTitle = res.data.title

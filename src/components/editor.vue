@@ -8,9 +8,11 @@
 </template>
 
 <script>
+import setting from '@config/setting.json'
+import axios from 'axios'
 import { ipcRenderer } from 'electron'
 import Editor from '@scripts/editor/markdown-editor.js'
-import { VIEW_MODE } from '@constants/index.js'
+import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@constants/index.js'
 import 'codemirror/lib/codemirror.css'
 import '@styles/melt-light.scss'
 
@@ -54,9 +56,8 @@ export default {
 
   mounted () {
     this.editor = new Editor('editor')
-    this.editor.on('change', () => {
-      this.$store.commit('updateNote', this.editor.getText())
-    })
+    this.editor.on('change', this.onChangeText)
+    this.editor.on('drop', this.onDropFile)
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
       'Shift-Cmd-L': () => this.$store.commit('showImageDialog'),
@@ -98,6 +99,33 @@ export default {
           .catch((err) => {
             alert(err)
           })
+      }
+    },
+
+    onChangeText () {
+      this.$store.commit('updateNote', this.editor.getText())
+    },
+
+    onDropFile (editor, e) {
+      const files = e.dataTransfer.files
+      if (files.length > 1) {
+        return
+      }
+      const file = files[0]
+      if (!ALLOW_DROP_FILE_TYPES.includes(file.type)) {
+        return
+      }
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (e) => {
+        const data = {
+          key: file.name,
+          type: file.type,
+          attachment: e.target.result
+        }
+        axios.post(`${setting.api}/images`, data).then((res) => {
+          this.editor.insertImage(res.data.alt, res.data.url)
+        })
       }
     }
   }
