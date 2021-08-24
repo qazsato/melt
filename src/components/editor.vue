@@ -56,27 +56,8 @@ export default {
 
   mounted () {
     this.editor = new Editor('editor')
-    this.editor.on('change', () => {
-      this.$store.commit('updateNote', this.editor.getText())
-    })
-    this.editor.on('drop', (editor, e) => {
-      const files = e.dataTransfer.files
-      if (files.length > 1) {
-        return
-      }
-      const file = files[0]
-      if (!ALLOW_DROP_FILE_TYPES.includes(file.type)) {
-        return
-      }
-      const data = new FormData()
-      data.append('file', file)
-      const headers = { 'content-type': 'multipart/form-data' }
-      axios.post(`${setting.api}/images`, data, { headers }).then((res) => {
-        const name = res.data.name
-        const url = res.data.url
-        this.editor.insertImage(name, url)
-      })
-    })
+    this.editor.on('change', this.onChangeText)
+    this.editor.on('drop', this.onDropFile)
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
       'Shift-Cmd-L': () => this.$store.commit('showImageDialog'),
@@ -118,6 +99,33 @@ export default {
           .catch((err) => {
             alert(err)
           })
+      }
+    },
+
+    onChangeText () {
+      this.$store.commit('updateNote', this.editor.getText())
+    },
+
+    onDropFile (editor, e) {
+      const files = e.dataTransfer.files
+      if (files.length > 1) {
+        return
+      }
+      const file = files[0]
+      if (!ALLOW_DROP_FILE_TYPES.includes(file.type)) {
+        return
+      }
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (e) => {
+        const data = {
+          key: file.name,
+          type: file.type,
+          attachment: e.target.result
+        }
+        axios.post(`${setting.api}/images`, data).then((res) => {
+          this.editor.insertImage(res.data.alt, res.data.url)
+        })
       }
     }
   }
