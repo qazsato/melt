@@ -72,9 +72,9 @@ export default {
       data.append('file', file)
       const headers = { 'content-type': 'multipart/form-data' }
       axios.post(`${setting.api}/images`, data, { headers }).then((res) => {
-        // TODO: URLをエディタに反映する
+        const name = res.data.name
         const url = res.data.url
-        console.log(url)
+        this.editor.insertImage(name, url)
       })
     })
     this.editor.addKeyMap({
