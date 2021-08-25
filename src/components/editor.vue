@@ -13,6 +13,7 @@ import axios from 'axios'
 import { ipcRenderer } from 'electron'
 import Editor from '@scripts/editor/markdown-editor.js'
 import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@constants/index.js'
+import { isCodeBlock, getDefaultCodeBlock } from '@utils/markdown.js'
 import 'codemirror/lib/codemirror.css'
 import '@styles/melt-light.scss'
 
@@ -105,14 +106,14 @@ export default {
       }
     },
 
-    onChangeText () {
+    onChangeText (editor, event) {
+      if (this.isInsertCodeBlock(event)) {
+        const currentLine = editor.getCursor().line
+        this.editor.selectLine(currentLine)
+        this.editor.insertText(getDefaultCodeBlock())
+        this.editor.gotoLine(currentLine + 1)
+      }
       this.$store.commit('updateNote', this.editor.getText())
-    },
-
-    pasteAsPlainText () {
-      this.isPasteAsPlainText = true
-      document.execCommand('paste')
-      this.isPasteAsPlainText = false
     },
 
     onPasteText (editor, event) {
@@ -139,8 +140,8 @@ export default {
       event.preventDefault()
     },
 
-    onDropFile (editor, e) {
-      const files = e.dataTransfer.files
+    onDropFile (editor, event) {
+      const files = event.dataTransfer.files
       if (files.length > 1) {
         return
       }
@@ -160,6 +161,23 @@ export default {
           this.editor.insertImage(res.data.name, res.data.url, true)
         })
       }
+    },
+
+    pasteAsPlainText () {
+      this.isPasteAsPlainText = true
+      document.execCommand('paste')
+      this.isPasteAsPlainText = false
+    },
+
+    isInsertCodeBlock (event) {
+      if (event.from.line === event.to.line) {
+        const text = this.editor.getLineText(event.to.line)
+        const removed = event.removed[0]
+        if (isCodeBlock(text) && !isCodeBlock(removed)) {
+          return true
+        }
+      }
+      return false
     }
   }
 }
