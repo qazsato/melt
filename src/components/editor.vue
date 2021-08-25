@@ -19,7 +19,8 @@ import '@styles/melt-light.scss'
 export default {
   data () {
     return {
-      editor: null
+      editor: null,
+      isPasteOriginalText: false
     }
   },
 
@@ -57,6 +58,7 @@ export default {
   mounted () {
     this.editor = new Editor('editor')
     this.editor.on('change', this.onChangeText)
+    this.editor.on('paste', this.onPasteText)
     this.editor.on('drop', this.onDropFile)
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
@@ -70,7 +72,8 @@ export default {
       'Shift-Cmd-O': () => this.editor.insertOrderedList(),
       'Shift-Cmd-X': () => this.editor.insertTaskList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
-      'Cmd-S': () => this.saveNote()
+      'Cmd-S': () => this.saveNote(),
+      'Shift-Cmd-V': () => this.pasteOriginalText()
     })
     this.$store.commit('setEditor', this.editor)
   },
@@ -106,6 +109,32 @@ export default {
       this.$store.commit('updateNote', this.editor.getText())
     },
 
+    pasteOriginalText () {
+      this.isPasteOriginalText = true
+      document.execCommand('paste')
+      this.isPasteOriginalText = false
+    },
+
+    onPasteText (editor, event) {
+      if (this.isPasteOriginalText) {
+        return
+      }
+      const text = event.clipboardData.getData('text')
+      try {
+        // eslint-disable-next-line no-new
+        new URL(text)
+      } catch (error) {
+        // URLに変換できない場合何もしない
+      }
+      const url = `${setting.api}/sites/metadata?url=${text}`
+      axios.get(url).then((res) => {
+        this.editor.insertLink(res.data.title, text)
+      }).catch(() => {
+        this.editor.insertText(text)
+      })
+      event.preventDefault()
+    },
+
     onDropFile (editor, e) {
       const files = e.dataTransfer.files
       if (files.length > 1) {
@@ -124,7 +153,7 @@ export default {
           attachment: e.target.result
         }
         axios.post(`${setting.api}/images`, data).then((res) => {
-          this.editor.insertImage(res.data.alt, res.data.url)
+          this.editor.insertImage(res.data.name, res.data.url, true)
         })
       }
     }
