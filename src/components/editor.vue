@@ -20,7 +20,7 @@ export default {
   data () {
     return {
       editor: null,
-      isPasteOriginalText: false
+      isPasteAsPlainText: false
     }
   },
 
@@ -73,7 +73,7 @@ export default {
       'Shift-Cmd-X': () => this.editor.insertTaskList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveNote(),
-      'Shift-Cmd-V': () => this.pasteOriginalText()
+      'Shift-Cmd-V': () => this.pasteAsPlainText()
     })
     this.$store.commit('setEditor', this.editor)
   },
@@ -109,14 +109,14 @@ export default {
       this.$store.commit('updateNote', this.editor.getText())
     },
 
-    pasteOriginalText () {
-      this.isPasteOriginalText = true
+    pasteAsPlainText () {
+      this.isPasteAsPlainText = true
       document.execCommand('paste')
-      this.isPasteOriginalText = false
+      this.isPasteAsPlainText = false
     },
 
     onPasteText (editor, event) {
-      if (this.isPasteOriginalText) {
+      if (this.isPasteAsPlainText) {
         return
       }
       const text = event.clipboardData.getData('text')
@@ -128,7 +128,11 @@ export default {
       }
       const url = `${setting.api}/sites/metadata?url=${text}`
       axios.get(url).then((res) => {
-        this.editor.insertLink(res.data.title, text)
+        if (res.data.title) {
+          this.editor.insertLink(res.data.title, text)
+        } else {
+          this.editor.insertText(text)
+        }
       }).catch(() => {
         this.editor.insertText(text)
       })
