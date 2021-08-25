@@ -64,6 +64,14 @@ class MarkdownEditor extends Editor {
   }
 
   /**
+   * テキストを挿入します。
+   * @param {string} text
+   */
+  insertText (text = '') {
+    this.editor.replaceSelection(text)
+  }
+
+  /**
    * リンクを挿入します。
    * @param {string} title
    * @param {string} url
@@ -76,9 +84,11 @@ class MarkdownEditor extends Editor {
    * 画像を挿入します。
    * @param {string} alt
    * @param {string} url
+   * @param {boolean} isHtmlString
    */
-  insertImage (alt = '', url = '') {
-    this.editor.replaceSelection(`![${alt}](${url})`)
+  insertImage (alt = '', url = '', isHtmlString = false) {
+    const text = isHtmlString ? `<img alt="${alt}" src="${url}">` : `![${alt}](${url})`
+    this.editor.replaceSelection(text)
   }
 
   /**
