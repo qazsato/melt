@@ -13,6 +13,7 @@ import axios from 'axios'
 import { ipcRenderer } from 'electron'
 import Editor from '@scripts/editor/markdown-editor.js'
 import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@constants/index.js'
+import { isCodeBlock, getDefaultCodeBlock } from '@utils/markdown.js'
 import 'codemirror/lib/codemirror.css'
 import '@styles/melt-light.scss'
 
@@ -20,7 +21,7 @@ export default {
   data () {
     return {
       editor: null,
-      isPasteOriginalText: false
+      isPasteAsPlainText: false
     }
   },
 
@@ -73,7 +74,7 @@ export default {
       'Shift-Cmd-X': () => this.editor.insertTaskList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveNote(),
-      'Shift-Cmd-V': () => this.pasteOriginalText()
+      'Shift-Cmd-V': () => this.pasteAsPlainText()
     })
     this.$store.commit('setEditor', this.editor)
   },
@@ -105,18 +106,18 @@ export default {
       }
     },
 
-    onChangeText () {
+    onChangeText (editor, event) {
+      if (this.isInsertCodeBlock(event)) {
+        const currentLine = editor.getCursor().line
+        this.editor.selectLine(currentLine)
+        this.editor.insertText(getDefaultCodeBlock())
+        this.editor.gotoLine(currentLine + 1)
+      }
       this.$store.commit('updateNote', this.editor.getText())
     },
 
-    pasteOriginalText () {
-      this.isPasteOriginalText = true
-      document.execCommand('paste')
-      this.isPasteOriginalText = false
-    },
-
     onPasteText (editor, event) {
-      if (this.isPasteOriginalText) {
+      if (this.isPasteAsPlainText) {
         return
       }
       const text = event.clipboardData.getData('text')
@@ -128,15 +129,19 @@ export default {
       }
       const url = `${setting.api}/sites/metadata?url=${text}`
       axios.get(url).then((res) => {
-        this.editor.insertLink(res.data.title, text)
+        if (res.data.title) {
+          this.editor.insertLink(res.data.title, text)
+        } else {
+          this.editor.insertText(text)
+        }
       }).catch(() => {
         this.editor.insertText(text)
       })
       event.preventDefault()
     },
 
-    onDropFile (editor, e) {
-      const files = e.dataTransfer.files
+    onDropFile (editor, event) {
+      const files = event.dataTransfer.files
       if (files.length > 1) {
         return
       }
@@ -156,6 +161,23 @@ export default {
           this.editor.insertImage(res.data.name, res.data.url, true)
         })
       }
+    },
+
+    pasteAsPlainText () {
+      this.isPasteAsPlainText = true
+      document.execCommand('paste')
+      this.isPasteAsPlainText = false
+    },
+
+    isInsertCodeBlock (event) {
+      if (event.from.line === event.to.line) {
+        const text = this.editor.getLineText(event.to.line)
+        const removed = event.removed[0]
+        if (isCodeBlock(text) && !isCodeBlock(removed)) {
+          return true
+        }
+      }
+      return false
     }
   }
 }

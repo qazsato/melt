@@ -77,6 +77,14 @@ class Editor {
   }
 
   /**
+   * 指定行数の文字を返却します。
+   * @param {number} number
+   */
+  getLineText (number) {
+    return this.editor.getLine(number)
+  }
+
+  /**
    * 選択中の文字の開始位置と終了位置を返却します。
    */
   getSelectionPosition () {
@@ -113,6 +121,23 @@ class Editor {
    */
   isFocus () {
     return this.focused
+  }
+
+  /**
+   * 指定行にカーソルを移動します
+   * @param {number}} line
+   */
+  gotoLine (line) {
+    this.editor.setCursor({ pos: 0, line })
+  }
+
+  /**
+   * 指定行を選択状態にします
+   * @param {number} line
+   */
+  selectLine (line) {
+    const text = this.getLineText(line)
+    this.editor.setSelection({ line, ch: 0 }, { line, ch: text.length })
   }
 }
 
