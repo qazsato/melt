@@ -125,7 +125,7 @@ export default {
         // eslint-disable-next-line no-new
         new URL(text)
       } catch (error) {
-        // URLに変換できない場合何もしない
+        return // URLに変換できない場合何もしない
       }
       const url = `${setting.api}/sites/metadata?url=${text}`
       axios.get(url).then((res) => {
