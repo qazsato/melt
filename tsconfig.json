@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "strict": false, // TODO
+    "strict": true,
     "module": "es2015",
     "moduleResolution": "node",
     "baseUrl": ".",

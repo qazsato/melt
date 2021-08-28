@@ -1,4 +1,5 @@
 import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
+import { Editor as CM } from 'codemirror'
 import Editor from './editor'
 import 'codemirror/mode/gfm/gfm.js'
 import 'codemirror/mode/htmlmixed/htmlmixed.js'
@@ -13,7 +14,7 @@ import 'codemirror/mode/shell/shell.js'
 import 'codemirror/addon/edit/continuelist.js'
 
 class MarkdownEditor extends Editor {
-  constructor (id) {
+  constructor (id: string) {
     const option = {
       mode: {
         name: 'gfm',
@@ -28,8 +29,8 @@ class MarkdownEditor extends Editor {
       allowDropFileTypes: ALLOW_DROP_FILE_TYPES,
       extraKeys: {
         Enter: 'newlineAndIndentContinueMarkdownList',
-        Tab: (cm) => { this.onPressTab(cm) },
-        'Shift-Tab': (cm) => { this.onPressShiftTab(cm) }
+        Tab: (cm: CM) => { this.onPressTab(cm) },
+        'Shift-Tab': (cm: CM) => { this.onPressShiftTab(cm) }
       }
     }
     super(id, option)
@@ -38,7 +39,7 @@ class MarkdownEditor extends Editor {
   /**
    * Tabのハンドラ
    */
-  onPressTab (cm) {
+  onPressTab (cm: CM) {
     const pos = this.editor.getCursor()
     const text = this.editor.getLine(pos.line)
     if (cm.somethingSelected()) {
@@ -59,7 +60,7 @@ class MarkdownEditor extends Editor {
   /**
    * Shift + Tab のハンドラ
    */
-  onPressShiftTab (cm) {
+  onPressShiftTab (cm: CM) {
     cm.execCommand('indentLess')
   }
 
@@ -165,14 +166,14 @@ class MarkdownEditor extends Editor {
   /**
    * リストか判定します。
    */
-  isList (text) {
+  isList (text: string) {
     return this.isBulletList(text) || this.isOrderedList(text) || this.isTaskList(text)
   }
 
   /**
    * 箇条書きリストか判定します。
    */
-  isBulletList (lineText) {
+  isBulletList (lineText: string) {
     const trimed = lineText.trimLeft()
     if (trimed.indexOf('- ') === 0 ||
         trimed.indexOf('* ') === 0 ||
@@ -185,7 +186,7 @@ class MarkdownEditor extends Editor {
   /**
    * 番号付きリストか判定します。
    */
-  isOrderedList (lineText) {
+  isOrderedList (lineText: string) {
     const trimed = lineText.trimLeft()
     if (trimed.search(/^[0-9]+\./) !== -1) {
       return true
@@ -196,7 +197,7 @@ class MarkdownEditor extends Editor {
   /**
    * タスクリストか判定します。
    */
-  isTaskList (lineText) {
+  isTaskList (lineText: string) {
     const trimed = lineText.trimLeft()
     if (trimed.indexOf('- [ ]') === 0 ||
         trimed.indexOf('* [ ]') === 0 ||
@@ -212,7 +213,7 @@ class MarkdownEditor extends Editor {
   /**
    * 対象行のリストがインデント可能か判定します。
    */
-  isIndentableList (lineNumber) {
+  isIndentableList (lineNumber: number) {
     // 先頭行の場合、字下げ不要
     if (lineNumber === 0) {
       return false
@@ -258,9 +259,9 @@ class MarkdownEditor extends Editor {
 
   /**
    * 任意の文字列を選択されたテキストの前後に挿入します。
-   * @param {string} mark
+   * @param mark
    */
-  putMarkInSelection (mark) {
+  putMarkInSelection (mark: string) {
     const pos = this.getSelectionPosition()
     const startX = pos.start.x
     const startY = pos.start.y
@@ -294,9 +295,9 @@ class MarkdownEditor extends Editor {
 
   /**
    * リストを挿入します。
-   * @param {string} type
+   * @param type
    */
-  insertList (type) {
+  insertList (type: string) {
     const pos = this.getSelectionPosition()
     if (pos.start.y === pos.end.y) { // 単一行
       const prefix = this.getListPrefix(type)
@@ -320,10 +321,10 @@ class MarkdownEditor extends Editor {
 
   /**
    * リストの種別毎のプレフィックスを返却します。
-   * @param {string} type
-   * @param {number} number
+   * @param type
+   * @param number
    */
-  getListPrefix (type, number = 1) {
+  getListPrefix (type: string, number: number = 1) {
     if (type === LIST_TYPE.BULLET) {
       return '- '
     } else if (type === LIST_TYPE.ORDERED) {
@@ -331,6 +332,7 @@ class MarkdownEditor extends Editor {
     } else if (type === LIST_TYPE.TASK) {
       return '- [ ] '
     }
+    return ''
   }
 
   /**

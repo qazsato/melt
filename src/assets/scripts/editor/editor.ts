@@ -1,29 +1,30 @@
-import CodeMirror from 'codemirror'
+import CodeMirror, { EditorConfiguration, KeyMap, Position } from 'codemirror'
 
 class Editor {
   editor: any = null
   focused: boolean = false
 
-  constructor (id, option) {
-    this.editor = CodeMirror.fromTextArea(document.getElementById(id), option)
+  constructor (id: string, option: EditorConfiguration) {
+    const element: HTMLTextAreaElement = <HTMLTextAreaElement> document.getElementById(id)
+    this.editor = CodeMirror.fromTextArea(element, option)
     this.editor.on('focus', () => { this.focused = true })
     this.editor.on('blur', () => { this.focused = false })
   }
 
   /**
    * キーバインドを登録します。
-   * @param {object} map
+   * @param map
    */
-  addKeyMap (map) {
+  addKeyMap (map: KeyMap) {
     this.editor.addKeyMap(map)
   }
 
   /**
    * イベントを紐付けます。
-   * @param {string} event
-   * @param {function} handler
+   * @param event
+   * @param handler
    */
-  on (event, handler) {
+  on (event: string, handler: () => void) {
     this.editor.on(event, handler)
   }
 
@@ -36,11 +37,11 @@ class Editor {
 
   /**
    * 任意の文字を挿入します。
-   * @param {string} text
-   * @param {object} from {line, ch}
-   * @param {object} to {line, ch}
+   * @param text
+   * @param from {line, ch}
+   * @param to {line, ch}
    */
-  insert (text, from = null, to = null) {
+  insert (text: string, from?: Position, to?: Position) {
     if (!from) {
       from = this.editor.getCursor()
     }
@@ -49,9 +50,9 @@ class Editor {
 
   /**
    * 行の先頭に任意の文字を挿入します。
-   * @param {string} text
+   * @param text
    */
-  insertPrefix (text) {
+  insertPrefix (text: string) {
     const pos = this.editor.getCursor()
     this.editor.replaceRange(text, { line: pos.line, ch: 0 })
   }
@@ -65,9 +66,9 @@ class Editor {
 
   /**
    * エディタの文字を設定します。
-   * @param {String} val
+   * @param val
    */
-  setText (val) {
+  setText (val: string) {
     this.editor.setValue(val)
   }
 
@@ -80,9 +81,9 @@ class Editor {
 
   /**
    * 指定行数の文字を返却します。
-   * @param {number} number
+   * @param number
    */
-  getLineText (number) {
+  getLineText (number: number) {
     return this.editor.getLine(number)
   }
 
@@ -127,17 +128,17 @@ class Editor {
 
   /**
    * 指定行にカーソルを移動します
-   * @param {number}} line
+   * @param line
    */
-  gotoLine (line) {
+  gotoLine (line: number) {
     this.editor.setCursor({ pos: 0, line })
   }
 
   /**
    * 指定行を選択状態にします
-   * @param {number} line
+   * @param line
    */
-  selectLine (line) {
+  selectLine (line: number) {
     const text = this.getLineText(line)
     this.editor.setSelection({ line, ch: 0 }, { line, ch: text.length })
   }

@@ -8,10 +8,10 @@ import { getBrowsingHistories } from '@/utils/local-storage'
  * @param {String} dir ディレクトリパス
  * @returns notes
  */
-export const readAllNotes = (dir) => {
-  const files = glob.sync(`${dir}/**/*.md`)
-  const notes = files.map((f) => new Note(f))
-  return _.orderBy(notes, (n) => n.fileStats.mtime, 'desc')
+export const readAllNotes = (dir: string) => {
+  const paths = glob.sync(`${dir}/**/*.md`)
+  const notes = paths.map((p: string) => new Note(p))
+  return _.orderBy(notes, (n: Note) => n.fileStats!.mtime, 'desc')
 }
 
 /**
@@ -20,8 +20,8 @@ export const readAllNotes = (dir) => {
  */
 export const readRecentlyOpenedNotes = () => {
   const paths = getBrowsingHistories()
-  const notes = []
-  paths.forEach((p) => {
+  const notes: Note[] = []
+  paths.forEach((p: string) => {
     try {
       notes.push(new Note(p))
     } catch (error) {

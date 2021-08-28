@@ -4,7 +4,7 @@ import checkbox from 'markdown-it-task-checkbox'
 import highlight from 'highlight.js'
 
 class Markdown {
-  md: MarkdownIt = null
+  md: MarkdownIt
 
   constructor () {
     this.md = new MarkdownIt({
@@ -26,7 +26,7 @@ class Markdown {
     this.changeLinkOpenRule()
   }
 
-  render (text) {
+  render (text: string) {
     return this.md.render(text)
   }
 
@@ -45,7 +45,7 @@ class Markdown {
       if (aIndex < 0) {
         tokens[idx].attrPush(['target', '_blank']) // add new attribute
       } else {
-        tokens[idx].attrs[aIndex][1] = '_blank' // replace value of existing attr
+        tokens[idx].attrs![aIndex][1] = '_blank' // replace value of existing attr
       }
 
       // pass token to default renderer.

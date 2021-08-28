@@ -2,11 +2,11 @@ import file from './file'
 import Markdown from '@/assets/scripts/markdown/markdown'
 
 class Note extends file {
-  content: string = null
-  tableOfContents: string[] = null
+  content: string = ''
+  tableOfContents: tableOfContent[] = []
   isChanged: boolean = false
 
-  constructor (path = null) {
+  constructor (path?: string) {
     super(path)
     this.content = this.fileContent || ''
     this.tableOfContents = this.createTableOfContents()
@@ -17,13 +17,13 @@ class Note extends file {
     return this.fileName || 'Untitled'
   }
 
-  find (word) {
+  find (word: string) {
     const w = word.toLowerCase()
     const rows = this.content.split('\n')
     return rows.filter((r) => r.toLowerCase().includes(w))
   }
 
-  update (content) {
+  update (content: string) {
     this.content = content
     this.tableOfContents = this.createTableOfContents()
     this.isChanged = this.checkChanged()
@@ -37,8 +37,8 @@ class Note extends file {
   }
 
   delete () {
-    this.content = null
-    this.tableOfContents = null
+    this.content = ''
+    this.tableOfContents = []
     this.isChanged = false
     this.unlink()
   }
@@ -48,7 +48,7 @@ class Note extends file {
   }
 
   createTableOfContents () {
-    const tocs = []
+    const tocs: tableOfContent[] = []
     const htmlText = new Markdown().render(this.content)
     const rows = htmlText.split('\n')
     rows.forEach((r) => {
@@ -68,6 +68,11 @@ class Note extends file {
     })
     return tocs
   }
+}
+
+interface tableOfContent {
+  heading: number;
+  text: string;
 }
 
 export default Note

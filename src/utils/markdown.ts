@@ -1,8 +1,8 @@
 /**
  * コードブロックか否か
- * @param {string} text
+ * @param text
  */
-export const isCodeBlock = (text) => {
+export const isCodeBlock = (text: string) => {
   return text === '```'
 }
 

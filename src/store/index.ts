@@ -3,22 +3,39 @@ import Vuex from 'vuex'
 import Note from '@/assets/scripts/note/note'
 import { VIEW_MODE } from '@/constants'
 import { updateBrowsingHistory } from '@/utils/local-storage'
+import Editor from '@/assets/scripts/editor/markdown-editor'
+
 
 Vue.use(Vuex)
 
+interface State {
+  note: Note;
+  editor: Editor | null
+  viewMode: string;
+  visibleLinkDialog: boolean;
+  visibleImageDialog: boolean;
+  visibleTableDialog: boolean;
+  visibleFindParagraphDialog: boolean;
+  visibleFindTitleDialog: boolean;
+  visibleFindContentDialog: boolean;
+  visibleRenameDialog: boolean;
+}
+
+const state: State = {
+  note: new Note(),
+  editor: null,
+  viewMode: VIEW_MODE.EDITOR,
+  visibleLinkDialog: false,
+  visibleImageDialog: false,
+  visibleTableDialog: false,
+  visibleFindParagraphDialog: false,
+  visibleFindTitleDialog: false,
+  visibleFindContentDialog: false,
+  visibleRenameDialog: false
+}
+
 const store = new Vuex.Store({
-  state: {
-    note: new Note(),
-    editor: null,
-    viewMode: VIEW_MODE.EDITOR,
-    visibleLinkDialog: false,
-    visibleImageDialog: false,
-    visibleTableDialog: false,
-    visibleFindParagraphDialog: false,
-    visibleFindTitleDialog: false,
-    visibleFindContentDialog: false,
-    visibleRenameDialog: false
-  },
+  state,
 
   mutations: {
     createNewNote (state) {
@@ -30,8 +47,8 @@ const store = new Vuex.Store({
       state.note = new Note()
       state.viewMode = VIEW_MODE.EDITOR
       Vue.nextTick().then(() => {
-        state.editor.setText('')
-        state.editor.focus()
+        state.editor!.setText('')
+        state.editor!.focus()
       })
     },
 
@@ -51,7 +68,7 @@ const store = new Vuex.Store({
     renameNote (state, path) {
       try {
         state.note.rename(path)
-      } catch (e) {
+      } catch (e: any) {
         if (e.message === 'file path is exists.') {
           window.alert('同名のノートが存在しています')
         } else {
@@ -69,14 +86,14 @@ const store = new Vuex.Store({
         state.viewMode = VIEW_MODE.PREVIEW
       } else {
         state.viewMode = VIEW_MODE.EDITOR
-        Vue.nextTick().then(() => state.editor.focus())
+        Vue.nextTick().then(() => state.editor!.focus())
       }
     },
 
     changeViewMode (state, viewMode) {
       state.viewMode = viewMode
       if (state.viewMode === VIEW_MODE.EDITOR) {
-        Vue.nextTick().then(() => state.editor.focus())
+        Vue.nextTick().then(() => state.editor!.focus())
       }
     },
 
