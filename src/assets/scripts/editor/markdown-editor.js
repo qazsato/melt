@@ -1,4 +1,4 @@
-import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@constants/index.js'
+import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import Editor from './editor.js'
 import 'codemirror/mode/gfm/gfm.js'
 import 'codemirror/mode/htmlmixed/htmlmixed.js'

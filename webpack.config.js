@@ -46,11 +46,8 @@ module.exports = {
     extensions: ['.ts', '.js'],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
-      '@config': path.resolve(__dirname, 'config'),
-      '@scripts': path.resolve(__dirname, 'src/assets/scripts'),
-      '@styles': path.resolve(__dirname, 'src/assets/styles'),
-      '@constants': path.resolve(__dirname, 'src/constants'),
-      '@utils': path.resolve(__dirname, 'src/utils')
+      '@': path.resolve(__dirname, 'src'),
+      '@config': path.resolve(__dirname, 'config')
     }
   },
   plugins: [

@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import Markdown from '@scripts/markdown/markdown.js'
-import '@styles/markdown.scss'
-import { VIEW_MODE } from '@constants/index.js'
+import Markdown from '@/assets/scripts/markdown/markdown'
+import '@/assets/styles/markdown.scss'
+import { VIEW_MODE } from '@/constants'
 
 export default {
   computed: {

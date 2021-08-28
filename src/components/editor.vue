@@ -11,11 +11,11 @@
 import setting from '@config/setting.json'
 import axios from 'axios'
 import { ipcRenderer } from 'electron'
-import Editor from '@scripts/editor/markdown-editor.js'
-import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@constants/index.js'
-import { isCodeBlock, getDefaultCodeBlock } from '@utils/markdown.js'
+import Editor from '@/assets/scripts/editor/markdown-editor'
+import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@/constants'
+import { isCodeBlock, getDefaultCodeBlock } from '@/utils/markdown'
 import 'codemirror/lib/codemirror.css'
-import '@styles/melt-light.scss'
+import '@/assets/styles/melt-light.scss'
 
 export default {
   data () {

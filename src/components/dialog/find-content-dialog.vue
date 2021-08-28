@@ -38,8 +38,8 @@
 
 <script>
 import setting from '@config/setting.json'
-import { readAllNotes, readRecentlyOpenedNotes } from '@utils/note.js'
-import { VIEW_MODE } from '@constants/index.js'
+import { readAllNotes, readRecentlyOpenedNotes } from '@/utils/note'
+import { VIEW_MODE } from '@/constants'
 
 export default {
   data () {

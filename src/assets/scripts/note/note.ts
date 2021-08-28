@@ -1,5 +1,5 @@
 import file from './file'
-import Markdown from '@scripts/markdown/markdown.js'
+import Markdown from '@/assets/scripts/markdown/markdown'
 
 class Note extends file {
   content: string = null
