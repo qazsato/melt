@@ -17,6 +17,7 @@
     "markdown-it-emoji": "2.0.0",
     "markdown-it-task-checkbox": "1.0.6",
     "vue": "2.6.14",
+    "vue-class-component": "7.2.6",
     "vue-router": "3.5.2",
     "vuex": "3.6.2"
   },
@@ -42,6 +43,8 @@
     "node-sass": "6.0.1",
     "sass-loader": "12.1.0",
     "style-loader": "3.2.1",
+    "ts-loader": "9.2.5",
+    "typescript": "4.4.2",
     "vue-jest": "3.0.7",
     "vue-loader": "15.9.8",
     "vue-template-compiler": "2.6.14",

@@ -1,6 +1,6 @@
 import glob from 'glob'
 import _ from 'lodash'
-import Note from '@scripts/note/note.js'
+import Note from '@scripts/note/note'
 import { getBrowsingHistories } from '@utils/local-storage.js'
 
 /**

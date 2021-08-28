@@ -1,11 +1,16 @@
-import fs from 'fs'
+import fs, { Stats } from 'fs'
 
 class File {
+  filePath: string = ''
+  fileName: string = ''
+  fileContent: string = ''
+  fileStats: Stats = null
+
   constructor (path) {
     this.load(path)
   }
 
-  load (path) {
+  load (path = null) {
     this.filePath = path
     this.fileName = path ? path.split('/').reverse()[0] : ''
     this.fileContent = this.readFile(path)

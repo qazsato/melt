@@ -5,7 +5,7 @@ module.exports = {
   mode: process.env.NODE_ENV,
   target: 'electron-main',
   entry: {
-    main: './src/main.js'
+    main: './src/main.ts'
   },
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -17,6 +17,10 @@ module.exports = {
       {
         test: /\.vue$/,
         use: ['vue-loader']
+      },
+      {
+        test: /\.ts$/,
+        use: ['ts-loader']
       },
       {
         test: /\.js$/,
@@ -39,7 +43,7 @@ module.exports = {
   },
   devtool: process.env.NODE_ENV === 'production' ? false : 'eval-source-map',
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.ts', '.js'],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
       '@config': path.resolve(__dirname, 'config'),

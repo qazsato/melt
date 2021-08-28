@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import router from './router/index'
-import store from './store/index'
+import router from './router'
+import store from './store'
 import App from './app.vue'
 
 // eslint-disable-next-line no-new

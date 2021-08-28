@@ -2,7 +2,11 @@ import file from './file'
 import Markdown from '@scripts/markdown/markdown.js'
 
 class Note extends file {
-  constructor (path) {
+  content: string = null
+  tableOfContents: string[] = null
+  isChanged: boolean = false
+
+  constructor (path = null) {
     super(path)
     this.content = this.fileContent || ''
     this.tableOfContents = this.createTableOfContents()
