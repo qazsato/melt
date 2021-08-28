@@ -1,9 +1,11 @@
 import CodeMirror from 'codemirror'
 
 class Editor {
+  editor: any = null
+  focused: boolean = false
+
   constructor (id, option) {
     this.editor = CodeMirror.fromTextArea(document.getElementById(id), option)
-    this.focused = false
     this.editor.on('focus', () => { this.focused = true })
     this.editor.on('blur', () => { this.focused = false })
   }
@@ -38,7 +40,7 @@ class Editor {
    * @param {object} from {line, ch}
    * @param {object} to {line, ch}
    */
-  insert (text, from, to) {
+  insert (text, from = null, to = null) {
     if (!from) {
       from = this.editor.getCursor()
     }

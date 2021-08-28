@@ -1,5 +1,5 @@
 import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
-import Editor from './editor.js'
+import Editor from './editor'
 import 'codemirror/mode/gfm/gfm.js'
 import 'codemirror/mode/htmlmixed/htmlmixed.js'
 import 'codemirror/mode/css/css.js'

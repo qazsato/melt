@@ -4,6 +4,8 @@ import checkbox from 'markdown-it-task-checkbox'
 import highlight from 'highlight.js'
 
 class Markdown {
+  md: MarkdownIt = null
+
   constructor () {
     this.md = new MarkdownIt({
       html: true,
