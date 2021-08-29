@@ -21,9 +21,7 @@
     >
       <template slot-scope="{ item }">
         <div class="item">
-          <div class="heading">
-            H{{ item.heading }}
-          </div>
+          <div class="heading">H{{ item.heading }}</div>
           <div class="text">
             {{ item.text }}
           </div>
@@ -35,47 +33,53 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       paragraphText: '',
       tableOfContents: [],
       suggestions: [],
-      isComposing: false // 日本語入力(IME)が未確定か否か
+      isComposing: false, // 日本語入力(IME)が未確定か否か
     }
   },
 
   computed: {
-    visibleFindParagraphDialog () {
+    visibleFindParagraphDialog() {
       return this.$store.state.visibleFindParagraphDialog
-    }
+    },
   },
 
   watch: {
-    visibleFindParagraphDialog (value) {
+    visibleFindParagraphDialog(value) {
       if (value) {
-        this.$nextTick().then(() => this.$refs.paragraphInput.$refs.input.focus())
+        this.$nextTick().then(() =>
+          this.$refs.paragraphInput.$refs.input.focus()
+        )
       }
-    }
+    },
   },
 
   methods: {
-    queryFindParagraph (query, callback) {
-      const filteredParagraphs = query ? this.tableOfContents.filter((t) => t.text.toLowerCase().includes(query.toLowerCase())) : this.tableOfContents
+    queryFindParagraph(query, callback) {
+      const filteredParagraphs = query
+        ? this.tableOfContents.filter((t) =>
+            t.text.toLowerCase().includes(query.toLowerCase())
+          )
+        : this.tableOfContents
       this.suggestions = filteredParagraphs.map((t, i) => {
         return {
           text: t.text,
           heading: t.heading,
-          index: i
+          index: i,
         }
       })
       callback(this.suggestions)
     },
 
-    onKeydown (e) {
+    onKeydown(e) {
       this.isComposing = e.isComposing
     },
 
-    onSelect (item) {
+    onSelect(item) {
       // HACK: イベント処理順を keydown => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
@@ -92,7 +96,7 @@ export default {
       })
     },
 
-    openDialog () {
+    openDialog() {
       this.tableOfContents = this.$store.state.note.tableOfContents
       // HACK: closeDialogで消えたままになっているため戻す
       const element = document.querySelector('.find-paragraph-popper')
@@ -101,13 +105,13 @@ export default {
       }
     },
 
-    closeDialog () {
+    closeDialog() {
       this.paragraphText = ''
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
       document.querySelector('.find-paragraph-popper').style.display = 'none'
       this.$store.commit('hideFindParagraphDialog')
-    }
-  }
+    },
+  },
 }
 </script>
 

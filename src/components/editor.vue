@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-show="isViewModeEditor"
-    class="editor-area"
-  >
+  <div v-show="isViewModeEditor" class="editor-area">
     <textarea id="editor" />
   </div>
 </template>
@@ -18,45 +15,47 @@ import 'codemirror/lib/codemirror.css'
 import '@/assets/styles/melt-light.scss'
 
 export default {
-  data () {
+  data() {
     return {
       editor: null,
-      isPasteAsPlainText: false
+      isPasteAsPlainText: false,
     }
   },
 
   computed: {
-    isViewModeEditor () {
+    isViewModeEditor() {
       return this.$store.state.viewMode === VIEW_MODE.EDITOR
     },
 
-    viewMode () {
+    viewMode() {
       return this.$store.state.viewMode
     },
 
-    note () {
+    note() {
       return this.$store.state.note
-    }
+    },
   },
 
   watch: {
-    viewMode (value) {
+    viewMode(value) {
       // NOTE: HTMLモードでファイル変更し、TEXTモードに切り替えた場合、変更前の情報が表示されたままとなってしまう。
       // その問題を回避するため、ここで再度テキストを設定して変更後の情報にする。
       if (value === VIEW_MODE.EDITOR) {
         // 変更済みの情報を上書きしないように、未変更の場合のみ設定する
         if (!this.$store.state.note.isChanged) {
-          this.$nextTick().then(() => this.editor.setText(this.$store.state.note.content))
+          this.$nextTick().then(() =>
+            this.editor.setText(this.$store.state.note.content)
+          )
         }
       }
     },
 
-    note (note) {
+    note(note) {
       this.editor.setText(note.content)
-    }
+    },
   },
 
-  mounted () {
+  mounted() {
     this.editor = new Editor('editor')
     this.editor.on('change', this.onChangeText)
     this.editor.on('paste', this.onPasteText)
@@ -74,19 +73,20 @@ export default {
       'Shift-Cmd-X': () => this.editor.insertTaskList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveNote(),
-      'Shift-Cmd-V': () => this.pasteAsPlainText()
+      'Shift-Cmd-V': () => this.pasteAsPlainText(),
     })
     this.$store.commit('setEditor', this.editor)
   },
 
   methods: {
-    saveNote () {
+    saveNote() {
       const content = this.editor.getText()
       if (this.$store.state.note.filePath) {
         this.$store.commit('updateNote', content)
         this.$store.commit('saveNote')
       } else {
-        ipcRenderer.invoke('new-note-save', content)
+        ipcRenderer
+          .invoke('new-note-save', content)
           .then((data) => {
             // キャンセルで閉じた
             if (data.status === undefined) {
@@ -106,7 +106,7 @@ export default {
       }
     },
 
-    onChangeText (editor, event) {
+    onChangeText(editor, event) {
       if (this.isInsertCodeBlock(event)) {
         const currentLine = editor.getCursor().line
         this.editor.selectLine(currentLine)
@@ -116,7 +116,7 @@ export default {
       this.$store.commit('updateNote', this.editor.getText())
     },
 
-    onPasteText (editor, event) {
+    onPasteText(editor, event) {
       if (this.isPasteAsPlainText) {
         return
       }
@@ -128,19 +128,22 @@ export default {
         return // URLに変換できない場合何もしない
       }
       const url = `${setting.api}/sites/metadata?url=${text}`
-      axios.get(url).then((res) => {
-        if (res.data.title) {
-          this.editor.insertLink(res.data.title, text)
-        } else {
+      axios
+        .get(url)
+        .then((res) => {
+          if (res.data.title) {
+            this.editor.insertLink(res.data.title, text)
+          } else {
+            this.editor.insertText(text)
+          }
+        })
+        .catch(() => {
           this.editor.insertText(text)
-        }
-      }).catch(() => {
-        this.editor.insertText(text)
-      })
+        })
       event.preventDefault()
     },
 
-    onDropFile (editor, event) {
+    onDropFile(editor, event) {
       const files = event.dataTransfer.files
       if (files.length > 1) {
         return
@@ -155,7 +158,7 @@ export default {
         const data = {
           key: file.name,
           type: file.type,
-          attachment: e.target.result
+          attachment: e.target.result,
         }
         axios.post(`${setting.api}/images`, data).then((res) => {
           this.editor.insertImage(res.data.name, res.data.url, true)
@@ -163,13 +166,13 @@ export default {
       }
     },
 
-    pasteAsPlainText () {
+    pasteAsPlainText() {
       this.isPasteAsPlainText = true
       document.execCommand('paste')
       this.isPasteAsPlainText = false
     },
 
-    isInsertCodeBlock (event) {
+    isInsertCodeBlock(event) {
       if (event.from.line === event.to.line) {
         const text = this.editor.getLineText(event.to.line)
         const removed = event.removed[0]
@@ -178,8 +181,8 @@ export default {
         }
       }
       return false
-    }
-  }
+    },
+  },
 }
 </script>
 

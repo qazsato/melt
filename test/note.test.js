@@ -59,7 +59,8 @@ test('拡張子がmd以外のファイル読み込みでエラーとなること
 })
 
 test('ノートの目次が作成されること', () => {
-  const content = '# h1 Heading\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading'
+  const content =
+    '# h1 Heading\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading'
   const note = new Note()
   note.update(content)
   expect(note.tableOfContents[0].heading).toBe(1)

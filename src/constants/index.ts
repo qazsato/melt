@@ -1,12 +1,12 @@
 export const VIEW_MODE = {
   EDITOR: 'editor',
-  PREVIEW: 'preview'
+  PREVIEW: 'preview',
 }
 
 export const LIST_TYPE = {
   ORDERED: 'ordered',
   BULLET: 'bullet',
-  TASK: 'task'
+  TASK: 'task',
 }
 
 export const ALLOW_DROP_FILE_TYPES = ['image/png', 'image/jpeg', 'image/gif']

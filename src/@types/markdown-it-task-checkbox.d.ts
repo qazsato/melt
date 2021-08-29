@@ -1,1 +1,1 @@
-declare module 'markdown-it-task-checkbox';
+declare module 'markdown-it-task-checkbox'

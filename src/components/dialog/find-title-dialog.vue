@@ -35,31 +35,31 @@ import { readAllNotes, readRecentlyOpenedNotes } from '@/utils/note'
 import { VIEW_MODE } from '@/constants'
 
 export default {
-  data () {
+  data() {
     return {
       notePath: '',
       notes: [],
       suggestions: [],
-      isComposing: false // 日本語入力(IME)が未確定か否か
+      isComposing: false, // 日本語入力(IME)が未確定か否か
     }
   },
 
   computed: {
-    visibleFindTitleDialog () {
+    visibleFindTitleDialog() {
       return this.$store.state.visibleFindTitleDialog
-    }
+    },
   },
 
   watch: {
-    visibleFindTitleDialog (value) {
+    visibleFindTitleDialog(value) {
       if (value) {
         this.$nextTick().then(() => this.$refs.noteInput.$refs.input.focus())
       }
-    }
+    },
   },
 
   methods: {
-    queryFindTitle (query, callback) {
+    queryFindTitle(query, callback) {
       let filteredNotes = []
       if (query) {
         filteredNotes = this.notes.filter((n) => {
@@ -73,24 +73,28 @@ export default {
         return {
           label: n.fileName,
           path: n.filePath,
-          relativePath: n.filePath.split(setting.directory)[1]
+          relativePath: n.filePath.split(setting.directory)[1],
         }
       })
       callback(this.suggestions)
     },
 
-    onKeydown (e) {
+    onKeydown(e) {
       this.isComposing = e.isComposing
     },
 
-    onSelect (item) {
+    onSelect(item) {
       // HACK: イベント処理順を keydown => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
           return
         }
         if (this.$store.state.note.isChanged) {
-          if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
+          if (
+            !window.confirm(
+              '変更が保存されていません。変更を破棄してよいですか。'
+            )
+          ) {
             this.$refs.noteInput.$refs.input.blur()
             return
           }
@@ -101,7 +105,7 @@ export default {
       })
     },
 
-    openDialog () {
+    openDialog() {
       this.notes = readAllNotes(setting.directory)
       // HACK: closeDialogで消えたままになっているため戻す
       const element = document.querySelector('.find-title-popper')
@@ -110,13 +114,13 @@ export default {
       }
     },
 
-    closeDialog () {
+    closeDialog() {
       this.notePath = ''
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
       document.querySelector('.find-title-popper').style.display = 'none'
       this.$store.commit('hideFindTitleDialog')
-    }
-  }
+    },
+  },
 }
 </script>
 

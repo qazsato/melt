@@ -5,44 +5,46 @@ module.exports = {
   mode: process.env.NODE_ENV,
   target: 'electron-main',
   entry: {
-    main: './src/main.ts'
+    main: './src/main.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: './dist/',
-    filename: './[name].bundle.js'
+    filename: './[name].bundle.js',
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
-        use: ['vue-loader']
+        use: ['vue-loader'],
       },
       {
         test: /\.ts$/,
-        use: [{
-          loader: 'ts-loader',
-          options: { appendTsSuffixTo: [/\.vue$/] }
-        }]
+        use: [
+          {
+            loader: 'ts-loader',
+            options: { appendTsSuffixTo: [/\.vue$/] },
+          },
+        ],
       },
       {
         test: /\.js$/,
         use: ['babel-loader'],
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-        use: ['file-loader']
-      }
-    ]
+        use: ['file-loader'],
+      },
+    ],
   },
   devtool: process.env.NODE_ENV === 'production' ? false : 'eval-source-map',
   resolve: {
@@ -50,10 +52,8 @@ module.exports = {
     alias: {
       vue$: 'vue/dist/vue.esm.js',
       '@': path.resolve(__dirname, 'src'),
-      '@config': path.resolve(__dirname, 'config')
-    }
+      '@config': path.resolve(__dirname, 'config'),
+    },
   },
-  plugins: [
-    new VueLoaderPlugin()
-  ]
+  plugins: [new VueLoaderPlugin()],
 }

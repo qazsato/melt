@@ -4,10 +4,8 @@ import MeltMain from '../components/melt-main.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  { path: '/', component: MeltMain }
-]
+const routes = [{ path: '/', component: MeltMain }]
 
 export default new VueRouter({
-  routes
+  routes,
 })

@@ -26,48 +26,38 @@
         />
       </el-form-item>
     </el-form>
-    <span
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button
-        type="primary"
-        @click="insertTable"
-      >
-        Insert
-      </el-button>
-      <el-button @click="closeDialog">
-        Cancel
-      </el-button>
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="insertTable"> Insert </el-button>
+      <el-button @click="closeDialog"> Cancel </el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       tableRow: 3,
-      tableColumn: 3
+      tableColumn: 3,
     }
   },
 
   methods: {
-    openDialog () {
+    openDialog() {
       this.$nextTick().then(() => this.$refs.tableRowInput.$refs.input.focus())
     },
 
-    closeDialog () {
+    closeDialog() {
       this.tableRow = 3
       this.tableColumn = 3
       this.$store.state.editor.focus()
       this.$store.commit('hideTableDialog')
     },
 
-    insertTable () {
+    insertTable() {
       this.$store.state.editor.insertTable(this.tableRow, this.tableColumn)
       this.closeDialog()
-    }
-  }
+    },
+  },
 }
 </script>

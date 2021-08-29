@@ -8,11 +8,13 @@ interface BrowsingHistory {
  * 閲覧履歴を更新
  * @param path ファイルパス
  */
-export const updateBrowsingHistory = (path: string) => {
+export const updateBrowsingHistory = (path: string): void => {
   if (!path) {
     return
   }
-  const browsingHistories = localStorage.browsingHistories ? JSON.parse(localStorage.browsingHistories) : []
+  const browsingHistories = localStorage.browsingHistories
+    ? (JSON.parse(localStorage.browsingHistories) as BrowsingHistory[])
+    : []
   const bh = browsingHistories.find((h: BrowsingHistory) => h.path === path)
   const time = new Date().getTime()
   if (bh) {
@@ -27,13 +29,19 @@ export const updateBrowsingHistory = (path: string) => {
  * 閲覧履歴を取得
  * @returns ファイルパス
  */
-export const getBrowsingHistories = () => {
+export const getBrowsingHistories = (): string[] => {
   const MAX_NOTE_COUNT = 10
   if (!localStorage.browsingHistories) {
     return []
   }
-  const browsingHistories = JSON.parse(localStorage.browsingHistories)
-  browsingHistories.sort((a: BrowsingHistory, b: BrowsingHistory) => b.time - a.time)
-  const paths = browsingHistories.slice(0, MAX_NOTE_COUNT).map((h: BrowsingHistory) => h.path)
+  const browsingHistories = JSON.parse(
+    localStorage.browsingHistories
+  ) as BrowsingHistory[]
+  browsingHistories.sort(
+    (a: BrowsingHistory, b: BrowsingHistory) => b.time - a.time
+  )
+  const paths = browsingHistories
+    .slice(0, MAX_NOTE_COUNT)
+    .map((h: BrowsingHistory) => h.path)
   return paths
 }

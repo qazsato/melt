@@ -10,27 +10,16 @@
           :disabled="isChanged"
         >
           <el-row>
-            <el-link
-              type="primary"
-              icon="el-icon-edit"
-              @click="onClickEdit"
-            >
+            <el-link type="primary" icon="el-icon-edit" @click="onClickEdit">
               rename
             </el-link>
           </el-row>
           <el-row>
-            <el-link
-              type="danger"
-              icon="el-icon-delete"
-              @click="onClickDelete"
-            >
+            <el-link type="danger" icon="el-icon-delete" @click="onClickDelete">
               delete
             </el-link>
           </el-row>
-          <div
-            slot="reference"
-            :class="{ 'editable': !isChanged }"
-          >
+          <div slot="reference" :class="{ editable: !isChanged }">
             {{ $store.state.note.title }}
           </div>
         </el-popover>
@@ -38,10 +27,7 @@
       <template v-else>
         <div>{{ $store.state.note.title }}</div>
       </template>
-      <span
-        v-if="isChanged"
-        class="changed"
-      >*</span>
+      <span v-if="isChanged" class="changed">*</span>
     </h1>
 
     <el-radio-group
@@ -50,32 +36,28 @@
       size="mini"
       @change="changeViewMode"
     >
-      <el-radio-button label="editor">
-        TEXT
-      </el-radio-button>
-      <el-radio-button label="preview">
-        HTML
-      </el-radio-button>
+      <el-radio-button label="editor">TEXT</el-radio-button>
+      <el-radio-button label="preview">HTML</el-radio-button>
     </el-radio-group>
   </section>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       viewMode: this.$store.state.viewMode,
-      visiblePopover: false
+      visiblePopover: false,
     }
   },
 
   computed: {
-    isChanged () {
+    isChanged() {
       return this.$store.state.note.isChanged
-    }
+    },
   },
 
-  mounted () {
+  mounted() {
     this.$store.watch(
       (state) => state.viewMode,
       (value) => {
@@ -85,23 +67,23 @@ export default {
   },
 
   methods: {
-    changeViewMode () {
+    changeViewMode() {
       this.$store.commit('changeViewMode', this.viewMode)
     },
 
-    onClickEdit () {
+    onClickEdit() {
       this.visiblePopover = false
       this.$store.commit('showRenameDialog')
     },
 
-    onClickDelete () {
+    onClickDelete() {
       this.visiblePopover = false
       if (window.confirm(`${this.$store.state.note.title}を削除しますか`)) {
         this.$store.commit('deleteNote')
         this.$store.commit('createNewNote')
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -161,7 +143,7 @@ export default {
     min-width: auto;
   }
 
-  &.el-popper[x-placement^="right"] {
+  &.el-popper[x-placement^='right'] {
     margin-left: 20px;
   }
 

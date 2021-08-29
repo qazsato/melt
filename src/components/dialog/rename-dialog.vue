@@ -13,14 +13,9 @@
       placeholder="Please input"
       @keyup.enter.native="changeFileName"
     >
-      <template slot="append">
-        .md
-      </template>
+      <template slot="append"> .md </template>
     </el-input>
-    <span
-      slot="footer"
-      class="dialog-footer"
-    >
+    <span slot="footer" class="dialog-footer">
       <el-button
         type="primary"
         :disabled="isDisabledChange"
@@ -28,38 +23,36 @@
       >
         Change
       </el-button>
-      <el-button @click="closeDialog">
-        Cancel
-      </el-button>
+      <el-button @click="closeDialog"> Cancel </el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      fileName: ''
+      fileName: '',
     }
   },
 
   computed: {
-    isDisabledChange () {
+    isDisabledChange() {
       return this.fileName.length === 0
-    }
+    },
   },
 
   methods: {
-    openDialog () {
+    openDialog() {
       this.fileName = this.$store.state.note.title.split('.md')[0]
       this.$nextTick().then(() => this.$refs.fileNameInput.$refs.input.focus())
     },
 
-    closeDialog () {
+    closeDialog() {
       this.$store.commit('hideRenameDialog')
     },
 
-    changeFileName () {
+    changeFileName() {
       if (this.isDisabledChange) {
         return
       }
@@ -68,7 +61,7 @@ export default {
       const path = note.filePath.replace(regexp, `${this.fileName}.md`)
       this.$store.commit('renameNote', path)
       this.closeDialog()
-    }
-  }
+    },
+  },
 }
 </script>

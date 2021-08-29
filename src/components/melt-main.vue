@@ -49,28 +49,28 @@ export default {
     imageDialog,
     linkDialog,
     tableDialog,
-    renameDialog
+    renameDialog,
   },
 
-  data () {
+  data() {
     return {
-      findInPage: null
+      findInPage: null,
     }
   },
 
   computed: {
-    isChanged () {
+    isChanged() {
       return this.$store.state.note.isChanged
-    }
+    },
   },
 
   watch: {
-    isChanged (value) {
+    isChanged(value) {
       ipcRenderer.invoke('is-note-changed', value)
-    }
+    },
   },
 
-  mounted () {
+  mounted() {
     this.findInPage = new FindInPage(remote.getCurrentWebContents(), {
       offsetTop: 8,
       boxBgColor: '#4a4a4a',
@@ -80,7 +80,7 @@ export default {
       inputFocusColor: '#00b1b3',
       textColor: '#aaa',
       textHoverBgColor: '#555',
-      caseSelectedColor: '#555'
+      caseSelectedColor: '#555',
     })
 
     ipcRenderer.on('new-note', () => {
@@ -106,7 +106,7 @@ export default {
     ipcRenderer.on('toggle-view-mode', () => {
       this.$store.commit('toggleViewMode')
     })
-  }
+  },
 }
 </script>
 

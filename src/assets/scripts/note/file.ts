@@ -1,47 +1,47 @@
 import fs, { Stats } from 'fs'
 
 class File {
-  filePath: string = ''
-  fileName: string = ''
-  fileContent: string = ''
+  filePath = ''
+  fileName = ''
+  fileContent = ''
   fileStats: Stats | null = null
 
-  constructor (path: string | undefined) {
+  constructor(path: string | undefined) {
     this.load(path)
   }
 
-  load (path?: string | undefined) {
+  load(path?: string | undefined): void {
     this.filePath = path || ''
     this.fileName = path ? path.split('/').reverse()[0] : ''
     this.fileContent = this.readFile(path)
     this.fileStats = this.stat(path)
   }
 
-  readFile (path: string | undefined = '') {
+  readFile(path: string | undefined = ''): string {
     if (!this.validatePath(path)) {
       return ''
     }
     return fs.readFileSync(path, 'utf-8')
   }
 
-  stat (path: string | undefined = '') {
+  stat(path: string | undefined = ''): Stats | null {
     if (!this.validatePath(path)) {
       return null
     }
     return fs.statSync(path)
   }
 
-  writeFile (data: string, path: string) {
+  writeFile(data: string, path: string): void {
     fs.writeFileSync(path, data)
     this.load(path)
   }
 
-  unlink () {
+  unlink(): void {
     fs.unlinkSync(this.filePath)
     this.load()
   }
 
-  rename (path: string) {
+  rename(path: string): void {
     if (this.isExist(path)) {
       throw new Error('file path is exists.')
     }
@@ -49,7 +49,7 @@ class File {
     this.load(path)
   }
 
-  isExist (path: string) {
+  isExist(path: string): boolean {
     try {
       this.stat(path)
       return true
@@ -58,7 +58,7 @@ class File {
     }
   }
 
-  validatePath (path: string | undefined) {
+  validatePath(path: string | undefined): boolean {
     if (!path) {
       return false
     }

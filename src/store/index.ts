@@ -5,20 +5,19 @@ import { VIEW_MODE } from '@/constants'
 import { updateBrowsingHistory } from '@/utils/local-storage'
 import Editor from '@/assets/scripts/editor/markdown-editor'
 
-
 Vue.use(Vuex)
 
 interface State {
-  note: Note;
+  note: Note
   editor: Editor | null
-  viewMode: string;
-  visibleLinkDialog: boolean;
-  visibleImageDialog: boolean;
-  visibleTableDialog: boolean;
-  visibleFindParagraphDialog: boolean;
-  visibleFindTitleDialog: boolean;
-  visibleFindContentDialog: boolean;
-  visibleRenameDialog: boolean;
+  viewMode: string
+  visibleLinkDialog: boolean
+  visibleImageDialog: boolean
+  visibleTableDialog: boolean
+  visibleFindParagraphDialog: boolean
+  visibleFindTitleDialog: boolean
+  visibleFindContentDialog: boolean
+  visibleRenameDialog: boolean
 }
 
 const state: State = {
@@ -31,44 +30,49 @@ const state: State = {
   visibleFindParagraphDialog: false,
   visibleFindTitleDialog: false,
   visibleFindContentDialog: false,
-  visibleRenameDialog: false
+  visibleRenameDialog: false,
 }
 
 const store = new Vuex.Store({
   state,
 
   mutations: {
-    createNewNote (state) {
+    createNewNote(state) {
       if (state.note.isChanged) {
-        if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
+        if (
+          !window.confirm(
+            '変更が保存されていません。変更を破棄してよいですか。'
+          )
+        ) {
           return
         }
       }
       state.note = new Note()
       state.viewMode = VIEW_MODE.EDITOR
-      Vue.nextTick().then(() => {
-        state.editor!.setText('')
-        state.editor!.focus()
+      void Vue.nextTick().then(() => {
+        state.editor?.setText('')
+        state.editor?.focus()
       })
     },
 
-    changeNote (state, path) {
+    changeNote(state, path) {
       state.note = new Note(path)
       updateBrowsingHistory(path)
     },
 
-    updateNote (state, content) {
+    updateNote(state, content) {
       state.note.update(content)
     },
 
-    saveNote (state, path) {
+    saveNote(state, path) {
       state.note.save(path)
     },
 
-    renameNote (state, path) {
+    renameNote(state, path) {
       try {
         state.note.rename(path)
       } catch (e: any) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (e.message === 'file path is exists.') {
           window.alert('同名のノートが存在しています')
         } else {
@@ -77,86 +81,86 @@ const store = new Vuex.Store({
       }
     },
 
-    deleteNote (state) {
+    deleteNote(state) {
       state.note.delete()
     },
 
-    toggleViewMode (state) {
+    toggleViewMode(state) {
       if (state.viewMode === VIEW_MODE.EDITOR) {
         state.viewMode = VIEW_MODE.PREVIEW
       } else {
         state.viewMode = VIEW_MODE.EDITOR
-        Vue.nextTick().then(() => state.editor!.focus())
+        void Vue.nextTick().then(() => state.editor?.focus())
       }
     },
 
-    changeViewMode (state, viewMode) {
+    changeViewMode(state, viewMode: string) {
       state.viewMode = viewMode
       if (state.viewMode === VIEW_MODE.EDITOR) {
-        Vue.nextTick().then(() => state.editor!.focus())
+        void Vue.nextTick().then(() => state.editor?.focus())
       }
     },
 
-    setEditor (state, editor) {
+    setEditor(state, editor: Editor) {
       state.editor = editor
     },
 
-    showLinkDialog (state) {
+    showLinkDialog(state) {
       state.visibleLinkDialog = true
     },
 
-    hideLinkDialog (state) {
+    hideLinkDialog(state) {
       state.visibleLinkDialog = false
     },
 
-    showImageDialog (state) {
+    showImageDialog(state) {
       state.visibleImageDialog = true
     },
 
-    hideImageDialog (state) {
+    hideImageDialog(state) {
       state.visibleImageDialog = false
     },
 
-    showTableDialog (state) {
+    showTableDialog(state) {
       state.visibleTableDialog = true
     },
 
-    hideTableDialog (state) {
+    hideTableDialog(state) {
       state.visibleTableDialog = false
     },
 
-    showFindParagraphDialog (state) {
+    showFindParagraphDialog(state) {
       state.visibleFindParagraphDialog = true
     },
 
-    hideFindParagraphDialog (state) {
+    hideFindParagraphDialog(state) {
       state.visibleFindParagraphDialog = false
     },
 
-    showFindTitleDialog (state) {
+    showFindTitleDialog(state) {
       state.visibleFindTitleDialog = true
     },
 
-    hideFindTitleDialog (state) {
+    hideFindTitleDialog(state) {
       state.visibleFindTitleDialog = false
     },
 
-    showFindContentDialog (state) {
+    showFindContentDialog(state) {
       state.visibleFindContentDialog = true
     },
 
-    hideFindContentDialog (state) {
+    hideFindContentDialog(state) {
       state.visibleFindContentDialog = false
     },
 
-    showRenameDialog (state) {
+    showRenameDialog(state) {
       state.visibleRenameDialog = true
     },
 
-    hideRenameDialog (state) {
+    hideRenameDialog(state) {
       state.visibleRenameDialog = false
-    }
-  }
+    },
+  },
 })
 
 export default store

@@ -4,15 +4,15 @@ const setting = require('./config/setting.json')
 
 const windowState = {} // key: win.id, value: object
 
-function createWindow () {
+function createWindow() {
   const win = new BrowserWindow({
     minWidth: 420,
     minHeight: 420,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true
-    }
+      enableRemoteModule: true,
+    },
   })
   win.loadFile('index.html')
   win.maximize()
@@ -52,7 +52,7 @@ function createWindow () {
   createMenu()
 }
 
-function createMenu () {
+function createMenu() {
   const template = [
     {
       label: app.getName(),
@@ -65,8 +65,8 @@ function createMenu () {
         { role: 'hideothers' },
         { role: 'unhide' },
         { type: 'separator' },
-        { role: 'quit' }
-      ]
+        { role: 'quit' },
+      ],
     },
     {
       label: 'File',
@@ -74,53 +74,53 @@ function createMenu () {
         {
           label: 'New Note',
           accelerator: 'CmdOrCtrl+N',
-          click () {
+          click() {
             const win = BrowserWindow.getFocusedWindow()
             win.webContents.send('new-note')
-          }
+          },
         },
         {
           label: 'New Window',
           accelerator: 'CmdOrCtrl+Shift+N',
-          click () {
+          click() {
             createWindow()
-          }
+          },
         },
         { type: 'separator' },
         {
           label: 'Open Note',
           accelerator: 'CmdOrCtrl+P',
-          click () {
+          click() {
             const win = BrowserWindow.getFocusedWindow()
             win.webContents.send('open-note')
-          }
+          },
         },
         { type: 'separator' },
         {
           label: 'Find Paragraph',
           accelerator: 'CmdOrCtrl+Shift+P',
-          click () {
+          click() {
             const win = BrowserWindow.getFocusedWindow()
             win.webContents.send('find-paragraph')
-          }
+          },
         },
         {
           label: 'Find Text',
           accelerator: 'CmdOrCtrl+F',
-          click () {
+          click() {
             const win = BrowserWindow.getFocusedWindow()
             win.webContents.send('find-text')
-          }
+          },
         },
         {
           label: 'Find Text in folder',
           accelerator: 'CmdOrCtrl+Shift+F',
-          click () {
+          click() {
             const win = BrowserWindow.getFocusedWindow()
             win.webContents.send('find-text-in-folder')
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       label: 'Edit',
@@ -131,8 +131,8 @@ function createMenu () {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
-        { role: 'selectall' }
-      ]
+        { role: 'selectall' },
+      ],
     },
     {
       label: 'View',
@@ -140,10 +140,10 @@ function createMenu () {
         {
           label: 'Toggle View Mode',
           accelerator: 'CmdOrCtrl+E',
-          click () {
+          click() {
             const win = BrowserWindow.getFocusedWindow()
             win.webContents.send('toggle-view-mode')
-          }
+          },
         },
         { type: 'separator' },
         { role: 'resetzoom' },
@@ -152,8 +152,8 @@ function createMenu () {
         { type: 'separator' },
         { role: 'togglefullscreen' },
         { type: 'separator' },
-        { role: 'toggledevtools' }
-      ]
+        { role: 'toggledevtools' },
+      ],
     },
     {
       role: 'window',
@@ -165,22 +165,24 @@ function createMenu () {
           type: 'checkbox',
           label: 'Always On Top',
           checked: false,
-          click () {
+          click() {
             const win = BrowserWindow.getFocusedWindow()
             win.setAlwaysOnTop(!win.isAlwaysOnTop())
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       role: 'help',
       submenu: [
         {
           label: 'GitHub',
-          click () { shell.openExternal('https://github.com/qazsato/melt') }
-        }
-      ]
-    }
+          click() {
+            shell.openExternal('https://github.com/qazsato/melt')
+          },
+        },
+      ],
+    },
   ]
 
   if (process.env.NODE_ENV === 'development') {
@@ -224,16 +226,14 @@ ipcMain.handle('new-note-save', async (event, data) => {
   const win = BrowserWindow.getFocusedWindow()
   const path = dialog.showSaveDialogSync(win, {
     defaultPath: `${setting.directory}/Untitled`,
-    filters: [
-      { name: 'Text', extensions: ['md'] }
-    ],
-    properties: ['createDirectory']
+    filters: [{ name: 'Text', extensions: ['md'] }],
+    properties: ['createDirectory'],
   })
 
   // キャンセルで閉じた場合
   if (path === undefined) {
     return {
-      status: undefined
+      status: undefined,
     }
   }
 
@@ -241,12 +241,12 @@ ipcMain.handle('new-note-save', async (event, data) => {
     fs.writeFileSync(path, data)
     return {
       status: true,
-      path: path
+      path: path,
     }
   } catch (error) {
     return {
       status: false,
-      message: error.message
+      message: error.message,
     }
   }
 })
@@ -255,14 +255,16 @@ ipcMain.handle('new-note-save', async (event, data) => {
 ipcMain.handle('is-note-changed', async (event, changed) => {
   const win = BrowserWindow.getFocusedWindow()
   if (!win) return // NOTE: 画像をドラッグ&ドロップした場合はフォーカス状態とならないため null となる
-  windowState[win.id] = Object.assign(windowState[win.id] || {}, { isNoteSaved: !changed })
+  windowState[win.id] = Object.assign(windowState[win.id] || {}, {
+    isNoteSaved: !changed,
+  })
 })
 
-function showCloseConfirm () {
+function showCloseConfirm() {
   const selected = dialog.showMessageBoxSync({
     message: 'Meltを終了します',
     buttons: ['OK', 'Cancel'],
-    cancelId: -1 // Esc押下時の値
+    cancelId: -1, // Esc押下時の値
   })
   return selected === 0
 }

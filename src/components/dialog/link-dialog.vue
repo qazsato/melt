@@ -25,19 +25,9 @@
         />
       </el-form-item>
     </el-form>
-    <span
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button
-        type="primary"
-        @click="insertLink"
-      >
-        Insert
-      </el-button>
-      <el-button @click="closeDialog">
-        Cancel
-      </el-button>
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="insertLink"> Insert </el-button>
+      <el-button @click="closeDialog"> Cancel </el-button>
     </span>
   </el-dialog>
 </template>
@@ -47,15 +37,15 @@ import setting from '@config/setting.json'
 import axios from 'axios'
 
 export default {
-  data () {
+  data() {
     return {
       linkTitle: '',
-      linkUrl: ''
+      linkUrl: '',
     }
   },
 
   methods: {
-    openDialog () {
+    openDialog() {
       const text = this.$store.state.editor.getSelection()
       if (text) {
         try {
@@ -64,31 +54,40 @@ export default {
           this.linkUrl = text
           const url = `${setting.api}/sites/metadata?url=${this.linkUrl}`
           axios.get(url).then((res) => {
-            if (this.linkTitle === '' && this.$store.state.visibleLinkDialog === true) {
+            if (
+              this.linkTitle === '' &&
+              this.$store.state.visibleLinkDialog === true
+            ) {
               this.linkTitle = res.data.title
             }
           })
-          this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus())
+          this.$nextTick().then(() =>
+            this.$refs.linkTitleInput.$refs.input.focus()
+          )
         } catch (e) {
           this.linkTitle = text
-          this.$nextTick().then(() => this.$refs.linkUrlInput.$refs.input.focus())
+          this.$nextTick().then(() =>
+            this.$refs.linkUrlInput.$refs.input.focus()
+          )
         }
       } else {
-        this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus())
+        this.$nextTick().then(() =>
+          this.$refs.linkTitleInput.$refs.input.focus()
+        )
       }
     },
 
-    closeDialog () {
+    closeDialog() {
       this.linkTitle = ''
       this.linkUrl = ''
       this.$store.state.editor.focus()
       this.$store.commit('hideLinkDialog')
     },
 
-    insertLink () {
+    insertLink() {
       this.$store.state.editor.insertLink(this.linkTitle, this.linkUrl)
       this.closeDialog()
-    }
-  }
+    },
+  },
 }
 </script>

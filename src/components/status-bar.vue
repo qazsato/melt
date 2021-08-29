@@ -9,10 +9,7 @@
       <span>{{ line }}</span>
     </div>
     <div class="spacer" />
-    <div
-      v-if="lastModifiedAt"
-      class="last-modified"
-    >
+    <div v-if="lastModifiedAt" class="last-modified">
       <i class="el-icon-refresh" />
       <span>{{ lastModifiedAt }}</span>
     </div>
@@ -23,39 +20,43 @@
 import dayjs from 'dayjs'
 
 export default {
-  data () {
+  data() {
     return {
       paragraph: 0,
       line: 0,
-      lastModifiedAt: null
+      lastModifiedAt: null,
     }
   },
 
   computed: {
-    isChanged () {
+    isChanged() {
       return this.$store.state.note.isChanged
     },
 
-    content () {
+    content() {
       return this.$store.state.note.content
-    }
+    },
   },
 
   watch: {
-    isChanged () {
+    isChanged() {
       const note = this.$store.state.note
       if (note.fileStats) {
-        this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
+        this.lastModifiedAt = dayjs(note.fileStats.mtime).format(
+          'YYYY/MM/DD HH:mm:ss'
+        )
       }
     },
 
-    content (value) {
+    content(value) {
       const note = this.$store.state.note
       this.paragraph = note.tableOfContents.length
       this.line = value.split('\n').length
-      this.lastModifiedAt = note.fileStats ? dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss') : null
-    }
-  }
+      this.lastModifiedAt = note.fileStats
+        ? dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
+        : null
+    },
+  },
 }
 </script>
 

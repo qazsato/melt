@@ -2,4 +2,6 @@ node_modules
 release-builds
 dist
 coverage
-src/assets/fonts
+test
+webpack.config.js
+main.js
