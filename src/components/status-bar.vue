@@ -16,16 +16,24 @@
   </section>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import dayjs from 'dayjs'
 
-export default {
+interface DataType {
+  paragraph: number
+  line: number
+  lastModifiedAt: string | null
+}
+
+export default Vue.extend({
   data() {
-    return {
+    const data: DataType = {
       paragraph: 0,
       line: 0,
       lastModifiedAt: null,
     }
+    return data
   },
 
   computed: {
@@ -42,9 +50,7 @@ export default {
     isChanged() {
       const note = this.$store.state.note
       if (note.fileStats) {
-        this.lastModifiedAt = dayjs(note.fileStats.mtime).format(
-          'YYYY/MM/DD HH:mm:ss'
-        )
+        this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
       }
     },
 
@@ -52,12 +58,10 @@ export default {
       const note = this.$store.state.note
       this.paragraph = note.tableOfContents.length
       this.line = value.split('\n').length
-      this.lastModifiedAt = note.fileStats
-        ? dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
-        : null
+      this.lastModifiedAt = note.fileStats ? dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss') : null
     },
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>

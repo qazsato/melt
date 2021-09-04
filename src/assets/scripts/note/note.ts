@@ -3,7 +3,7 @@ import Markdown from '@/assets/scripts/markdown/markdown'
 
 class Note extends file {
   content = ''
-  tableOfContents: tableOfContent[] = []
+  tableOfContents: TableOfContent[] = []
   isChanged = false
 
   constructor(path?: string) {
@@ -47,8 +47,8 @@ class Note extends file {
     return this.content !== this.fileContent
   }
 
-  createTableOfContents(): tableOfContent[] {
-    const tocs: tableOfContent[] = []
+  createTableOfContents(): TableOfContent[] {
+    const tocs: TableOfContent[] = []
     const htmlText = new Markdown().render(this.content)
     const rows = htmlText.split('\n')
     rows.forEach((r) => {
@@ -88,7 +88,7 @@ class Note extends file {
   }
 }
 
-interface tableOfContent {
+export interface TableOfContent {
   heading: number
   text: string
 }

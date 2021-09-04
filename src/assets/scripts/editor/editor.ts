@@ -5,9 +5,7 @@ class Editor {
   focused = false
 
   constructor(id: string, option: EditorConfiguration) {
-    const element: HTMLTextAreaElement = <HTMLTextAreaElement>(
-      document.getElementById(id)
-    )
+    const element: HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById(id)
     this.editor = CodeMirror.fromTextArea(element, option)
     this.editor.on('focus', () => {
       this.focused = true
@@ -31,7 +29,7 @@ class Editor {
    * @param handler
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  on(event: any, handler: () => void): void {
+  on(event: any, handler: any): void {
     this.editor.on(event, handler)
   }
 
@@ -103,9 +101,7 @@ class Editor {
     const anchor = selection.anchor
     // NOTE 三平方の定理でエディタの起点(0,0)からの距離を求め、start/endの判定を行う。
     const headDist = Math.sqrt(Math.pow(head.line, 2) + Math.pow(head.ch, 2))
-    const anchorDist = Math.sqrt(
-      Math.pow(anchor.line, 2) + Math.pow(anchor.ch, 2)
-    )
+    const anchorDist = Math.sqrt(Math.pow(anchor.line, 2) + Math.pow(anchor.ch, 2))
     let start
     let end
     if (headDist < anchorDist) {

@@ -4,22 +4,30 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import setting from '@config/setting.json'
 import axios from 'axios'
 import { ipcRenderer } from 'electron'
+import { Editor as CM } from 'codemirror'
 import Editor from '@/assets/scripts/editor/markdown-editor'
 import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { isCodeBlock, getDefaultCodeBlock } from '@/utils/markdown'
 import 'codemirror/lib/codemirror.css'
 import '@/assets/styles/melt-light.scss'
 
-export default {
+interface DataType {
+  editor: Editor | null
+  isPasteAsPlainText: boolean
+}
+
+export default Vue.extend({
   data() {
-    return {
+    const data: DataType = {
       editor: null,
       isPasteAsPlainText: false,
     }
+    return data
   },
 
   computed: {
@@ -43,15 +51,13 @@ export default {
       if (value === VIEW_MODE.EDITOR) {
         // 変更済みの情報を上書きしないように、未変更の場合のみ設定する
         if (!this.$store.state.note.isChanged) {
-          this.$nextTick().then(() =>
-            this.editor.setText(this.$store.state.note.content)
-          )
+          this.$nextTick().then(() => this.editor?.setText(this.$store.state.note.content))
         }
       }
     },
 
     note(note) {
-      this.editor.setText(note.content)
+      this.editor?.setText(note.content)
     },
   },
 
@@ -63,14 +69,14 @@ export default {
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
       'Shift-Cmd-L': () => this.$store.commit('showImageDialog'),
-      'Cmd-B': () => this.editor.insertBold(),
-      'Cmd-I': () => this.editor.insertItalic(),
-      'Cmd-D': () => this.editor.insertStrikethrough(),
-      'Cmd-K': () => this.editor.insertCode(),
-      'Cmd-U': () => this.editor.insertQuote(),
-      'Shift-Cmd-U': () => this.editor.insertBulletList(),
-      'Shift-Cmd-O': () => this.editor.insertOrderedList(),
-      'Shift-Cmd-X': () => this.editor.insertTaskList(),
+      'Cmd-B': () => this.editor?.insertBold(),
+      'Cmd-I': () => this.editor?.insertItalic(),
+      'Cmd-D': () => this.editor?.insertStrikethrough(),
+      'Cmd-K': () => this.editor?.insertCode(),
+      'Cmd-U': () => this.editor?.insertQuote(),
+      'Shift-Cmd-U': () => this.editor?.insertBulletList(),
+      'Shift-Cmd-O': () => this.editor?.insertOrderedList(),
+      'Shift-Cmd-X': () => this.editor?.insertTaskList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveNote(),
       'Shift-Cmd-V': () => this.pasteAsPlainText(),
@@ -80,7 +86,7 @@ export default {
 
   methods: {
     saveNote() {
-      const content = this.editor.getText()
+      const content = this.editor?.getText()
       if (this.$store.state.note.filePath) {
         this.$store.commit('updateNote', content)
         this.$store.commit('saveNote')
@@ -106,17 +112,17 @@ export default {
       }
     },
 
-    onChangeText(editor, event) {
+    onChangeText(editor: CM, event: any) {
       if (this.isInsertCodeBlock(event)) {
         const currentLine = editor.getCursor().line
-        this.editor.selectLine(currentLine)
-        this.editor.insertText(getDefaultCodeBlock())
-        this.editor.gotoLine(currentLine + 1)
+        this.editor?.selectLine(currentLine)
+        this.editor?.insertText(getDefaultCodeBlock())
+        this.editor?.gotoLine(currentLine + 1)
       }
-      this.$store.commit('updateNote', this.editor.getText())
+      this.$store.commit('updateNote', this.editor?.getText())
     },
 
-    onPasteText(editor, event) {
+    onPasteText(editor: CM, event: any) {
       if (this.isPasteAsPlainText) {
         return
       }
@@ -132,18 +138,18 @@ export default {
         .get(url)
         .then((res) => {
           if (res.data.title) {
-            this.editor.insertLink(res.data.title, text)
+            this.editor?.insertLink(res.data.title, text)
           } else {
-            this.editor.insertText(text)
+            this.editor?.insertText(text)
           }
         })
         .catch(() => {
-          this.editor.insertText(text)
+          this.editor?.insertText(text)
         })
       event.preventDefault()
     },
 
-    onDropFile(editor, event) {
+    onDropFile(editor: CM, event: any) {
       const files = event.dataTransfer.files
       if (files.length > 1) {
         return
@@ -158,10 +164,10 @@ export default {
         const data = {
           key: file.name,
           type: file.type,
-          attachment: e.target.result,
+          attachment: e.target?.result,
         }
         axios.post(`${setting.api}/images`, data).then((res) => {
-          this.editor.insertImage(res.data.name, res.data.url, true)
+          this.editor?.insertImage(res.data.name, res.data.url, true)
         })
       }
     },
@@ -172,9 +178,9 @@ export default {
       this.isPasteAsPlainText = false
     },
 
-    isInsertCodeBlock(event) {
+    isInsertCodeBlock(event: any) {
       if (event.from.line === event.to.line) {
-        const text = this.editor.getLineText(event.to.line)
+        const text = this.editor?.getLineText(event.to.line) || ''
         const removed = event.removed[0]
         if (isCodeBlock(text) && !isCodeBlock(removed)) {
           return true
@@ -183,7 +189,7 @@ export default {
       return false
     },
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>

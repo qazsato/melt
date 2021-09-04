@@ -29,19 +29,35 @@
   </el-dialog>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import setting from '@config/setting.json'
 import { readAllNotes, readRecentlyOpenedNotes } from '@/utils/note'
 import { VIEW_MODE } from '@/constants'
+import Note from '@/assets/scripts/note/note'
 
-export default {
+interface Suggestion {
+  label: string
+  path: string
+  relativePath: string
+}
+
+interface DataType {
+  notePath: string
+  notes: Note[]
+  suggestions: Suggestion[]
+  isComposing: boolean
+}
+
+export default Vue.extend({
   data() {
-    return {
+    const data: DataType = {
       notePath: '',
       notes: [],
       suggestions: [],
       isComposing: false, // 日本語入力(IME)が未確定か否か
     }
+    return data
   },
 
   computed: {
@@ -53,16 +69,19 @@ export default {
   watch: {
     visibleFindTitleDialog(value) {
       if (value) {
-        this.$nextTick().then(() => this.$refs.noteInput.$refs.input.focus())
+        this.$nextTick().then(() => {
+          // @ts-ignore
+          this.$refs.noteInput.$refs.input.focus()
+        })
       }
     },
   },
 
   methods: {
-    queryFindTitle(query, callback) {
+    queryFindTitle(query: string, callback: (suggestion: Suggestion[]) => void) {
       let filteredNotes = []
       if (query) {
-        filteredNotes = this.notes.filter((n) => {
+        filteredNotes = this.notes.filter((n: Note) => {
           const relativePath = n.filePath.split(setting.directory)[1]
           return relativePath.toLowerCase().includes(query.toLowerCase())
         })
@@ -79,22 +98,19 @@ export default {
       callback(this.suggestions)
     },
 
-    onKeydown(e) {
+    onKeydown(e: any) {
       this.isComposing = e.isComposing
     },
 
-    onSelect(item) {
+    onSelect(item: Suggestion) {
       // HACK: イベント処理順を keydown => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
           return
         }
         if (this.$store.state.note.isChanged) {
-          if (
-            !window.confirm(
-              '変更が保存されていません。変更を破棄してよいですか。'
-            )
-          ) {
+          if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
+            // @ts-ignore
             this.$refs.noteInput.$refs.input.blur()
             return
           }
@@ -108,20 +124,21 @@ export default {
     openDialog() {
       this.notes = readAllNotes(setting.directory)
       // HACK: closeDialogで消えたままになっているため戻す
-      const element = document.querySelector('.find-title-popper')
-      if (element && this.suggestions.length > 0) {
-        element.style.display = 'block'
+      const ele = <HTMLElement>document.querySelector('.find-title-popper')
+      if (ele && this.suggestions.length > 0) {
+        ele.style.display = 'block'
       }
     },
 
     closeDialog() {
       this.notePath = ''
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      document.querySelector('.find-title-popper').style.display = 'none'
+      const ele = <HTMLElement>document.querySelector('.find-title-popper')
+      ele.style.display = 'none'
       this.$store.commit('hideFindTitleDialog')
     },
   },
-}
+})
 </script>
 
 <style lang="scss">

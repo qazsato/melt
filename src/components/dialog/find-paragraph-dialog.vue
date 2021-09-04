@@ -31,15 +31,32 @@
   </el-dialog>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { TableOfContent } from '@/assets/scripts/note/note'
+
+interface Suggestion {
+  text: string
+  heading: number
+  index: number
+}
+
+interface DataType {
+  paragraphText: string
+  tableOfContents: TableOfContent[]
+  suggestions: Suggestion[]
+  isComposing: boolean
+}
+
+export default Vue.extend({
   data() {
-    return {
+    const data: DataType = {
       paragraphText: '',
       tableOfContents: [],
       suggestions: [],
       isComposing: false, // 日本語入力(IME)が未確定か否か
     }
+    return data
   },
 
   computed: {
@@ -51,19 +68,18 @@ export default {
   watch: {
     visibleFindParagraphDialog(value) {
       if (value) {
-        this.$nextTick().then(() =>
+        this.$nextTick().then(() => {
+          // @ts-ignore
           this.$refs.paragraphInput.$refs.input.focus()
-        )
+        })
       }
     },
   },
 
   methods: {
-    queryFindParagraph(query, callback) {
+    queryFindParagraph(query: string, callback: (suggestion: Suggestion[]) => void) {
       const filteredParagraphs = query
-        ? this.tableOfContents.filter((t) =>
-            t.text.toLowerCase().includes(query.toLowerCase())
-          )
+        ? this.tableOfContents.filter((t) => t.text.toLowerCase().includes(query.toLowerCase()))
         : this.tableOfContents
       this.suggestions = filteredParagraphs.map((t, i) => {
         return {
@@ -75,11 +91,11 @@ export default {
       callback(this.suggestions)
     },
 
-    onKeydown(e) {
+    onKeydown(e: any) {
       this.isComposing = e.isComposing
     },
 
-    onSelect(item) {
+    onSelect(item: Suggestion) {
       // HACK: イベント処理順を keydown => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
@@ -99,20 +115,21 @@ export default {
     openDialog() {
       this.tableOfContents = this.$store.state.note.tableOfContents
       // HACK: closeDialogで消えたままになっているため戻す
-      const element = document.querySelector('.find-paragraph-popper')
-      if (element && this.suggestions.length > 0) {
-        element.style.display = 'block'
+      const ele = <HTMLElement>document.querySelector('.find-paragraph-popper')
+      if (ele && this.suggestions.length > 0) {
+        ele.style.display = 'block'
       }
     },
 
     closeDialog() {
       this.paragraphText = ''
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      document.querySelector('.find-paragraph-popper').style.display = 'none'
+      const ele = <HTMLElement>document.querySelector('.find-paragraph-popper')
+      ele.style.display = 'none'
       this.$store.commit('hideFindParagraphDialog')
     },
   },
-}
+})
 </script>
 
 <style lang="scss">

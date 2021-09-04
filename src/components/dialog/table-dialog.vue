@@ -9,21 +9,10 @@
   >
     <el-form label-width="45px">
       <el-form-item label="Row">
-        <el-input-number
-          ref="tableRowInput"
-          v-model="tableRow"
-          :max="10"
-          :min="1"
-          @keyup.enter.native="insertTable"
-        />
+        <el-input-number ref="tableRowInput" v-model="tableRow" :max="10" :min="1" @keyup.enter.native="insertTable" />
       </el-form-item>
       <el-form-item label="Col">
-        <el-input-number
-          v-model="tableColumn"
-          :max="10"
-          :min="1"
-          @keyup.enter.native="insertTable"
-        />
+        <el-input-number v-model="tableColumn" :max="10" :min="1" @keyup.enter.native="insertTable" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -33,18 +22,29 @@
   </el-dialog>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+interface DataType {
+  tableRow: number
+  tableColumn: number
+}
+
+export default Vue.extend({
   data() {
-    return {
+    const data: DataType = {
       tableRow: 3,
       tableColumn: 3,
     }
+    return data
   },
 
   methods: {
     openDialog() {
-      this.$nextTick().then(() => this.$refs.tableRowInput.$refs.input.focus())
+      this.$nextTick().then(() => {
+        // @ts-ignore
+        this.$refs.tableRowInput.$refs.input.focus()
+      })
     },
 
     closeDialog() {
@@ -59,5 +59,5 @@ export default {
       this.closeDialog()
     },
   },
-}
+})
 </script>

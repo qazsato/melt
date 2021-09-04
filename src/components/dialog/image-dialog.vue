@@ -9,20 +9,10 @@
   >
     <el-form label-width="45px">
       <el-form-item label="Alt">
-        <el-input
-          ref="imageAltInput"
-          v-model="imageAlt"
-          placeholder="Please input"
-          @keyup.enter.native="insertImage"
-        />
+        <el-input ref="imageAltInput" v-model="imageAlt" placeholder="Please input" @keyup.enter.native="insertImage" />
       </el-form-item>
       <el-form-item label="URL">
-        <el-input
-          ref="imageUrlInput"
-          v-model="imageUrl"
-          placeholder="Please input"
-          @keyup.enter.native="insertImage"
-        />
+        <el-input ref="imageUrlInput" v-model="imageUrl" placeholder="Please input" @keyup.enter.native="insertImage" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -32,13 +22,21 @@
   </el-dialog>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+interface DataType {
+  imageAlt: string
+  imageUrl: string
+}
+
+export default Vue.extend({
   data() {
-    return {
+    const data: DataType = {
       imageAlt: '',
       imageUrl: '',
     }
+    return data
   },
 
   methods: {
@@ -49,19 +47,22 @@ export default {
           // eslint-disable-next-line no-new
           new URL(text)
           this.imageUrl = text
-          this.$nextTick().then(() =>
+          this.$nextTick().then(() => {
+            // @ts-ignore
             this.$refs.imageAltInput.$refs.input.focus()
-          )
+          })
         } catch (e) {
           this.imageAlt = text
-          this.$nextTick().then(() =>
+          this.$nextTick().then(() => {
+            // @ts-ignore
             this.$refs.imageUrlInput.$refs.input.focus()
-          )
+          })
         }
       } else {
-        this.$nextTick().then(() =>
+        this.$nextTick().then(() => {
+          // @ts-ignore
           this.$refs.imageAltInput.$refs.input.focus()
-        )
+        })
       }
     },
 
@@ -77,5 +78,5 @@ export default {
       this.closeDialog()
     },
   },
-}
+})
 </script>

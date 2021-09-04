@@ -7,37 +7,34 @@
     :before-close="closeDialog"
     @open="openDialog"
   >
-    <el-input
-      ref="fileNameInput"
-      v-model="fileName"
-      placeholder="Please input"
-      @keyup.enter.native="changeFileName"
-    >
+    <el-input ref="fileNameInput" v-model="fileName" placeholder="Please input" @keyup.enter.native="changeFileName">
       <template slot="append"> .md </template>
     </el-input>
     <span slot="footer" class="dialog-footer">
-      <el-button
-        type="primary"
-        :disabled="isDisabledChange"
-        @click="changeFileName"
-      >
-        Change
-      </el-button>
+      <el-button type="primary" :disabled="isDisabledChange" @click="changeFileName"> Change </el-button>
       <el-button @click="closeDialog"> Cancel </el-button>
     </span>
   </el-dialog>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+interface DataType {
+  fileName: string
+}
+
+export default Vue.extend({
   data() {
-    return {
+    const data: DataType = {
       fileName: '',
     }
+    return data
   },
 
   computed: {
     isDisabledChange() {
+      // @ts-ignore
       return this.fileName.length === 0
     },
   },
@@ -45,7 +42,10 @@ export default {
   methods: {
     openDialog() {
       this.fileName = this.$store.state.note.title.split('.md')[0]
-      this.$nextTick().then(() => this.$refs.fileNameInput.$refs.input.focus())
+      this.$nextTick().then(() => {
+        // @ts-ignore
+        this.$refs.fileNameInput.$refs.input.focus()
+      })
     },
 
     closeDialog() {
@@ -63,5 +63,5 @@ export default {
       this.closeDialog()
     },
   },
-}
+})
 </script>

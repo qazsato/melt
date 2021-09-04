@@ -22,7 +22,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { ipcRenderer, remote } from 'electron'
 import { FindInPage } from 'electron-find'
 import toolBar from './tool-bar.vue'
@@ -37,7 +38,11 @@ import linkDialog from './dialog/link-dialog.vue'
 import tableDialog from './dialog/table-dialog.vue'
 import renameDialog from './dialog/rename-dialog.vue'
 
-export default {
+interface DataType {
+  findInPage: any
+}
+
+export default Vue.extend({
   components: {
     toolBar,
     editor,
@@ -53,9 +58,10 @@ export default {
   },
 
   data() {
-    return {
+    const data: DataType = {
       findInPage: null,
     }
+    return data
   },
 
   computed: {
@@ -96,7 +102,7 @@ export default {
     })
 
     ipcRenderer.on('find-text', () => {
-      this.findInPage.openFindWindow()
+      this.findInPage?.openFindWindow()
     })
 
     ipcRenderer.on('find-text-in-folder', () => {
@@ -107,7 +113,7 @@ export default {
       this.$store.commit('toggleViewMode')
     })
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -17,12 +17,7 @@
         />
       </el-form-item>
       <el-form-item label="URL">
-        <el-input
-          ref="linkUrlInput"
-          v-model="linkUrl"
-          placeholder="Please input"
-          @keyup.enter.native="insertLink"
-        />
+        <el-input ref="linkUrlInput" v-model="linkUrl" placeholder="Please input" @keyup.enter.native="insertLink" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -32,16 +27,23 @@
   </el-dialog>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import setting from '@config/setting.json'
 import axios from 'axios'
 
-export default {
+interface DataType {
+  linkTitle: string
+  linkUrl: string
+}
+
+export default Vue.extend({
   data() {
-    return {
+    const data: DataType = {
       linkTitle: '',
       linkUrl: '',
     }
+    return data
   },
 
   methods: {
@@ -54,26 +56,26 @@ export default {
           this.linkUrl = text
           const url = `${setting.api}/sites/metadata?url=${this.linkUrl}`
           axios.get(url).then((res) => {
-            if (
-              this.linkTitle === '' &&
-              this.$store.state.visibleLinkDialog === true
-            ) {
+            if (this.linkTitle === '' && this.$store.state.visibleLinkDialog === true) {
               this.linkTitle = res.data.title
             }
           })
-          this.$nextTick().then(() =>
+          this.$nextTick().then(() => {
+            // @ts-ignore
             this.$refs.linkTitleInput.$refs.input.focus()
-          )
+          })
         } catch (e) {
           this.linkTitle = text
-          this.$nextTick().then(() =>
+          this.$nextTick().then(() => {
+            // @ts-ignore
             this.$refs.linkUrlInput.$refs.input.focus()
-          )
+          })
         }
       } else {
-        this.$nextTick().then(() =>
+        this.$nextTick().then(() => {
+          // @ts-ignore
           this.$refs.linkTitleInput.$refs.input.focus()
-        )
+        })
       }
     },
 
@@ -89,5 +91,5 @@ export default {
       this.closeDialog()
     },
   },
-}
+})
 </script>

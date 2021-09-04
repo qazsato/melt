@@ -10,14 +10,10 @@
           :disabled="isChanged"
         >
           <el-row>
-            <el-link type="primary" icon="el-icon-edit" @click="onClickEdit">
-              rename
-            </el-link>
+            <el-link type="primary" icon="el-icon-edit" @click="onClickEdit"> rename </el-link>
           </el-row>
           <el-row>
-            <el-link type="danger" icon="el-icon-delete" @click="onClickDelete">
-              delete
-            </el-link>
+            <el-link type="danger" icon="el-icon-delete" @click="onClickDelete"> delete </el-link>
           </el-row>
           <div slot="reference" :class="{ editable: !isChanged }">
             {{ $store.state.note.title }}
@@ -30,25 +26,28 @@
       <span v-if="isChanged" class="changed">*</span>
     </h1>
 
-    <el-radio-group
-      v-model="viewMode"
-      class="checkbox-mode"
-      size="mini"
-      @change="changeViewMode"
-    >
+    <el-radio-group v-model="viewMode" class="checkbox-mode" size="mini" @change="changeViewMode">
       <el-radio-button label="editor">TEXT</el-radio-button>
       <el-radio-button label="preview">HTML</el-radio-button>
     </el-radio-group>
   </section>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+interface DataType {
+  viewMode: string
+  visiblePopover: boolean
+}
+
+export default Vue.extend({
   data() {
-    return {
+    const data: DataType = {
       viewMode: this.$store.state.viewMode,
       visiblePopover: false,
     }
+    return data
   },
 
   computed: {
@@ -84,7 +83,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>
