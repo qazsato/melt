@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import setting from '@config/setting.json'
+import setting from '@/config/setting'
 import axios from 'axios'
 import { ipcRenderer } from 'electron'
 import { Editor as CM } from 'codemirror'

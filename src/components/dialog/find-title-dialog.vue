@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import setting from '@config/setting.json'
+import setting from '@/config/setting'
 import { readAllNotes, readRecentlyOpenedNotes } from '@/utils/note'
 import { VIEW_MODE } from '@/constants'
 import Note from '@/assets/scripts/note/note'

@@ -1,7 +1,0 @@
-node_modules
-release-builds
-dist
-coverage
-test
-webpack.config.js
-main.js
