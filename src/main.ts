@@ -2,7 +2,7 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 import App from './app.vue'
-import setting from '@config/setting.json'
+import setting from '@/config/setting'
 import * as Sentry from '@sentry/vue'
 import { Integrations } from '@sentry/tracing'
 
@@ -11,11 +11,11 @@ Sentry.init({
   dsn: setting.sentry_dsn,
   integrations: [
     new Integrations.BrowserTracing({
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router)
-    })
+      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+    }),
   ],
   tracesSampleRate: 1.0,
-  environment: process.env.NODE_ENV
+  environment: process.env.NODE_ENV,
 })
 
 // eslint-disable-next-line no-new

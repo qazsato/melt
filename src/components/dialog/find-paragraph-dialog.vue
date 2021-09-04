@@ -115,7 +115,7 @@ export default Vue.extend({
     openDialog() {
       this.tableOfContents = this.$store.state.note.tableOfContents
       // HACK: closeDialogで消えたままになっているため戻す
-      const ele = <HTMLElement>document.querySelector('.find-paragraph-popper')
+      const ele = document.querySelector('.find-paragraph-popper') as HTMLElement
       if (ele && this.suggestions.length > 0) {
         ele.style.display = 'block'
       }
@@ -124,7 +124,7 @@ export default Vue.extend({
     closeDialog() {
       this.paragraphText = ''
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      const ele = <HTMLElement>document.querySelector('.find-paragraph-popper')
+      const ele = document.querySelector('.find-paragraph-popper') as HTMLElement
       ele.style.display = 'none'
       this.$store.commit('hideFindParagraphDialog')
     },

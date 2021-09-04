@@ -42,7 +42,7 @@ export default Vue.extend({
   watch: {
     content() {
       this.$nextTick().then(() => {
-        const element = <HTMLElement>this.$refs.markdown
+        const element = this.$refs.markdown as HTMLElement
         const cbElements = element.querySelectorAll('.clipboard')
         cbElements.forEach((e) => e.addEventListener('click', this.copyClipboard))
       })
@@ -53,7 +53,6 @@ export default Vue.extend({
     copyClipboard(event: any) {
       const code = event.target.nextElementSibling.innerText.trim() // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
       navigator.clipboard.writeText(code).then(() => {
-        // @ts-ignore
         this.$message({ type: 'success', message: 'Copy to clipboard.', showClose: true })
       })
     },

@@ -34,14 +34,8 @@ export const getBrowsingHistories = (): string[] => {
   if (!localStorage.browsingHistories) {
     return []
   }
-  const browsingHistories = JSON.parse(
-    localStorage.browsingHistories
-  ) as BrowsingHistory[]
-  browsingHistories.sort(
-    (a: BrowsingHistory, b: BrowsingHistory) => b.time - a.time
-  )
-  const paths = browsingHistories
-    .slice(0, MAX_NOTE_COUNT)
-    .map((h: BrowsingHistory) => h.path)
+  const browsingHistories = JSON.parse(localStorage.browsingHistories) as BrowsingHistory[]
+  browsingHistories.sort((a: BrowsingHistory, b: BrowsingHistory) => b.time - a.time)
+  const paths = browsingHistories.slice(0, MAX_NOTE_COUNT).map((h: BrowsingHistory) => h.path)
   return paths
 }

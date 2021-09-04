@@ -21,11 +21,7 @@ class Markdown {
         } else {
           code = this.md.utils.escapeHtml(str)
         }
-        return (
-          '<pre class="codeblock"><i class="clipboard"></i><div><code>' +
-          code +
-          '</code></div></pre>'
-        )
+        return '<pre class="codeblock"><i class="clipboard"></i><div><code>' + code + '</code></div></pre>'
       },
     })
     this.md.use(emoji)
@@ -47,13 +43,7 @@ class Markdown {
         return self.renderToken(tokens, idx, options)
       }
 
-    this.md.renderer.rules.link_open = function (
-      tokens,
-      idx,
-      options,
-      env,
-      self
-    ) {
+    this.md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
       // If you are sure other plugins can't add `target` - drop check below
       const aIndex = tokens[idx].attrIndex('target')
 
