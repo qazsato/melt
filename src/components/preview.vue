@@ -50,6 +50,7 @@ export default Vue.extend({
   },
 
   methods: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     copyClipboard(event: any) {
       const code = event.target.nextElementSibling.innerText.trim() // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
       navigator.clipboard.writeText(code).then(() => {

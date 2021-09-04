@@ -91,6 +91,7 @@ export default Vue.extend({
       callback(this.suggestions)
     },
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onKeydown(e: any) {
       this.isComposing = e.isComposing
     },
