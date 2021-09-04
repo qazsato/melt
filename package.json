@@ -1,10 +1,12 @@
 {
   "name": "melt",
   "productName": "Melt",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "My Markdown Editor. Based on the GitHub Flavored Markdown Spec.",
   "main": "main.js",
   "dependencies": {
+    "@sentry/tracing": "6.12.0",
+    "@sentry/vue": "6.12.0",
     "axios": "0.21.1",
     "codemirror": "5.62.3",
     "dayjs": "1.10.6",
