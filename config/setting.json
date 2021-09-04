@@ -1,4 +1,5 @@
 {
-  "directory": "/Users/kazuki-sato/ghq/github.com/qazsato/note",
-  "api": "https://api.melt.qazsato.com"
+  "directory": "",
+  "api": "https://api.melt.qazsato.com",
+  "sentry_dsn": ""
 }
