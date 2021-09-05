@@ -4,17 +4,12 @@
   "private": true,
   "author": "qazsato",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "electron:serve": "vue-cli-service electron:serve",
-    "electron:build": "vue-cli-service electron:build",
+    "serve": "vue-cli-service electron:serve",
+    "build": "vue-cli-service electron:build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps",
-    "prepack:mac": "npm run build",
-    "pack:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icon.icns --prune=true --out=release-builds",
-    "start": "NODE_ENV=development electron ."
+    "postuninstall": "electron-builder install-app-deps"
   },
   "main": "background.js",
   "dependencies": {
