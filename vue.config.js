@@ -4,10 +4,10 @@ module.exports = {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
-    },
-    builderOptions: {
-      mac: {
-        icon: 'src/images/icon.icns',
+      builderOptions: {
+        mac: {
+          icon: 'src/images/icon.icns',
+        },
       },
     },
   },
