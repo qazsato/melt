@@ -236,7 +236,8 @@ app.whenReady().then(async () => {
     // Install Vue Devtools
     try {
       await installExtension(VUEJS_DEVTOOLS)
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
