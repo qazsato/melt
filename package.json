@@ -15,20 +15,20 @@
   "dependencies": {
     "@sentry/tracing": "6.12.0",
     "@sentry/vue": "6.12.0",
-    "axios": "0.21.1",
+    "axios": "0.21.3",
     "codemirror": "5.62.3",
     "dayjs": "1.10.6",
     "electron-find": "1.0.7",
-    "element-ui": "2.15.5",
+    "element-ui": "2.15.6",
     "github-markdown-css": "4.0.0",
     "glob": "7.1.7",
     "highlight.js": "11.2.0",
     "markdown-it": "12.2.0",
     "markdown-it-emoji": "2.0.0",
     "markdown-it-task-checkbox": "1.0.6",
-    "vue": "2.6.11",
-    "vue-router": "3.2.0",
-    "vuex": "3.4.0"
+    "vue": "2.6.14",
+    "vue-router": "3.5.2",
+    "vuex": "3.6.2"
   },
   "devDependencies": {
     "@types/codemirror": "5.60.2",
@@ -58,7 +58,7 @@
     "sass-loader": "8.0.2",
     "typescript": "4.1.5",
     "vue-cli-plugin-electron-builder": "2.1.1",
-    "vue-template-compiler": "2.6.11"
+    "vue-template-compiler": "2.6.14"
   },
   "keywords": [
     "markdown",
