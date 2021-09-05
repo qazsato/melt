@@ -9,77 +9,74 @@
   >
     <el-form label-width="45px">
       <el-form-item label="Alt">
-        <el-input
-          ref="imageAltInput"
-          v-model="imageAlt"
-          placeholder="Please input"
-          @keyup.enter.native="insertImage"
-        />
+        <el-input ref="imageAltInput" v-model="imageAlt" placeholder="Please input" @keyup.enter.native="insertImage" />
       </el-form-item>
       <el-form-item label="URL">
-        <el-input
-          ref="imageUrlInput"
-          v-model="imageUrl"
-          placeholder="Please input"
-          @keyup.enter.native="insertImage"
-        />
+        <el-input ref="imageUrlInput" v-model="imageUrl" placeholder="Please input" @keyup.enter.native="insertImage" />
       </el-form-item>
     </el-form>
-    <span
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button
-        type="primary"
-        @click="insertImage"
-      >
-        Insert
-      </el-button>
-      <el-button @click="closeDialog">
-        Cancel
-      </el-button>
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="insertImage"> Insert </el-button>
+      <el-button @click="closeDialog"> Cancel </el-button>
     </span>
   </el-dialog>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
+<script lang="ts">
+import Vue from 'vue'
+
+interface DataType {
+  imageAlt: string
+  imageUrl: string
+}
+
+export default Vue.extend({
+  data() {
+    const data: DataType = {
       imageAlt: '',
-      imageUrl: ''
+      imageUrl: '',
     }
+    return data
   },
 
   methods: {
-    openDialog () {
+    openDialog() {
       const text = this.$store.state.editor.getSelection()
       if (text) {
         try {
           // eslint-disable-next-line no-new
           new URL(text)
           this.imageUrl = text
-          this.$nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus())
+          this.$nextTick().then(() => {
+            // @ts-ignore
+            this.$refs.imageAltInput.$refs.input.focus()
+          })
         } catch (e) {
           this.imageAlt = text
-          this.$nextTick().then(() => this.$refs.imageUrlInput.$refs.input.focus())
+          this.$nextTick().then(() => {
+            // @ts-ignore
+            this.$refs.imageUrlInput.$refs.input.focus()
+          })
         }
       } else {
-        this.$nextTick().then(() => this.$refs.imageAltInput.$refs.input.focus())
+        this.$nextTick().then(() => {
+          // @ts-ignore
+          this.$refs.imageAltInput.$refs.input.focus()
+        })
       }
     },
 
-    closeDialog () {
+    closeDialog() {
       this.imageAlt = ''
       this.imageUrl = ''
       this.$store.state.editor.focus()
       this.$store.commit('hideImageDialog')
     },
 
-    insertImage () {
+    insertImage() {
       this.$store.state.editor.insertImage(this.imageAlt, this.imageUrl)
       this.closeDialog()
-    }
-  }
-}
+    },
+  },
+})
 </script>

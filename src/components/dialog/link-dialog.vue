@@ -17,45 +17,37 @@
         />
       </el-form-item>
       <el-form-item label="URL">
-        <el-input
-          ref="linkUrlInput"
-          v-model="linkUrl"
-          placeholder="Please input"
-          @keyup.enter.native="insertLink"
-        />
+        <el-input ref="linkUrlInput" v-model="linkUrl" placeholder="Please input" @keyup.enter.native="insertLink" />
       </el-form-item>
     </el-form>
-    <span
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button
-        type="primary"
-        @click="insertLink"
-      >
-        Insert
-      </el-button>
-      <el-button @click="closeDialog">
-        Cancel
-      </el-button>
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="insertLink"> Insert </el-button>
+      <el-button @click="closeDialog"> Cancel </el-button>
     </span>
   </el-dialog>
 </template>
 
-<script>
-import setting from '@config/setting.json'
+<script lang="ts">
+import Vue from 'vue'
+import setting from '@/config/setting'
 import axios from 'axios'
 
-export default {
-  data () {
-    return {
+interface DataType {
+  linkTitle: string
+  linkUrl: string
+}
+
+export default Vue.extend({
+  data() {
+    const data: DataType = {
       linkTitle: '',
-      linkUrl: ''
+      linkUrl: '',
     }
+    return data
   },
 
   methods: {
-    openDialog () {
+    openDialog() {
       const text = this.$store.state.editor.getSelection()
       if (text) {
         try {
@@ -68,27 +60,36 @@ export default {
               this.linkTitle = res.data.title
             }
           })
-          this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus())
+          this.$nextTick().then(() => {
+            // @ts-ignore
+            this.$refs.linkTitleInput.$refs.input.focus()
+          })
         } catch (e) {
           this.linkTitle = text
-          this.$nextTick().then(() => this.$refs.linkUrlInput.$refs.input.focus())
+          this.$nextTick().then(() => {
+            // @ts-ignore
+            this.$refs.linkUrlInput.$refs.input.focus()
+          })
         }
       } else {
-        this.$nextTick().then(() => this.$refs.linkTitleInput.$refs.input.focus())
+        this.$nextTick().then(() => {
+          // @ts-ignore
+          this.$refs.linkTitleInput.$refs.input.focus()
+        })
       }
     },
 
-    closeDialog () {
+    closeDialog() {
       this.linkTitle = ''
       this.linkUrl = ''
       this.$store.state.editor.focus()
       this.$store.commit('hideLinkDialog')
     },
 
-    insertLink () {
+    insertLink() {
       this.$store.state.editor.insertLink(this.linkTitle, this.linkUrl)
       this.closeDialog()
-    }
-  }
-}
+    },
+  },
+})
 </script>

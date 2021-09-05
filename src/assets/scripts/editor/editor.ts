@@ -1,44 +1,52 @@
-import CodeMirror from 'codemirror'
+import CodeMirror, { EditorConfiguration, KeyMap, Position } from 'codemirror'
 
 class Editor {
-  constructor (id, option) {
-    this.editor = CodeMirror.fromTextArea(document.getElementById(id), option)
-    this.focused = false
-    this.editor.on('focus', () => { this.focused = true })
-    this.editor.on('blur', () => { this.focused = false })
+  editor: CodeMirror.Editor
+  focused = false
+
+  constructor(id: string, option: EditorConfiguration) {
+    const element: HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById(id)
+    this.editor = CodeMirror.fromTextArea(element, option)
+    this.editor.on('focus', () => {
+      this.focused = true
+    })
+    this.editor.on('blur', () => {
+      this.focused = false
+    })
   }
 
   /**
    * キーバインドを登録します。
-   * @param {object} map
+   * @param map
    */
-  addKeyMap (map) {
+  addKeyMap(map: KeyMap): void {
     this.editor.addKeyMap(map)
   }
 
   /**
    * イベントを紐付けます。
-   * @param {string} event
-   * @param {function} handler
+   * @param event
+   * @param handler
    */
-  on (event, handler) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  on(event: any, handler: any): void {
     this.editor.on(event, handler)
   }
 
   /**
    * エディタにフォーカスします。
    */
-  focus () {
+  focus(): void {
     this.editor.focus()
   }
 
   /**
    * 任意の文字を挿入します。
-   * @param {string} text
-   * @param {object} from {line, ch}
-   * @param {object} to {line, ch}
+   * @param text
+   * @param from {line, ch}
+   * @param to {line, ch}
    */
-  insert (text, from, to) {
+  insert(text: string, from?: Position, to?: Position): void {
     if (!from) {
       from = this.editor.getCursor()
     }
@@ -47,9 +55,9 @@ class Editor {
 
   /**
    * 行の先頭に任意の文字を挿入します。
-   * @param {string} text
+   * @param text
    */
-  insertPrefix (text) {
+  insertPrefix(text: string): void {
     const pos = this.editor.getCursor()
     this.editor.replaceRange(text, { line: pos.line, ch: 0 })
   }
@@ -57,37 +65,37 @@ class Editor {
   /**
    * エディタの文字を全て返却します。
    */
-  getText () {
+  getText(): string {
     return this.editor.getValue()
   }
 
   /**
    * エディタの文字を設定します。
-   * @param {String} val
+   * @param val
    */
-  setText (val) {
+  setText(val: string): void {
     this.editor.setValue(val)
   }
 
   /**
    * 選択中の文字を返却します。
    */
-  getSelection () {
+  getSelection(): string {
     return this.editor.getSelection()
   }
 
   /**
    * 指定行数の文字を返却します。
-   * @param {number} number
+   * @param number
    */
-  getLineText (number) {
+  getLineText(number: number): string {
     return this.editor.getLine(number)
   }
 
   /**
    * 選択中の文字の開始位置と終了位置を返却します。
    */
-  getSelectionPosition () {
+  getSelectionPosition(): Pos {
     const selection = this.editor.listSelections()[0]
     const head = selection.head
     const anchor = selection.anchor
@@ -111,7 +119,7 @@ class Editor {
    * @param {number} x X座標の相対値
    * @param {number} y Y座標の相対値
    */
-  moveCursorPosition (x = 0, y = 0) {
+  moveCursorPosition(x = 0, y = 0): void {
     const pos = this.editor.getCursor()
     this.editor.setCursor({ line: pos.line + y, ch: pos.ch + x })
   }
@@ -119,25 +127,36 @@ class Editor {
   /**
    * エディタがフォーカス中か否かを返却します。
    */
-  isFocus () {
+  isFocus(): boolean {
     return this.focused
   }
 
   /**
    * 指定行にカーソルを移動します
-   * @param {number}} line
+   * @param line
    */
-  gotoLine (line) {
-    this.editor.setCursor({ pos: 0, line })
+  gotoLine(line: number): void {
+    this.editor.setCursor({ ch: 0, line })
   }
 
   /**
    * 指定行を選択状態にします
-   * @param {number} line
+   * @param line
    */
-  selectLine (line) {
+  selectLine(line: number): void {
     const text = this.getLineText(line)
     this.editor.setSelection({ line, ch: 0 }, { line, ch: text.length })
+  }
+}
+
+interface Pos {
+  start: {
+    x: number
+    y: number
+  }
+  end: {
+    x: number
+    y: number
   }
 }
 

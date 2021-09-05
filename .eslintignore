@@ -1,5 +1,2 @@
-node_modules
-release-builds
-dist
-coverage
-src/assets/fonts
+main.js
+tests/**/*.js

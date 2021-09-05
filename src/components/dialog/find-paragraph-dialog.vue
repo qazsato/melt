@@ -21,9 +21,7 @@
     >
       <template slot-scope="{ item }">
         <div class="item">
-          <div class="heading">
-            H{{ item.heading }}
-          </div>
+          <div class="heading">H{{ item.heading }}</div>
           <div class="text">
             {{ item.text }}
           </div>
@@ -33,49 +31,72 @@
   </el-dialog>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
+<script lang="ts">
+import Vue from 'vue'
+import { TableOfContent } from '@/assets/scripts/note/note'
+
+interface Suggestion {
+  text: string
+  heading: number
+  index: number
+}
+
+interface DataType {
+  paragraphText: string
+  tableOfContents: TableOfContent[]
+  suggestions: Suggestion[]
+  isComposing: boolean
+}
+
+export default Vue.extend({
+  data() {
+    const data: DataType = {
       paragraphText: '',
       tableOfContents: [],
       suggestions: [],
-      isComposing: false // 日本語入力(IME)が未確定か否か
+      isComposing: false, // 日本語入力(IME)が未確定か否か
     }
+    return data
   },
 
   computed: {
-    visibleFindParagraphDialog () {
+    visibleFindParagraphDialog() {
       return this.$store.state.visibleFindParagraphDialog
-    }
+    },
   },
 
   watch: {
-    visibleFindParagraphDialog (value) {
+    visibleFindParagraphDialog(value) {
       if (value) {
-        this.$nextTick().then(() => this.$refs.paragraphInput.$refs.input.focus())
+        this.$nextTick().then(() => {
+          // @ts-ignore
+          this.$refs.paragraphInput.$refs.input.focus()
+        })
       }
-    }
+    },
   },
 
   methods: {
-    queryFindParagraph (query, callback) {
-      const filteredParagraphs = query ? this.tableOfContents.filter((t) => t.text.toLowerCase().includes(query.toLowerCase())) : this.tableOfContents
+    queryFindParagraph(query: string, callback: (suggestion: Suggestion[]) => void) {
+      const filteredParagraphs = query
+        ? this.tableOfContents.filter((t) => t.text.toLowerCase().includes(query.toLowerCase()))
+        : this.tableOfContents
       this.suggestions = filteredParagraphs.map((t, i) => {
         return {
           text: t.text,
           heading: t.heading,
-          index: i
+          index: i,
         }
       })
       callback(this.suggestions)
     },
 
-    onKeydown (e) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onKeydown(e: any) {
       this.isComposing = e.isComposing
     },
 
-    onSelect (item) {
+    onSelect(item: Suggestion) {
       // HACK: イベント処理順を keydown => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
@@ -92,23 +113,24 @@ export default {
       })
     },
 
-    openDialog () {
+    openDialog() {
       this.tableOfContents = this.$store.state.note.tableOfContents
       // HACK: closeDialogで消えたままになっているため戻す
-      const element = document.querySelector('.find-paragraph-popper')
-      if (element && this.suggestions.length > 0) {
-        element.style.display = 'block'
+      const ele = document.querySelector('.find-paragraph-popper') as HTMLElement
+      if (ele && this.suggestions.length > 0) {
+        ele.style.display = 'block'
       }
     },
 
-    closeDialog () {
+    closeDialog() {
       this.paragraphText = ''
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      document.querySelector('.find-paragraph-popper').style.display = 'none'
+      const ele = document.querySelector('.find-paragraph-popper') as HTMLElement
+      ele.style.display = 'none'
       this.$store.commit('hideFindParagraphDialog')
-    }
-  }
-}
+    },
+  },
+})
 </script>
 
 <style lang="scss">

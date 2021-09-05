@@ -7,59 +7,52 @@
     :before-close="closeDialog"
     @open="openDialog"
   >
-    <el-input
-      ref="fileNameInput"
-      v-model="fileName"
-      placeholder="Please input"
-      @keyup.enter.native="changeFileName"
-    >
-      <template slot="append">
-        .md
-      </template>
+    <el-input ref="fileNameInput" v-model="fileName" placeholder="Please input" @keyup.enter.native="changeFileName">
+      <template slot="append"> .md </template>
     </el-input>
-    <span
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button
-        type="primary"
-        :disabled="isDisabledChange"
-        @click="changeFileName"
-      >
-        Change
-      </el-button>
-      <el-button @click="closeDialog">
-        Cancel
-      </el-button>
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" :disabled="isDisabledChange" @click="changeFileName"> Change </el-button>
+      <el-button @click="closeDialog"> Cancel </el-button>
     </span>
   </el-dialog>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      fileName: ''
+<script lang="ts">
+import Vue from 'vue'
+
+interface DataType {
+  fileName: string
+}
+
+export default Vue.extend({
+  data() {
+    const data: DataType = {
+      fileName: '',
     }
+    return data
   },
 
   computed: {
-    isDisabledChange () {
+    isDisabledChange() {
+      // @ts-ignore
       return this.fileName.length === 0
-    }
+    },
   },
 
   methods: {
-    openDialog () {
+    openDialog() {
       this.fileName = this.$store.state.note.title.split('.md')[0]
-      this.$nextTick().then(() => this.$refs.fileNameInput.$refs.input.focus())
+      this.$nextTick().then(() => {
+        // @ts-ignore
+        this.$refs.fileNameInput.$refs.input.focus()
+      })
     },
 
-    closeDialog () {
+    closeDialog() {
       this.$store.commit('hideRenameDialog')
     },
 
-    changeFileName () {
+    changeFileName() {
       if (this.isDisabledChange) {
         return
       }
@@ -68,7 +61,7 @@ export default {
       const path = note.filePath.replace(regexp, `${this.fileName}.md`)
       this.$store.commit('renameNote', path)
       this.closeDialog()
-    }
-  }
-}
+    },
+  },
+})
 </script>

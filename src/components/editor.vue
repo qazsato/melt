@@ -1,62 +1,67 @@
 <template>
-  <div
-    v-show="isViewModeEditor"
-    class="editor-area"
-  >
+  <div v-show="isViewModeEditor" class="editor-area">
     <textarea id="editor" />
   </div>
 </template>
 
-<script>
-import setting from '@config/setting.json'
+<script lang="ts">
+import Vue from 'vue'
+import setting from '@/config/setting'
 import axios from 'axios'
 import { ipcRenderer } from 'electron'
-import Editor from '@scripts/editor/markdown-editor.js'
-import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@constants/index.js'
-import { isCodeBlock, getDefaultCodeBlock } from '@utils/markdown.js'
+import { Editor as CM } from 'codemirror'
+import Editor from '@/assets/scripts/editor/markdown-editor'
+import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@/constants'
+import { isCodeBlock, getDefaultCodeBlock } from '@/utils/markdown'
 import 'codemirror/lib/codemirror.css'
-import '@styles/melt-light.scss'
+import '@/assets/styles/melt-light.scss'
 
-export default {
-  data () {
-    return {
+interface DataType {
+  editor: Editor | null
+  isPasteAsPlainText: boolean
+}
+
+export default Vue.extend({
+  data() {
+    const data: DataType = {
       editor: null,
-      isPasteAsPlainText: false
+      isPasteAsPlainText: false,
     }
+    return data
   },
 
   computed: {
-    isViewModeEditor () {
+    isViewModeEditor() {
       return this.$store.state.viewMode === VIEW_MODE.EDITOR
     },
 
-    viewMode () {
+    viewMode() {
       return this.$store.state.viewMode
     },
 
-    note () {
+    note() {
       return this.$store.state.note
-    }
+    },
   },
 
   watch: {
-    viewMode (value) {
+    viewMode(value) {
       // NOTE: HTMLモードでファイル変更し、TEXTモードに切り替えた場合、変更前の情報が表示されたままとなってしまう。
       // その問題を回避するため、ここで再度テキストを設定して変更後の情報にする。
       if (value === VIEW_MODE.EDITOR) {
         // 変更済みの情報を上書きしないように、未変更の場合のみ設定する
         if (!this.$store.state.note.isChanged) {
-          this.$nextTick().then(() => this.editor.setText(this.$store.state.note.content))
+          this.$nextTick().then(() => this.editor?.setText(this.$store.state.note.content))
         }
       }
     },
 
-    note (note) {
-      this.editor.setText(note.content)
-    }
+    note(note) {
+      this.editor?.setText(note.content)
+    },
   },
 
-  mounted () {
+  mounted() {
     this.editor = new Editor('editor')
     this.editor.on('change', this.onChangeText)
     this.editor.on('paste', this.onPasteText)
@@ -64,29 +69,30 @@ export default {
     this.editor.addKeyMap({
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
       'Shift-Cmd-L': () => this.$store.commit('showImageDialog'),
-      'Cmd-B': () => this.editor.insertBold(),
-      'Cmd-I': () => this.editor.insertItalic(),
-      'Cmd-D': () => this.editor.insertStrikethrough(),
-      'Cmd-K': () => this.editor.insertCode(),
-      'Cmd-U': () => this.editor.insertQuote(),
-      'Shift-Cmd-U': () => this.editor.insertBulletList(),
-      'Shift-Cmd-O': () => this.editor.insertOrderedList(),
-      'Shift-Cmd-X': () => this.editor.insertTaskList(),
+      'Cmd-B': () => this.editor?.insertBold(),
+      'Cmd-I': () => this.editor?.insertItalic(),
+      'Cmd-D': () => this.editor?.insertStrikethrough(),
+      'Cmd-K': () => this.editor?.insertCode(),
+      'Cmd-U': () => this.editor?.insertQuote(),
+      'Shift-Cmd-U': () => this.editor?.insertBulletList(),
+      'Shift-Cmd-O': () => this.editor?.insertOrderedList(),
+      'Shift-Cmd-X': () => this.editor?.insertTaskList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveNote(),
-      'Shift-Cmd-V': () => this.pasteAsPlainText()
+      'Shift-Cmd-V': () => this.pasteAsPlainText(),
     })
     this.$store.commit('setEditor', this.editor)
   },
 
   methods: {
-    saveNote () {
-      const content = this.editor.getText()
+    saveNote() {
+      const content = this.editor?.getText()
       if (this.$store.state.note.filePath) {
         this.$store.commit('updateNote', content)
         this.$store.commit('saveNote')
       } else {
-        ipcRenderer.invoke('new-note-save', content)
+        ipcRenderer
+          .invoke('new-note-save', content)
           .then((data) => {
             // キャンセルで閉じた
             if (data.status === undefined) {
@@ -106,17 +112,19 @@ export default {
       }
     },
 
-    onChangeText (editor, event) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onChangeText(editor: CM, event: any) {
       if (this.isInsertCodeBlock(event)) {
         const currentLine = editor.getCursor().line
-        this.editor.selectLine(currentLine)
-        this.editor.insertText(getDefaultCodeBlock())
-        this.editor.gotoLine(currentLine + 1)
+        this.editor?.selectLine(currentLine)
+        this.editor?.insertText(getDefaultCodeBlock())
+        this.editor?.gotoLine(currentLine + 1)
       }
-      this.$store.commit('updateNote', this.editor.getText())
+      this.$store.commit('updateNote', this.editor?.getText())
     },
 
-    onPasteText (editor, event) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onPasteText(editor: CM, event: any) {
       if (this.isPasteAsPlainText) {
         return
       }
@@ -128,19 +136,23 @@ export default {
         return // URLに変換できない場合何もしない
       }
       const url = `${setting.api}/sites/metadata?url=${text}`
-      axios.get(url).then((res) => {
-        if (res.data.title) {
-          this.editor.insertLink(res.data.title, text)
-        } else {
-          this.editor.insertText(text)
-        }
-      }).catch(() => {
-        this.editor.insertText(text)
-      })
+      axios
+        .get(url)
+        .then((res) => {
+          if (res.data.title) {
+            this.editor?.insertLink(res.data.title, text)
+          } else {
+            this.editor?.insertText(text)
+          }
+        })
+        .catch(() => {
+          this.editor?.insertText(text)
+        })
       event.preventDefault()
     },
 
-    onDropFile (editor, event) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onDropFile(editor: CM, event: any) {
       const files = event.dataTransfer.files
       if (files.length > 1) {
         return
@@ -155,32 +167,33 @@ export default {
         const data = {
           key: file.name,
           type: file.type,
-          attachment: e.target.result
+          attachment: e.target?.result,
         }
         axios.post(`${setting.api}/images`, data).then((res) => {
-          this.editor.insertImage(res.data.name, res.data.url, true)
+          this.editor?.insertImage(res.data.name, res.data.url, true)
         })
       }
     },
 
-    pasteAsPlainText () {
+    pasteAsPlainText() {
       this.isPasteAsPlainText = true
       document.execCommand('paste')
       this.isPasteAsPlainText = false
     },
 
-    isInsertCodeBlock (event) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    isInsertCodeBlock(event: any) {
       if (event.from.line === event.to.line) {
-        const text = this.editor.getLineText(event.to.line)
+        const text = this.editor?.getLineText(event.to.line) || ''
         const removed = event.removed[0]
         if (isCodeBlock(text) && !isCodeBlock(removed)) {
           return true
         }
       }
       return false
-    }
-  }
-}
+    },
+  },
+})
 </script>
 
 <style lang="scss" scoped>

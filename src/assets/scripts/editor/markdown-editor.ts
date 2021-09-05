@@ -1,5 +1,6 @@
-import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@constants/index.js'
-import Editor from './editor.js'
+import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
+import { Editor as CM } from 'codemirror'
+import Editor from './editor'
 import 'codemirror/mode/gfm/gfm.js'
 import 'codemirror/mode/htmlmixed/htmlmixed.js'
 import 'codemirror/mode/css/css.js'
@@ -13,11 +14,11 @@ import 'codemirror/mode/shell/shell.js'
 import 'codemirror/addon/edit/continuelist.js'
 
 class MarkdownEditor extends Editor {
-  constructor (id) {
+  constructor(id: string) {
     const option = {
       mode: {
         name: 'gfm',
-        highlightFormatting: true
+        highlightFormatting: true,
       },
       theme: 'melt-light',
       lineWrapping: true,
@@ -28,9 +29,13 @@ class MarkdownEditor extends Editor {
       allowDropFileTypes: ALLOW_DROP_FILE_TYPES,
       extraKeys: {
         Enter: 'newlineAndIndentContinueMarkdownList',
-        Tab: (cm) => { this.onPressTab(cm) },
-        'Shift-Tab': (cm) => { this.onPressShiftTab(cm) }
-      }
+        Tab: (cm: CM) => {
+          this.onPressTab(cm)
+        },
+        'Shift-Tab': (cm: CM) => {
+          this.onPressShiftTab(cm)
+        },
+      },
     }
     super(id, option)
   }
@@ -38,7 +43,7 @@ class MarkdownEditor extends Editor {
   /**
    * Tabのハンドラ
    */
-  onPressTab (cm) {
+  onPressTab(cm: CM): void {
     const pos = this.editor.getCursor()
     const text = this.editor.getLine(pos.line)
     if (cm.somethingSelected()) {
@@ -59,7 +64,7 @@ class MarkdownEditor extends Editor {
   /**
    * Shift + Tab のハンドラ
    */
-  onPressShiftTab (cm) {
+  onPressShiftTab(cm: CM): void {
     cm.execCommand('indentLess')
   }
 
@@ -67,7 +72,7 @@ class MarkdownEditor extends Editor {
    * テキストを挿入します。
    * @param {string} text
    */
-  insertText (text = '') {
+  insertText(text = ''): void {
     this.editor.replaceSelection(text)
   }
 
@@ -76,7 +81,7 @@ class MarkdownEditor extends Editor {
    * @param {string} title
    * @param {string} url
    */
-  insertLink (title = '', url = '') {
+  insertLink(title = '', url = ''): void {
     this.editor.replaceSelection(`[${title}](${url})`)
   }
 
@@ -86,7 +91,7 @@ class MarkdownEditor extends Editor {
    * @param {string} url
    * @param {boolean} isHtmlString
    */
-  insertImage (alt = '', url = '', isHtmlString = false) {
+  insertImage(alt = '', url = '', isHtmlString = false): void {
     const text = isHtmlString ? `<img alt="${alt}" src="${url}">` : `![${alt}](${url})`
     this.editor.replaceSelection(text)
   }
@@ -94,39 +99,41 @@ class MarkdownEditor extends Editor {
   /**
    * 太字を挿入します。
    */
-  insertBold () {
+  insertBold(): void {
     this.putMarkInSelection('**')
   }
 
   /**
    * 斜体を挿入します。
    */
-  insertItalic () {
+  insertItalic(): void {
     this.putMarkInSelection('*')
   }
 
   /**
    * 打ち消し線を挿入します。
    */
-  insertStrikethrough () {
+  insertStrikethrough(): void {
     this.putMarkInSelection('~~')
   }
 
   /**
    * コードを挿入します。
    */
-  insertCode () {
+  insertCode(): void {
     this.putMarkInSelection('`')
   }
 
   /**
    * 引用を挿入します。
    */
-  insertQuote () {
+  insertQuote(): void {
     const pos = this.getSelectionPosition()
-    if (pos.start.y === pos.end.y) { // 単一行
+    if (pos.start.y === pos.end.y) {
+      // 単一行
       this.insertPrefix('> ')
-    } else { // 複数行
+    } else {
+      // 複数行
       let lineText = ''
       for (let i = pos.start.y; i <= pos.end.y; i++) {
         const line = this.editor.getLine(i)
@@ -144,39 +151,37 @@ class MarkdownEditor extends Editor {
   /**
    * 箇条書きリストを挿入します。
    */
-  insertBulletList () {
+  insertBulletList(): void {
     this.insertList(LIST_TYPE.BULLET)
   }
 
   /**
    * 番号付きリストを挿入します。
    */
-  insertOrderedList () {
+  insertOrderedList(): void {
     this.insertList(LIST_TYPE.ORDERED)
   }
 
   /**
    * タスクリストを挿入します。
    */
-  insertTaskList () {
+  insertTaskList(): void {
     this.insertList(LIST_TYPE.TASK)
   }
 
   /**
    * リストか判定します。
    */
-  isList (text) {
+  isList(text: string): boolean {
     return this.isBulletList(text) || this.isOrderedList(text) || this.isTaskList(text)
   }
 
   /**
    * 箇条書きリストか判定します。
    */
-  isBulletList (lineText) {
+  isBulletList(lineText: string): boolean {
     const trimed = lineText.trimLeft()
-    if (trimed.indexOf('- ') === 0 ||
-        trimed.indexOf('* ') === 0 ||
-        trimed.indexOf('+ ') === 0) {
+    if (trimed.indexOf('- ') === 0 || trimed.indexOf('* ') === 0 || trimed.indexOf('+ ') === 0) {
       return true
     }
     return false
@@ -185,7 +190,7 @@ class MarkdownEditor extends Editor {
   /**
    * 番号付きリストか判定します。
    */
-  isOrderedList (lineText) {
+  isOrderedList(lineText: string): boolean {
     const trimed = lineText.trimLeft()
     if (trimed.search(/^[0-9]+\./) !== -1) {
       return true
@@ -196,14 +201,16 @@ class MarkdownEditor extends Editor {
   /**
    * タスクリストか判定します。
    */
-  isTaskList (lineText) {
+  isTaskList(lineText: string): boolean {
     const trimed = lineText.trimLeft()
-    if (trimed.indexOf('- [ ]') === 0 ||
-        trimed.indexOf('* [ ]') === 0 ||
-        trimed.indexOf('+ [ ]') === 0 ||
-        trimed.indexOf('- [x]') === 0 ||
-        trimed.indexOf('* [x]') === 0 ||
-        trimed.indexOf('+ [x]') === 0) {
+    if (
+      trimed.indexOf('- [ ]') === 0 ||
+      trimed.indexOf('* [ ]') === 0 ||
+      trimed.indexOf('+ [ ]') === 0 ||
+      trimed.indexOf('- [x]') === 0 ||
+      trimed.indexOf('* [x]') === 0 ||
+      trimed.indexOf('+ [x]') === 0
+    ) {
       return true
     }
     return false
@@ -212,7 +219,7 @@ class MarkdownEditor extends Editor {
   /**
    * 対象行のリストがインデント可能か判定します。
    */
-  isIndentableList (lineNumber) {
+  isIndentableList(lineNumber: number): boolean {
     // 先頭行の場合、字下げ不要
     if (lineNumber === 0) {
       return false
@@ -235,7 +242,7 @@ class MarkdownEditor extends Editor {
   /**
    * テーブルを挿入します。
    */
-  insertTable (row = 3, column = 3) {
+  insertTable(row = 3, column = 3): void {
     let tr = ''
     let th = ''
     for (let i = 0; i < row - 1; i++) {
@@ -258,20 +265,22 @@ class MarkdownEditor extends Editor {
 
   /**
    * 任意の文字列を選択されたテキストの前後に挿入します。
-   * @param {string} mark
+   * @param mark
    */
-  putMarkInSelection (mark) {
+  putMarkInSelection(mark: string): void {
     const pos = this.getSelectionPosition()
     const startX = pos.start.x
     const startY = pos.start.y
     const endX = pos.end.x
     const endY = pos.end.y
-    if (startY === endY) { // 単一行
+    if (startY === endY) {
+      // 単一行
       this.editor.replaceSelection(`${mark}${this.getSelection()}${mark}`)
       if (startX === endX) {
         this.moveCursorPosition(-1 * mark.length, 0) // NOTE 未選択時の場合は入力のしやすさを考慮しカーソル移動する。
       }
-    } else { // 複数行
+    } else {
+      // 複数行
       let lineText = ''
       for (let i = startY; i <= endY; i++) {
         const line = this.editor.getLine(i)
@@ -294,14 +303,16 @@ class MarkdownEditor extends Editor {
 
   /**
    * リストを挿入します。
-   * @param {string} type
+   * @param type
    */
-  insertList (type) {
+  insertList(type: string): void {
     const pos = this.getSelectionPosition()
-    if (pos.start.y === pos.end.y) { // 単一行
+    if (pos.start.y === pos.end.y) {
+      // 単一行
       const prefix = this.getListPrefix(type)
       this.insertPrefix(prefix)
-    } else { // 複数行
+    } else {
+      // 複数行
       let lineText = ''
       for (let i = pos.start.y; i <= pos.end.y; i++) {
         const line = this.editor.getLine(i)
@@ -320,10 +331,10 @@ class MarkdownEditor extends Editor {
 
   /**
    * リストの種別毎のプレフィックスを返却します。
-   * @param {string} type
-   * @param {number} number
+   * @param type
+   * @param number
    */
-  getListPrefix (type, number = 1) {
+  getListPrefix(type: string, number = 1): string {
     if (type === LIST_TYPE.BULLET) {
       return '- '
     } else if (type === LIST_TYPE.ORDERED) {
@@ -331,12 +342,13 @@ class MarkdownEditor extends Editor {
     } else if (type === LIST_TYPE.TASK) {
       return '- [ ] '
     }
+    return ''
   }
 
   /**
    * 文書の見出し(Hタグ)を取得します。
    */
-  getTitle () {
+  getTitle(): string {
     const re = /# (.+)\n/.exec(this.editor.getValue())
     if (re === null) {
       return ''

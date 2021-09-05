@@ -9,54 +9,59 @@
       <span>{{ line }}</span>
     </div>
     <div class="spacer" />
-    <div
-      v-if="lastModifiedAt"
-      class="last-modified"
-    >
+    <div v-if="lastModifiedAt" class="last-modified">
       <i class="el-icon-refresh" />
       <span>{{ lastModifiedAt }}</span>
     </div>
   </section>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import dayjs from 'dayjs'
 
-export default {
-  data () {
-    return {
+interface DataType {
+  paragraph: number
+  line: number
+  lastModifiedAt: string | null
+}
+
+export default Vue.extend({
+  data() {
+    const data: DataType = {
       paragraph: 0,
       line: 0,
-      lastModifiedAt: null
+      lastModifiedAt: null,
     }
+    return data
   },
 
   computed: {
-    isChanged () {
+    isChanged() {
       return this.$store.state.note.isChanged
     },
 
-    content () {
+    content() {
       return this.$store.state.note.content
-    }
+    },
   },
 
   watch: {
-    isChanged () {
+    isChanged() {
       const note = this.$store.state.note
       if (note.fileStats) {
         this.lastModifiedAt = dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss')
       }
     },
 
-    content (value) {
+    content(value) {
       const note = this.$store.state.note
       this.paragraph = note.tableOfContents.length
       this.line = value.split('\n').length
       this.lastModifiedAt = note.fileStats ? dayjs(note.fileStats.mtime).format('YYYY/MM/DD HH:mm:ss') : null
-    }
-  }
-}
+    },
+  },
+})
 </script>
 
 <style lang="scss" scoped>
