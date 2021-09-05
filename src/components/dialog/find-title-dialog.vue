@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import setting from '@config/setting.json'
+import setting from '@/config/setting'
 import { readAllNotes, readRecentlyOpenedNotes } from '@/utils/note'
 import { VIEW_MODE } from '@/constants'
 import Note from '@/assets/scripts/note/note'
@@ -98,6 +98,7 @@ export default Vue.extend({
       callback(this.suggestions)
     },
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onKeydown(e: any) {
       this.isComposing = e.isComposing
     },
@@ -124,7 +125,7 @@ export default Vue.extend({
     openDialog() {
       this.notes = readAllNotes(setting.directory)
       // HACK: closeDialogで消えたままになっているため戻す
-      const ele = <HTMLElement>document.querySelector('.find-title-popper')
+      const ele = document.querySelector('.find-title-popper') as HTMLElement
       if (ele && this.suggestions.length > 0) {
         ele.style.display = 'block'
       }
@@ -133,7 +134,7 @@ export default Vue.extend({
     closeDialog() {
       this.notePath = ''
       // HACK: ESCで閉じるとサジェストのみが残ってしまうので強制的に消す
-      const ele = <HTMLElement>document.querySelector('.find-title-popper')
+      const ele = document.querySelector('.find-title-popper') as HTMLElement
       ele.style.display = 'none'
       this.$store.commit('hideFindTitleDialog')
     },

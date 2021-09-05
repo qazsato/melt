@@ -39,11 +39,7 @@ const store = new Vuex.Store({
   mutations: {
     createNewNote(state) {
       if (state.note.isChanged) {
-        if (
-          !window.confirm(
-            '変更が保存されていません。変更を破棄してよいですか。'
-          )
-        ) {
+        if (!window.confirm('変更が保存されていません。変更を破棄してよいですか。')) {
           return
         }
       }
@@ -71,6 +67,7 @@ const store = new Vuex.Store({
     renameNote(state, path) {
       try {
         state.note.rename(path)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (e.message === 'file path is exists.') {

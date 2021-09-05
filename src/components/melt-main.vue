@@ -39,6 +39,7 @@ import tableDialog from './dialog/table-dialog.vue'
 import renameDialog from './dialog/rename-dialog.vue'
 
 interface DataType {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   findInPage: any
 }
 

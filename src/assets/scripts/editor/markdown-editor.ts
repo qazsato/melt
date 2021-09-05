@@ -92,9 +92,7 @@ class MarkdownEditor extends Editor {
    * @param {boolean} isHtmlString
    */
   insertImage(alt = '', url = '', isHtmlString = false): void {
-    const text = isHtmlString
-      ? `<img alt="${alt}" src="${url}">`
-      : `![${alt}](${url})`
+    const text = isHtmlString ? `<img alt="${alt}" src="${url}">` : `![${alt}](${url})`
     this.editor.replaceSelection(text)
   }
 
@@ -175,11 +173,7 @@ class MarkdownEditor extends Editor {
    * リストか判定します。
    */
   isList(text: string): boolean {
-    return (
-      this.isBulletList(text) ||
-      this.isOrderedList(text) ||
-      this.isTaskList(text)
-    )
+    return this.isBulletList(text) || this.isOrderedList(text) || this.isTaskList(text)
   }
 
   /**
@@ -187,11 +181,7 @@ class MarkdownEditor extends Editor {
    */
   isBulletList(lineText: string): boolean {
     const trimed = lineText.trimLeft()
-    if (
-      trimed.indexOf('- ') === 0 ||
-      trimed.indexOf('* ') === 0 ||
-      trimed.indexOf('+ ') === 0
-    ) {
+    if (trimed.indexOf('- ') === 0 || trimed.indexOf('* ') === 0 || trimed.indexOf('+ ') === 0) {
       return true
     }
     return false
@@ -307,11 +297,7 @@ class MarkdownEditor extends Editor {
           lineText += '\n'
         }
       }
-      this.insert(
-        lineText,
-        { line: startY, ch: startX },
-        { line: endY, ch: endX }
-      )
+      this.insert(lineText, { line: startY, ch: startX }, { line: endY, ch: endX })
     }
   }
 

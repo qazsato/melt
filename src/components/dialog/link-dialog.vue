@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import setting from '@config/setting.json'
+import setting from '@/config/setting'
 import axios from 'axios'
 
 interface DataType {

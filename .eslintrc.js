@@ -1,29 +1,28 @@
 module.exports = {
   root: true,
   env: {
-    browser: true,
     node: true,
-    jest: true,
-  },
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    sourceType: 'module',
-    ecmaVersion: 2020,
-    tsconfigRootDir: __dirname,
-    project: ['./tsconfig.eslint.json'],
   },
   extends: [
+    'plugin:vue/essential',
     'eslint:recommended',
-    'plugin:vue/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'prettier',
+    '@vue/typescript/recommended',
+    '@vue/prettier',
+    '@vue/prettier/@typescript-eslint',
   ],
+  parserOptions: {
+    ecmaVersion: 2020,
+  },
+  rules: {
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+  },
   overrides: [
     {
-      files: ['*.test.js'],
-      rules: {
-        'no-unused-expressions': 'off',
+      files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
+      env: {
+        jest: true,
       },
     },
   ],

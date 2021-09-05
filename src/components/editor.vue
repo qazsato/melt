@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import setting from '@config/setting.json'
+import setting from '@/config/setting'
 import axios from 'axios'
 import { ipcRenderer } from 'electron'
 import { Editor as CM } from 'codemirror'
@@ -112,6 +112,7 @@ export default Vue.extend({
       }
     },
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChangeText(editor: CM, event: any) {
       if (this.isInsertCodeBlock(event)) {
         const currentLine = editor.getCursor().line
@@ -122,6 +123,7 @@ export default Vue.extend({
       this.$store.commit('updateNote', this.editor?.getText())
     },
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onPasteText(editor: CM, event: any) {
       if (this.isPasteAsPlainText) {
         return
@@ -149,6 +151,7 @@ export default Vue.extend({
       event.preventDefault()
     },
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onDropFile(editor: CM, event: any) {
       const files = event.dataTransfer.files
       if (files.length > 1) {
@@ -178,6 +181,7 @@ export default Vue.extend({
       this.isPasteAsPlainText = false
     },
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isInsertCodeBlock(event: any) {
       if (event.from.line === event.to.line) {
         const text = this.editor?.getLineText(event.to.line) || ''

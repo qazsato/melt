@@ -1,4 +1,4 @@
-import Markdown from '../src/assets/scripts/markdown/markdown'
+import Markdown from '../../src/assets/scripts/markdown/markdown'
 const markdown = new Markdown()
 
 test('HTML文字列がエスケープされずに出力される(html=true)', () => {
@@ -16,8 +16,7 @@ test('改行時にbrタグが挿入される(breaks=true)', () => {
 
 test('URL文字列がリンクになる(linkify=true)', () => {
   const text = 'http://example.com'
-  const html =
-    '<p><a href="http://example.com" target="_blank">http://example.com</a></p>\n'
+  const html = '<p><a href="http://example.com" target="_blank">http://example.com</a></p>\n'
   expect(markdown.render(text)).toBe(html)
 })
 
@@ -30,8 +29,7 @@ test('コードが挿入される(言語指定あり)', () => {
 
 test('コードが挿入される(言語指定なし)', () => {
   const text = '```\nvar a = 0;\n```'
-  const html =
-    '<pre class="codeblock"><i class="clipboard"></i><div><code>var a = 0;\n</code></div></pre>\n'
+  const html = '<pre class="codeblock"><i class="clipboard"></i><div><code>var a = 0;\n</code></div></pre>\n'
   expect(markdown.render(text)).toBe(html)
 })
 
