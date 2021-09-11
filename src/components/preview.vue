@@ -54,7 +54,7 @@ export default Vue.extend({
     copyClipboard(event: any) {
       const code = event.target.nextElementSibling.innerText.trim() // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
       navigator.clipboard.writeText(code).then(() => {
-        this.$message({ type: 'success', message: 'Copy to clipboard.', showClose: true })
+        this.$message({ type: 'success', message: 'Copied to clipboard', showClose: true })
       })
     },
   },
