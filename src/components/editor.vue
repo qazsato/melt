@@ -183,12 +183,18 @@ export default Vue.extend({
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isInsertCodeBlock(event: any) {
-      if (event.from.line === event.to.line) {
-        const text = this.editor?.getLineText(event.to.line) || ''
-        const removed = event.removed[0]
-        if (isCodeBlock(text) && !isCodeBlock(removed)) {
-          return true
-        }
+      // 入力文字が改行やBSの場合対象外
+      if (event.text[0] === '') {
+        return false
+      }
+      // 入力文字が複数行にまたがっている場合対象外
+      if (event.from.line !== event.to.line) {
+        return false
+      }
+      const text = this.editor?.getLineText(event.to.line) || ''
+      const removed = event.removed[0]
+      if (isCodeBlock(text) && !isCodeBlock(removed)) {
+        return true
       }
       return false
     },
