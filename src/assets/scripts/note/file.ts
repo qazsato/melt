@@ -1,4 +1,5 @@
 import fs, { Stats } from 'fs'
+import { updateBrowsingHistory, deleteBrowsingHistory } from '@/utils/local-storage'
 
 class File {
   filePath = ''
@@ -38,6 +39,7 @@ class File {
 
   unlink(): void {
     fs.unlinkSync(this.filePath)
+    deleteBrowsingHistory(this.filePath)
     this.load()
   }
 
@@ -46,6 +48,8 @@ class File {
       throw new Error('file path is exists.')
     }
     fs.renameSync(this.filePath, path)
+    deleteBrowsingHistory(this.filePath)
+    updateBrowsingHistory(path)
     this.load(path)
   }
 
