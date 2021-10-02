@@ -51,8 +51,10 @@ class File {
 
   isExist(path: string): boolean {
     try {
-      this.stat(path)
-      return true
+      const fileName = path.split('/').reverse()[0]
+      const filePath = path.replace(fileName, '')
+      const fileNames = fs.readdirSync(filePath)
+      return fileNames.some((f) => f === fileName)
     } catch (e) {
       return false
     }
