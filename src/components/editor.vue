@@ -183,6 +183,10 @@ export default Vue.extend({
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isInsertCodeBlock(event: any) {
+      // ペーストの場合対象外
+      if (event.origin === 'paste') {
+        return false
+      }
       // 入力文字が改行やBSの場合対象外
       if (event.text[0] === '') {
         return false

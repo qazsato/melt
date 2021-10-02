@@ -26,6 +26,21 @@ export const updateBrowsingHistory = (path: string): void => {
 }
 
 /**
+ * 閲覧履歴を削除
+ * @param path ファイルパス
+ */
+export const deleteBrowsingHistory = (path: string): void => {
+  if (!path) {
+    return
+  }
+  const browsingHistories = localStorage.browsingHistories
+    ? (JSON.parse(localStorage.browsingHistories) as BrowsingHistory[])
+    : []
+  const bh = browsingHistories.filter((h: BrowsingHistory) => h.path !== path)
+  localStorage.browsingHistories = JSON.stringify(bh)
+}
+
+/**
  * 閲覧履歴を取得
  * @returns ファイルパス
  */
