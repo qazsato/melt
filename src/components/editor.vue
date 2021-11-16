@@ -130,8 +130,10 @@ export default Vue.extend({
       }
       const text = event.clipboardData.getData('text')
       try {
-        // eslint-disable-next-line no-new
-        new URL(text)
+        const url = new URL(text)
+        if (url.protocol !== 'https:') {
+          return // HTTPでない場合何もしない
+        }
       } catch (error) {
         return // URLに変換できない場合何もしない
       }
