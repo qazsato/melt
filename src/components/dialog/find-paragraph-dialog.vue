@@ -22,7 +22,7 @@
       <template slot-scope="{ item }">
         <div class="item">
           <div class="heading">H{{ item.heading }}</div>
-          <div class="text">
+          <div class="text" :class="`heading-${item.heading}`">
             {{ item.text }}
           </div>
         </div>
@@ -178,6 +178,26 @@ export default Vue.extend({
         .text {
           text-overflow: ellipsis;
           overflow: hidden;
+        }
+
+        .heading-2 {
+          text-indent: 1em;
+        }
+
+        .heading-3 {
+          text-indent: 2em;
+        }
+
+        .heading-4 {
+          text-indent: 3em;
+        }
+
+        .heading-5 {
+          text-indent: 4em;
+        }
+
+        .heading-6 {
+          text-indent: 5em;
         }
       }
     }
