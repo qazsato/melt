@@ -1,3 +1,8 @@
+export const THEME = {
+  LIGHT: 'melt-light',
+  DARK: 'melt-dark',
+}
+
 export const VIEW_MODE = {
   EDITOR: 'editor',
   PREVIEW: 'preview',
