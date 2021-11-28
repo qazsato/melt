@@ -1,7 +1,8 @@
-// 自動生成したファイル
-// $ github-markdown-css --type light > github-markdown-light.scss
-// https://github.com/sindresorhus/generate-github-markdown-css
+// github-markdown-css, highlight.js のスタイルを設置
 .melt-light {
+  // 1. github-markdown-css
+  // $ github-markdown-css --type light > github-markdown-light.scss
+  // https://github.com/sindresorhus/generate-github-markdown-css
   .markdown-body {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
@@ -952,5 +953,102 @@
       0 42px 33px rgba(255, 255, 255, 0.024), 0 22px 18px rgba(255, 255, 255, 0.028),
       0 12px 10px rgba(255, 255, 255, 0.034), 0 7px 5px rgba(255, 255, 255, 0.04), 0 3px 2px rgba(255, 255, 255, 0.07);
     --shadow-button-hover-muted-mktg: #24292f 0 0 0 2px inset;
+  }
+
+  // 2. highlight.js
+  // https://github.com/highlightjs/highlight.js/blob/main/src/styles/github.css
+  pre code.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em;
+  }
+  code.hljs {
+    padding: 3px 5px;
+  } /*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/
+  .hljs {
+    color: #24292e;
+    background: #fff;
+  }
+  .hljs-doctag,
+  .hljs-keyword,
+  .hljs-meta .hljs-keyword,
+  .hljs-template-tag,
+  .hljs-template-variable,
+  .hljs-type,
+  .hljs-variable.language_ {
+    color: #d73a49;
+  }
+  .hljs-title,
+  .hljs-title.class_,
+  .hljs-title.class_.inherited__,
+  .hljs-title.function_ {
+    color: #6f42c1;
+  }
+  .hljs-attr,
+  .hljs-attribute,
+  .hljs-literal,
+  .hljs-meta,
+  .hljs-number,
+  .hljs-operator,
+  .hljs-selector-attr,
+  .hljs-selector-class,
+  .hljs-selector-id,
+  .hljs-variable {
+    color: #005cc5;
+  }
+  .hljs-meta .hljs-string,
+  .hljs-regexp,
+  .hljs-string {
+    color: #032f62;
+  }
+  .hljs-built_in,
+  .hljs-symbol {
+    color: #e36209;
+  }
+  .hljs-code,
+  .hljs-comment,
+  .hljs-formula {
+    color: #6a737d;
+  }
+  .hljs-name,
+  .hljs-quote,
+  .hljs-selector-pseudo,
+  .hljs-selector-tag {
+    color: #22863a;
+  }
+  .hljs-subst {
+    color: #24292e;
+  }
+  .hljs-section {
+    color: #005cc5;
+    font-weight: 700;
+  }
+  .hljs-bullet {
+    color: #735c0f;
+  }
+  .hljs-emphasis {
+    color: #24292e;
+    font-style: italic;
+  }
+  .hljs-strong {
+    color: #24292e;
+    font-weight: 700;
+  }
+  .hljs-addition {
+    color: #22863a;
+    background-color: #f0fff4;
+  }
+  .hljs-deletion {
+    color: #b31d28;
+    background-color: #ffeef0;
   }
 }
