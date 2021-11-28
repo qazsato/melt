@@ -1,65 +1,51 @@
 @import './melt.scss';
 
+// 色定義上書き元のcss
+// https://github.com/codemirror/CodeMirror/blob/master/lib/codemirror.css#L109-L143
 .CodeMirror.cm-s-melt-dark {
-  // コードブロック内に適用させるための色定義
-  // 下記定義を参考に、GFMのハイライトのカラーコードを設定
-  // 引用元) https://github.com/codemirror/CodeMirror/blob/master/lib/codemirror.css#L109-L143
-  .cm-atom {
-    color: #005cc5;
-  }
-  .cm-attribute {
-    color: #005cc5;
-  }
-  .cm-builtin {
-    color: #e36209;
-  }
-  .cm-comment {
-    color: #6a737d;
-  }
-  .cm-def {
-    color: #6f42c1;
-  }
-  .cm-keyword {
-    color: #d73a49;
-  }
-  .cm-link {
-    color: #0366d6;
-  }
-  .cm-meta {
-    color: #005cc5;
-  }
-  .cm-number {
-    color: #005cc5;
-  }
-  .cm-operator {
-    color: #005cc5;
-  }
-  .cm-string {
-    color: #032f62;
-  }
-  .cm-tag {
-    color: #22863a;
-  }
-  .cm-variable {
-    color: #d73a49;
-  }
-  .cm-variable-2 {
-    color: #c9d1d9;
-  }
-  .cm-variable-3 {
-    color: #c9d1d9;
-  }
-
   color: #c9d1d9;
 
-  .CodeMirror-selected {
-    background-color: #00b1b3;
-    opacity: 0.2;
+  .CodeMirror-cursor {
+    border-left-color: #c9d1d9;
   }
 
-  .cm-formatting,
-  .cm-url {
-    color: #444c56;
+  .CodeMirror-selected {
+    background-color: rgba(0, 177, 179, 0.6);
+  }
+
+  .cm-atom,
+  .cm-attribute,
+  .cm-meta,
+  .cm-number,
+  .cm-operator,
+  .cm-property,
+  .cm-qualifier,
+  .cm-string {
+    color: #6cb6ff;
+  }
+
+  .cm-link {
+    color: #539bf5;
+  }
+
+  .cm-builtin,
+  .cm-keyword,
+  .cm-variable {
+    color: #f47067;
+  }
+
+  .cm-tag {
+    color: #8ddb8c;
+  }
+
+  .cm-comment {
+    color: #768390;
+  }
+
+  .cm-def,
+  .cm-variable-2,
+  .cm-variable-3 {
+    color: #c9d1d9;
   }
 
   // リスト文字の色設定。IME未確定時に色が変わるので上書きしている
@@ -69,7 +55,9 @@
     color: #c9d1d9;
   }
 
-  .cm-hr {
+  .cm-formatting,
+  .cm-hr,
+  .cm-url {
     color: #444c56;
   }
 }
