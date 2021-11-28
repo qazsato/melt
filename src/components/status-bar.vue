@@ -1,5 +1,5 @@
 <template>
-  <section class="status-bar">
+  <section class="status-bar" :class="theme">
     <div class="paragraph">
       <span>¶ </span>
       <span>{{ paragraph }}</span>
@@ -37,6 +37,10 @@ export default Vue.extend({
   },
 
   computed: {
+    theme() {
+      return this.$store.state.theme
+    },
+
     isChanged() {
       return this.$store.state.note.isChanged
     },
@@ -70,9 +74,17 @@ export default Vue.extend({
   align-items: center;
   padding: 0 10px;
   height: 100%;
-  background-color: #f6f8fa;
-  color: #24292e;
   font-size: 11px;
+
+  &.melt-light {
+    background-color: #f6f8fa;
+    color: #24292e;
+  }
+
+  &.melt-dark {
+    background-color: #4a4a4a;
+    color: #c9d1d9;
+  }
 }
 
 .spacer {
