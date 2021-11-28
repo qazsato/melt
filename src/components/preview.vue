@@ -9,7 +9,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Markdown from '@/assets/scripts/markdown/markdown'
-import '@/assets/styles/markdown.scss'
+import '@/assets/styles/preview/markdown.scss'
 import { VIEW_MODE } from '@/constants'
 
 interface DataType {
