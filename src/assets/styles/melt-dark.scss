@@ -1,6 +1,6 @@
 @import './melt.scss';
 
-.CodeMirror.cm-s-melt-light {
+.CodeMirror.cm-s-melt-dark {
   // コードブロック内に適用させるための色定義
   // 下記定義を参考に、GFMのハイライトのカラーコードを設定
   // 引用元) https://github.com/codemirror/CodeMirror/blob/master/lib/codemirror.css#L109-L143
@@ -44,13 +44,13 @@
     color: #d73a49;
   }
   .cm-variable-2 {
-    color: #24292f;
+    color: #c9d1d9;
   }
   .cm-variable-3 {
-    color: #24292f;
+    color: #c9d1d9;
   }
 
-  color: #24292f;
+  color: #c9d1d9;
 
   .CodeMirror-selected {
     background-color: #00b1b3;
@@ -59,17 +59,17 @@
 
   .cm-formatting,
   .cm-url {
-    color: #d0d7de;
+    color: #444c56;
   }
 
   // リスト文字の色設定。IME未確定時に色が変わるので上書きしている
   .cm-formatting + .cm-keyword,
   .cm-formatting + .cm-keyword + .cm-keyword,
   .cm-formatting + .cm-keyword + .cm-keyword + .cm-keyword {
-    color: #24292f;
+    color: #c9d1d9;
   }
 
   .cm-hr {
-    color: #d0d7de;
+    color: #444c56;
   }
 }

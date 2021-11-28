@@ -27,7 +27,7 @@ export default Vue.extend({
   }
 
   &.melt-dark {
-    background: #0d1117;
+    background: #22272e;
   }
 }
 </style>
