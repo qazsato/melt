@@ -1,12 +1,17 @@
-@import '../../../node_modules/github-markdown-css';
-@import '../../../node_modules/highlight.js/styles/github.css';
+@import './melt-light.scss';
+@import './melt-dark.scss';
 
 .markdown-body {
   padding: 15px 30px;
 
-  .task-list-item {
-    input {
-      margin: 0 0.2em 0.25em -1.4em;
+  // タスクリスト
+  .task-list {
+    list-style: none;
+
+    .task-list-item {
+      input {
+        margin: 0 0.2em 0.25em -1.4em;
+      }
     }
   }
 
@@ -21,7 +26,6 @@
       right: 16px;
       top: 16px;
       font-size: 16px;
-      background-color: #f6f8fa;
       cursor: pointer;
 
       &:before {
@@ -37,7 +41,6 @@
 
     > div {
       overflow: auto;
-      padding: 16px;
     }
   }
 }

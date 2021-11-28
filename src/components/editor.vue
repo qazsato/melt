@@ -14,7 +14,7 @@ import Editor from '@/assets/scripts/editor/markdown-editor'
 import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { isCodeBlock, getDefaultCodeBlock } from '@/utils/markdown'
 import 'codemirror/lib/codemirror.css'
-import '@/assets/styles/melt-light.scss'
+import '@/assets/styles/editor/markdown.scss'
 
 interface DataType {
   editor: Editor | null

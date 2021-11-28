@@ -113,6 +113,10 @@ export default Vue.extend({
     ipcRenderer.on('toggle-view-mode', () => {
       this.$store.commit('toggleViewMode')
     })
+
+    ipcRenderer.on('change-theme', (event, theme: string) => {
+      this.$store.commit('changeTheme', theme)
+    })
   },
 })
 </script>
@@ -129,7 +133,6 @@ header {
 
 main {
   height: calc(100% - 70px);
-  background-color: #fff;
 }
 
 footer {

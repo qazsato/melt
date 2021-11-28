@@ -1,5 +1,5 @@
 <template>
-  <div v-show="isViewModePreview" class="preview-area">
+  <div v-show="isViewModePreview" class="preview-area" :class="theme">
     <!-- eslint-disable vue/no-v-html -->
     <article ref="markdown" class="markdown-body" v-html="markedText" />
     <!-- eslint-enable vue/no-v-html -->
@@ -9,7 +9,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Markdown from '@/assets/scripts/markdown/markdown'
-import '@/assets/styles/markdown.scss'
+import '@/assets/styles/preview/markdown.scss'
 import { VIEW_MODE } from '@/constants'
 
 interface DataType {
@@ -25,6 +25,10 @@ export default Vue.extend({
   },
 
   computed: {
+    theme() {
+      return this.$store.state.theme
+    },
+
     content() {
       return this.$store.state.note.content
     },
@@ -67,6 +71,5 @@ export default Vue.extend({
   min-width: 50%;
   height: 100%;
   overflow-y: scroll;
-  border-left: 1px solid #ebeef5;
 }
 </style>

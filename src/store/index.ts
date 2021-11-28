@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Note from '@/assets/scripts/note/note'
-import { VIEW_MODE } from '@/constants'
+import { THEME, VIEW_MODE } from '@/constants'
 import { updateBrowsingHistory } from '@/utils/local-storage'
 import Editor from '@/assets/scripts/editor/markdown-editor'
 
@@ -10,6 +10,7 @@ Vue.use(Vuex)
 interface State {
   note: Note
   editor: Editor | null
+  theme: string
   viewMode: string
   visibleLinkDialog: boolean
   visibleImageDialog: boolean
@@ -23,6 +24,7 @@ interface State {
 const state: State = {
   note: new Note(),
   editor: null,
+  theme: THEME.LIGHT,
   viewMode: VIEW_MODE.EDITOR,
   visibleLinkDialog: false,
   visibleImageDialog: false,
@@ -89,6 +91,11 @@ const store = new Vuex.Store({
         state.viewMode = VIEW_MODE.EDITOR
         void Vue.nextTick().then(() => state.editor?.focus())
       }
+    },
+
+    changeTheme(state, theme: string) {
+      state.theme = theme
+      state.editor?.setTheme(theme)
     },
 
     changeViewMode(state, viewMode: string) {
