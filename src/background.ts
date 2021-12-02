@@ -78,6 +78,17 @@ function createMenu() {
       submenu: [
         { role: 'about' },
         { type: 'separator' },
+        {
+          label: 'Setting',
+          accelerator: 'CmdOrCtrl+,',
+          click() {
+            const win = BrowserWindow.getFocusedWindow()
+            if (!win) return
+            win.webContents.send('show-setting')
+          },
+        },
+        { type: 'separator' },
+        { type: 'separator' },
         { role: 'services', submenu: [] },
         { type: 'separator' },
         { role: 'hide' },
