@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Note from '@/assets/scripts/note/note'
-import { VIEW_MODE } from '@/constants'
+import { INITIAL_NOTE, VIEW_MODE } from '@/constants'
 import { updateBrowsingHistory } from '@/utils/local-storage'
 import Editor from '@/assets/scripts/editor/markdown-editor'
 import { Preference } from '@/config/setting'
 import { getPreference, updatePreference } from '@/utils/local-storage'
+import { getBrowsingHistories } from '@/utils/local-storage'
 
 Vue.use(Vuex)
 
@@ -23,9 +24,16 @@ interface State {
   visibleRenameDialog: boolean
 }
 
+const preference: Preference = getPreference()
+let path
+if (preference.initialNote === INITIAL_NOTE.RECENTRY_OPENED) {
+  path = getBrowsingHistories()[0]
+}
+const note: Note = new Note(path)
+
 const state: State = {
-  preference: getPreference(),
-  note: new Note(),
+  preference: preference,
+  note: note,
   editor: null,
   viewMode: VIEW_MODE.EDITOR,
   visibleLinkDialog: false,

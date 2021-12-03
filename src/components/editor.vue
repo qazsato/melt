@@ -82,6 +82,7 @@ export default Vue.extend({
       'Shift-Cmd-V': () => this.pasteAsPlainText(),
     })
     this.$store.commit('setEditor', this.editor)
+    this.$nextTick().then(() => this.editor?.setText(this.$store.state.note.content))
   },
 
   methods: {

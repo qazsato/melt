@@ -1,7 +1,9 @@
 export interface Preference {
   directory: string
   theme: string
+  initialNote: string
 }
+
 interface Setting {
   api: string
   sentry_dsn: string

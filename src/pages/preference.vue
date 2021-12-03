@@ -10,35 +10,61 @@
         <el-input v-model="directory"></el-input>
         <h3>Theme</h3>
         <div>
-          <el-radio v-model="theme" label="melt-light">light</el-radio>
-          <el-radio v-model="theme" label="melt-dark">dark</el-radio>
+          <el-radio v-model="theme" :label="light">light</el-radio>
+          <el-radio v-model="theme" :label="dark">dark</el-radio>
+        </div>
+        <h3>Initial note on startup</h3>
+        <div>
+          <el-radio v-model="initialNote" :label="blank">blank</el-radio>
+          <el-radio v-model="initialNote" :label="recentlyOpened">recently opened</el-radio>
         </div>
       </section>
+      <!-- <section>
+        <h2>Editor</h2>
+        <h3>font-family</h3>
+        <el-input placeholder="Please input" v-model="input"></el-input>
+        <h3>font-size</h3>
+        <el-slider v-model="value1"></el-slider>
+      </section> -->
       <el-row type="flex" justify="end">
         <el-button type="primary" @click="onSave">Save</el-button>
       </el-row>
-      <!-- <h2>Font</h2>
-      <h3>font-family</h3>
-      <el-input placeholder="Please input" v-model="input"></el-input>
-      <h3>font-size</h3>
-      <el-slider v-model="value1"></el-slider> -->
     </main>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { PAGE } from '@/constants'
+import { THEME, INITIAL_NOTE, PAGE } from '@/constants'
 import { Preference } from '@/config/setting'
 import { getPreference } from '@/utils/local-storage'
 
 export default Vue.extend({
   data() {
-    const preference = getPreference()
+    const preference: Preference = getPreference()
     return {
       directory: preference.directory,
       theme: preference.theme,
+      initialNote: preference.initialNote,
     }
+  },
+
+  computed: {
+    light() {
+      return THEME.LIGHT
+    },
+
+    dark() {
+      return THEME.DARK
+    },
+
+    blank() {
+      return INITIAL_NOTE.BLANK
+    },
+
+    recentlyOpened() {
+      return INITIAL_NOTE.RECENTRY_OPENED
+    },
   },
 
   methods: {
@@ -50,6 +76,7 @@ export default Vue.extend({
       const preference: Preference = {
         directory: this.directory,
         theme: this.theme,
+        initialNote: this.initialNote,
       }
       this.$store.commit('updatePreference', preference)
       this.$message({ type: 'success', message: 'Preference saved', showClose: true })
