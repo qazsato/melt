@@ -1,5 +1,5 @@
 import path from 'path'
-import Note from '../../src/assets/scripts/note/note'
+import Note from '@/assets/scripts/note/note'
 
 test('新規ノートを作成されること', () => {
   const note = new Note()

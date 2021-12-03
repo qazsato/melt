@@ -84,11 +84,13 @@ export default Vue.extend({
   }
 
   &.melt-light {
+    background: #fff;
     color: #24292f;
   }
 
   &.melt-dark {
     color: #adbac7;
+    background: #22272e;
   }
 }
 </style>

@@ -62,7 +62,7 @@ export default Vue.extend({
   },
 
   mounted() {
-    this.editor = new Editor('editor')
+    this.editor = new Editor('editor', this.$store.state.preference.theme)
     this.editor.on('change', this.onChangeText)
     this.editor.on('paste', this.onPasteText)
     this.editor.on('drop', this.onDropFile)

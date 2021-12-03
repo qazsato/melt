@@ -1,4 +1,4 @@
-import { THEME, LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
+import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { Editor as CM } from 'codemirror'
 import Editor from './editor'
 import 'codemirror/mode/gfm/gfm.js'
@@ -14,13 +14,13 @@ import 'codemirror/mode/shell/shell.js'
 import 'codemirror/addon/edit/continuelist.js'
 
 class MarkdownEditor extends Editor {
-  constructor(id: string) {
+  constructor(id: string, theme: string) {
     const option = {
       mode: {
         name: 'gfm',
         highlightFormatting: true,
       },
-      theme: THEME.LIGHT,
+      theme: theme,
       lineWrapping: true,
       autofocus: true,
       indentUnit: 4,
