@@ -1,4 +1,4 @@
-import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
+import { THEME, LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { Editor as CM } from 'codemirror'
 import Editor from './editor'
 import 'codemirror/mode/gfm/gfm.js'
@@ -20,7 +20,7 @@ class MarkdownEditor extends Editor {
         name: 'gfm',
         highlightFormatting: true,
       },
-      theme: 'melt-light',
+      theme: THEME.LIGHT,
       lineWrapping: true,
       autofocus: true,
       indentUnit: 4,

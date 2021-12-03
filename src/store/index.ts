@@ -1,16 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Note from '@/assets/scripts/note/note'
-import { THEME, VIEW_MODE } from '@/constants'
+import { VIEW_MODE } from '@/constants'
 import { updateBrowsingHistory } from '@/utils/local-storage'
 import Editor from '@/assets/scripts/editor/markdown-editor'
+import { Preference } from '@/config/setting'
+import { getPreference, updatePreference } from '@/utils/local-storage'
 
 Vue.use(Vuex)
 
 interface State {
+  preference: Preference
   note: Note
   editor: Editor | null
-  theme: string
   viewMode: string
   visibleLinkDialog: boolean
   visibleImageDialog: boolean
@@ -22,9 +24,9 @@ interface State {
 }
 
 const state: State = {
+  preference: getPreference(),
   note: new Note(),
   editor: null,
-  theme: THEME.LIGHT,
   viewMode: VIEW_MODE.EDITOR,
   visibleLinkDialog: false,
   visibleImageDialog: false,
@@ -93,9 +95,10 @@ const store = new Vuex.Store({
       }
     },
 
-    changeTheme(state, theme: string) {
-      state.theme = theme
-      state.editor?.setTheme(theme)
+    updatePreference(state, preference: Preference) {
+      state.preference = preference
+      state.editor?.setTheme(preference.theme)
+      updatePreference(preference)
     },
 
     changeViewMode(state, viewMode: string) {

@@ -92,7 +92,7 @@ export default Vue.extend({
         this.$store.commit('saveNote')
       } else {
         ipcRenderer
-          .invoke('new-note-save', content)
+          .invoke('new-note-save', content, this.$store.state.preference.directory)
           .then((data) => {
             // キャンセルで閉じた
             if (data.status === undefined) {

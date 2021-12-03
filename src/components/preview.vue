@@ -26,7 +26,7 @@ export default Vue.extend({
 
   computed: {
     theme() {
-      return this.$store.state.theme
+      return this.$store.state.preference.theme
     },
 
     content() {

@@ -3,6 +3,11 @@ export const THEME = {
   DARK: 'melt-dark',
 }
 
+export const PAGE = {
+  MAIN: 'main',
+  PREFERENCE: 'preference',
+}
+
 export const VIEW_MODE = {
   EDITOR: 'editor',
   PREVIEW: 'preview',
@@ -15,3 +20,8 @@ export const LIST_TYPE = {
 }
 
 export const ALLOW_DROP_FILE_TYPES = ['image/png', 'image/jpeg', 'image/gif']
+
+export const DEFAULT_PREFERENCE = {
+  directory: '',
+  theme: THEME.LIGHT,
+}

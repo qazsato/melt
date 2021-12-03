@@ -8,6 +8,7 @@
 import Vue from 'vue'
 import { ipcRenderer, remote } from 'electron'
 import { FindInPage } from 'electron-find'
+import { PAGE } from '@/constants'
 import Element from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/ja'
 import '@/assets/styles/element-variables.scss'
@@ -29,7 +30,7 @@ export default Vue.extend({
 
   computed: {
     theme() {
-      return this.$store.state.theme
+      return this.$store.state.preference.theme
     },
 
     isChanged() {
@@ -57,8 +58,10 @@ export default Vue.extend({
     })
 
     ipcRenderer.on('show-setting', () => {
-      console.log('setting!')
-      this.$router.push({ path: '/setting' })
+      if (this.$route.name === PAGE.PREFERENCE) {
+        return
+      }
+      this.$router.push({ name: PAGE.PREFERENCE })
     })
 
     ipcRenderer.on('new-note', () => {
@@ -83,10 +86,6 @@ export default Vue.extend({
 
     ipcRenderer.on('toggle-view-mode', () => {
       this.$store.commit('toggleViewMode')
-    })
-
-    ipcRenderer.on('change-theme', (event, theme: string) => {
-      this.$store.commit('changeTheme', theme)
     })
   },
 })

@@ -4,8 +4,6 @@ import { app, protocol, BrowserWindow, Menu, ipcMain, dialog, shell } from 'elec
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import fs from 'fs'
-import setting from '@/config/setting'
-import { THEME } from '@/constants'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -79,7 +77,7 @@ function createMenu() {
         { role: 'about' },
         { type: 'separator' },
         {
-          label: 'Setting',
+          label: 'Preference',
           accelerator: 'CmdOrCtrl+,',
           click() {
             const win = BrowserWindow.getFocusedWindow()
@@ -192,31 +190,6 @@ function createMenu() {
       ],
     },
     {
-      label: 'Theme',
-      submenu: [
-        {
-          type: 'radio',
-          label: 'Light Theme',
-          checked: true,
-          click() {
-            const win = BrowserWindow.getFocusedWindow()
-            if (!win) return
-            win.webContents.send('change-theme', THEME.LIGHT)
-          },
-        },
-        {
-          type: 'radio',
-          label: 'Dark Theme',
-          checked: false,
-          click() {
-            const win = BrowserWindow.getFocusedWindow()
-            if (!win) return
-            win.webContents.send('change-theme', THEME.DARK)
-          },
-        },
-      ],
-    },
-    {
       role: 'window',
       submenu: [
         { role: 'minimize' },
@@ -306,11 +279,11 @@ app.whenReady().then(async () => {
 })
 
 // 新規ノート保存
-ipcMain.handle('new-note-save', async (event, data) => {
+ipcMain.handle('new-note-save', async (event, data, directory) => {
   const win = BrowserWindow.getFocusedWindow()
   if (!win) return
   const path = dialog.showSaveDialogSync(win, {
-    defaultPath: `${setting.directory}/Untitled`,
+    defaultPath: `${directory}/Untitled`,
     filters: [{ name: 'Text', extensions: ['md'] }],
     properties: ['createDirectory'],
   })
