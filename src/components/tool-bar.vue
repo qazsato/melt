@@ -123,19 +123,15 @@ export default Vue.extend({
     position: absolute;
     top: 12px;
     right: 15px;
+
+    /deep/ .el-radio-button__inner {
+      padding: 6px 10px;
+    }
   }
 }
 </style>
 
 <style lang="scss">
-#toolbar {
-  .checkbox-mode {
-    .el-radio-button__inner {
-      padding: 6px 10px;
-    }
-  }
-}
-
 .file-name-popper {
   &.el-popover {
     padding: 8px 16px;
