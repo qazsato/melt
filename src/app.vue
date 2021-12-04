@@ -94,11 +94,11 @@ export default Vue.extend({
 <style lang="scss" scoped>
 #app {
   &.melt-light {
-    background: #fff;
+    background: $light-bg-color;
   }
 
   &.melt-dark {
-    background: #22272e;
+    background: $dark-bg-color;
   }
 }
 </style>
