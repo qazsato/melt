@@ -16,6 +16,7 @@
       :fetch-suggestions="queryFindParagraph"
       placeholder="Find paragraph in note"
       :highlight-first-item="true"
+      :popper-append-to-body="false"
       @keydown.native="onKeydown"
       @select="onSelect"
     >

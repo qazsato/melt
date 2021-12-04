@@ -16,6 +16,7 @@
       :fetch-suggestions="queryFindTitle"
       placeholder="Find name in folder"
       :highlight-first-item="true"
+      :popper-append-to-body="false"
       @keydown.native="onKeydown"
       @select="onSelect"
     >

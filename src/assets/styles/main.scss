@@ -23,3 +23,89 @@ button {
 .v-modal {
   animation: none !important;
 }
+
+.melt-light {
+  .el-radio {
+    color: $light-color;
+  }
+
+  .el-input {
+    .el-input__inner {
+      color: $light-color;
+      background-color: $light-input-bg-color;
+      border-color: $light-input-border-color;
+    }
+  }
+
+  .el-autocomplete-suggestion {
+    background-color: $light-bg-color;
+    border-color: $light-input-border-color;
+
+    li {
+      color: $light-color;
+
+      &.highlighted {
+        background-color: $light-bg-color;
+        opacity: 0.5;
+      }
+
+      &:hover {
+        background-color: $light-bg-color;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .el-popper[x-placement^='bottom'] {
+    .popper__arrow {
+      border-bottom-color: $light-input-border-color;
+
+      &:after {
+        border-bottom-color: $light-bg-color;
+      }
+    }
+  }
+}
+
+.melt-dark {
+  .el-radio {
+    color: $dark-color;
+  }
+
+  .el-input {
+    .el-input__inner {
+      color: $dark-color;
+      background-color: $dark-input-bg-color;
+      border-color: $dark-input-border-color;
+    }
+  }
+
+  .el-autocomplete-suggestion {
+    background-color: $dark-bg-color;
+    border-color: $dark-input-border-color;
+
+    li {
+      color: $dark-color;
+
+      &.highlighted {
+        background-color: $dark-bg-color;
+        opacity: 0.5;
+      }
+
+      &:hover {
+        background-color: $dark-bg-color;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .el-popper[x-placement^='bottom'] {
+    .popper__arrow {
+      border-bottom-color: $dark-input-border-color;
+
+      &:after {
+        border-bottom-color: $dark-bg-color;
+      }
+    }
+  }
+}

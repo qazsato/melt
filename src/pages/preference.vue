@@ -97,7 +97,6 @@ export default Vue.extend({
       padding: 0 15px;
       line-height: 50px;
       color: #fff;
-      background-color: #4a4a4a;
 
       /deep/ .el-page-header__content {
         color: #fff;
@@ -111,13 +110,41 @@ export default Vue.extend({
   }
 
   &.melt-light {
-    background: $light-color;
-    color: $light-bg-color;
+    color: $light-color;
+    background-color: $light-bg-color;
+
+    .el-page-header {
+      background-color: $light-header-bg-color;
+    }
+
+    .el-radio {
+      color: $light-color;
+    }
+
+    /deep/ .el-input__inner {
+      color: $light-color;
+      background-color: $light-input-bg-color;
+      border-color: $light-input-border-color;
+    }
   }
 
   &.melt-dark {
     color: $dark-color;
-    background: $dark-bg-color;
+    background-color: $dark-bg-color;
+
+    .el-page-header {
+      background-color: $dark-header-bg-color;
+    }
+
+    .el-radio {
+      color: $dark-color;
+    }
+
+    /deep/ .el-input__inner {
+      color: $dark-color;
+      background-color: $dark-input-bg-color;
+      border-color: $dark-input-border-color;
+    }
   }
 }
 </style>

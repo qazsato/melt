@@ -1,5 +1,5 @@
 <template>
-  <section class="tool-bar">
+  <section class="tool-bar" :class="theme">
     <h1 class="file-name">
       <template v-if="$store.state.note.filePath">
         <el-popover
@@ -51,6 +51,10 @@ export default Vue.extend({
   },
 
   computed: {
+    theme() {
+      return this.$store.state.preference.theme
+    },
+
     isChanged() {
       return this.$store.state.note.isChanged
     },
@@ -89,7 +93,6 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .tool-bar {
   position: relative;
-  background-color: #4a4a4a;
 
   .file-name {
     display: flex;
@@ -127,6 +130,14 @@ export default Vue.extend({
     /deep/ .el-radio-button__inner {
       padding: 6px 10px;
     }
+  }
+
+  &.melt-light {
+    background-color: $light-header-bg-color;
+  }
+
+  &.melt-dark {
+    background-color: $dark-header-bg-color;
   }
 }
 </style>

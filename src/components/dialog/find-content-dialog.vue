@@ -16,6 +16,7 @@
       :fetch-suggestions="queryFindContent"
       placeholder="Find text in folder"
       :highlight-first-item="true"
+      :popper-append-to-body="false"
       @keydown.native="onKeydown"
       @select="onSelect"
     >
