@@ -23,7 +23,7 @@
         <div class="label">
           {{ item.label }}
         </div>
-        <span class="path">.{{ item.relativePath }}</span>
+        <span class="path">{{ item.displayPath }}</span>
         <li v-for="(row, index) in item.rows" :key="index" class="row">
           {{ row }}
         </li>
@@ -41,7 +41,7 @@ import Note from '@/assets/scripts/note/note'
 interface Suggestion {
   label: string
   path: string
-  relativePath: string
+  displayPath: string
   rows: string[]
 }
 
@@ -89,10 +89,14 @@ export default Vue.extend({
         filteredNotes = readRecentlyOpenedNotes()
       }
       this.suggestions = filteredNotes.map((n) => {
+        let displayPath = n.filePath
+        if (this.$store.state.preference.directory) {
+          displayPath = n.filePath.replace(this.$store.state.preference.directory, '.')
+        }
         return {
           label: n.fileName,
           path: n.filePath,
-          relativePath: n.filePath.split(this.$store.state.preference.directory)[1],
+          displayPath: displayPath,
           rows: query ? n.find(query) : [],
         }
       })

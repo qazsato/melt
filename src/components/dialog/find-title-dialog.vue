@@ -23,7 +23,7 @@
         <div class="label">
           {{ item.label }}
         </div>
-        <span class="path">.{{ item.relativePath }}</span>
+        <span class="path">{{ item.displayPath }}</span>
       </template>
     </el-autocomplete>
   </el-dialog>
@@ -38,7 +38,7 @@ import Note from '@/assets/scripts/note/note'
 interface Suggestion {
   label: string
   path: string
-  relativePath: string
+  displayPath: string
 }
 
 interface DataType {
@@ -88,10 +88,14 @@ export default Vue.extend({
         filteredNotes = readRecentlyOpenedNotes()
       }
       this.suggestions = filteredNotes.map((n) => {
+        let displayPath = n.filePath
+        if (this.$store.state.preference.directory) {
+          displayPath = n.filePath.replace(this.$store.state.preference.directory, '.')
+        }
         return {
           label: n.fileName,
           path: n.filePath,
-          relativePath: n.filePath.split(this.$store.state.preference.directory)[1],
+          displayPath: displayPath,
         }
       })
       callback(this.suggestions)
