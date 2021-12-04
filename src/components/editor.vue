@@ -62,7 +62,7 @@ export default Vue.extend({
   },
 
   mounted() {
-    this.editor = new Editor('editor')
+    this.editor = new Editor('editor', this.$store.state.preference.theme)
     this.editor.on('change', this.onChangeText)
     this.editor.on('paste', this.onPasteText)
     this.editor.on('drop', this.onDropFile)
@@ -82,6 +82,7 @@ export default Vue.extend({
       'Shift-Cmd-V': () => this.pasteAsPlainText(),
     })
     this.$store.commit('setEditor', this.editor)
+    this.$nextTick().then(() => this.editor?.setText(this.$store.state.note.content))
   },
 
   methods: {
@@ -92,7 +93,7 @@ export default Vue.extend({
         this.$store.commit('saveNote')
       } else {
         ipcRenderer
-          .invoke('new-note-save', content)
+          .invoke('new-note-save', content, this.$store.state.preference.directory)
           .then((data) => {
             // キャンセルで閉じた
             if (data.status === undefined) {

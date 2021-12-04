@@ -1,46 +1,49 @@
 @import './melt-light.scss';
 @import './melt-dark.scss';
 
-.markdown-body {
-  padding: 15px 30px;
+.melt-light,
+.melt-dark {
+  .markdown-body {
+    padding: 15px 30px;
 
-  // タスクリスト
-  .task-list {
-    list-style: none;
+    // タスクリスト
+    .task-list {
+      list-style: none;
 
-    .task-list-item {
-      input {
-        margin: 0 0.2em 0.25em -1.4em;
-      }
-    }
-  }
-
-  // コードブロック内のコピーボタン (独自拡張)
-  .codeblock {
-    position: relative;
-    overflow: hidden;
-    padding: 0;
-
-    .clipboard {
-      position: absolute;
-      right: 16px;
-      top: 16px;
-      font-size: 16px;
-      cursor: pointer;
-
-      &:before {
-        content: '\e787';
-        font-family: 'element-icons';
-        font-style: normal;
-      }
-
-      &:hover {
-        color: #999;
+      .task-list-item {
+        input {
+          margin: 0 0.2em 0.25em -1.4em;
+        }
       }
     }
 
-    > div {
-      overflow: auto;
+    // コードブロック内のコピーボタン (独自拡張)
+    .codeblock {
+      position: relative;
+      overflow: hidden;
+      padding: 16px 38px 16px 16px;
+
+      .clipboard {
+        position: absolute;
+        right: 12px;
+        top: 16px;
+        font-size: 16px;
+        cursor: pointer;
+
+        &:before {
+          content: '\e787';
+          font-family: 'element-icons';
+          font-style: normal;
+        }
+
+        &:hover {
+          color: #999;
+        }
+      }
+
+      > div {
+        overflow: auto;
+      }
     }
   }
 }

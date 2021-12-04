@@ -23,7 +23,7 @@
         <div class="label">
           {{ item.label }}
         </div>
-        <span class="path">.{{ item.relativePath }}</span>
+        <span class="path">{{ item.displayPath }}</span>
       </template>
     </el-autocomplete>
   </el-dialog>
@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import setting from '@/config/setting'
 import { readAllNotes, readRecentlyOpenedNotes } from '@/utils/note'
 import { VIEW_MODE } from '@/constants'
 import Note from '@/assets/scripts/note/note'
@@ -39,7 +38,7 @@ import Note from '@/assets/scripts/note/note'
 interface Suggestion {
   label: string
   path: string
-  relativePath: string
+  displayPath: string
 }
 
 interface DataType {
@@ -82,17 +81,21 @@ export default Vue.extend({
       let filteredNotes = []
       if (query) {
         filteredNotes = this.notes.filter((n: Note) => {
-          const relativePath = n.filePath.split(setting.directory)[1]
+          const relativePath = n.filePath.split(this.$store.state.preference.directory)[1]
           return relativePath.toLowerCase().includes(query.toLowerCase())
         })
       } else {
         filteredNotes = readRecentlyOpenedNotes()
       }
       this.suggestions = filteredNotes.map((n) => {
+        let displayPath = n.filePath
+        if (this.$store.state.preference.directory) {
+          displayPath = n.filePath.replace(this.$store.state.preference.directory, '.')
+        }
         return {
           label: n.fileName,
           path: n.filePath,
-          relativePath: n.filePath.split(setting.directory)[1],
+          displayPath: displayPath,
         }
       })
       callback(this.suggestions)
@@ -123,7 +126,7 @@ export default Vue.extend({
     },
 
     openDialog() {
-      this.notes = readAllNotes(setting.directory)
+      this.notes = readAllNotes(this.$store.state.preference.directory)
       // HACK: closeDialogで消えたままになっているため戻す
       const ele = document.querySelector('.find-title-popper') as HTMLElement
       if (ele && this.suggestions.length > 0) {

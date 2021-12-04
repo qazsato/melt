@@ -23,7 +23,7 @@
         <div class="label">
           {{ item.label }}
         </div>
-        <span class="path">.{{ item.relativePath }}</span>
+        <span class="path">{{ item.displayPath }}</span>
         <li v-for="(row, index) in item.rows" :key="index" class="row">
           {{ row }}
         </li>
@@ -34,7 +34,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import setting from '@/config/setting'
 import { readAllNotes, readRecentlyOpenedNotes } from '@/utils/note'
 import { VIEW_MODE } from '@/constants'
 import Note from '@/assets/scripts/note/note'
@@ -42,7 +41,7 @@ import Note from '@/assets/scripts/note/note'
 interface Suggestion {
   label: string
   path: string
-  relativePath: string
+  displayPath: string
   rows: string[]
 }
 
@@ -90,10 +89,14 @@ export default Vue.extend({
         filteredNotes = readRecentlyOpenedNotes()
       }
       this.suggestions = filteredNotes.map((n) => {
+        let displayPath = n.filePath
+        if (this.$store.state.preference.directory) {
+          displayPath = n.filePath.replace(this.$store.state.preference.directory, '.')
+        }
         return {
           label: n.fileName,
           path: n.filePath,
-          relativePath: n.filePath.split(setting.directory)[1],
+          displayPath: displayPath,
           rows: query ? n.find(query) : [],
         }
       })
@@ -125,7 +128,7 @@ export default Vue.extend({
     },
 
     openDialog() {
-      this.notes = readAllNotes(setting.directory)
+      this.notes = readAllNotes(this.$store.state.preference.directory)
       // HACK: closeDialogで消えたままになっているため戻す
       const ele = document.querySelector('.find-content-popper') as HTMLElement
       if (ele && this.suggestions.length > 0) {

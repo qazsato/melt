@@ -14,13 +14,13 @@ import 'codemirror/mode/shell/shell.js'
 import 'codemirror/addon/edit/continuelist.js'
 
 class MarkdownEditor extends Editor {
-  constructor(id: string) {
+  constructor(id: string, theme: string) {
     const option = {
       mode: {
         name: 'gfm',
         highlightFormatting: true,
       },
-      theme: 'melt-light',
+      theme: theme,
       lineWrapping: true,
       autofocus: true,
       indentUnit: 4,

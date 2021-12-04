@@ -2,13 +2,13 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 import App from './app.vue'
-import setting from '@/config/setting'
 import * as Sentry from '@sentry/vue'
 import { Integrations } from '@sentry/tracing'
+import dotenv from 'dotenv'
 
 Sentry.init({
   Vue,
-  dsn: setting.sentry_dsn,
+  dsn: dotenv.config().parsed?.SENTRY_DSN,
   integrations: [
     new Integrations.BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
