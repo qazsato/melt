@@ -63,6 +63,7 @@ export default Vue.extend({
 
   mounted() {
     this.editor = new Editor('editor', this.$store.state.preference.theme)
+    this.setStyle()
     this.editor.on('change', this.onChangeText)
     this.editor.on('paste', this.onPasteText)
     this.editor.on('drop', this.onDropFile)
@@ -86,6 +87,13 @@ export default Vue.extend({
   },
 
   methods: {
+    setStyle() {
+      const cm = document.querySelector('.CodeMirror') as HTMLElement
+      const ff = this.$store.state.preference.fontFamily
+      const fs = `${this.$store.state.preference.fontSize}px`
+      cm.setAttribute('style', `font-family: ${ff}; font-size:${fs};`)
+    },
+
     saveNote() {
       const content = this.editor?.getText()
       if (this.$store.state.note.filePath) {

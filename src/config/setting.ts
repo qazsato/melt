@@ -2,6 +2,8 @@ export interface Preference {
   directory: string
   theme: string
   initialNote: string
+  fontFamily: string
+  fontSize: number
 }
 
 interface Setting {

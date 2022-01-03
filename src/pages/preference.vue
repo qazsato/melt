@@ -19,15 +19,15 @@
           <el-radio v-model="initialNote" :label="recentlyOpened">recently opened</el-radio>
         </div>
       </section>
-      <!-- <section>
+      <section>
         <h2>Editor</h2>
-        <h3>font-family</h3>
-        <el-input placeholder="Please input" v-model="input"></el-input>
-        <h3>font-size</h3>
-        <el-slider v-model="value1"></el-slider>
-      </section> -->
+        <h3>Font Family</h3>
+        <el-input v-model="fontFamily"></el-input>
+        <h3>Font Size</h3>
+        <el-slider v-model="fontSize" :min="10" :max="30" show-input></el-slider>
+      </section>
       <el-row type="flex" justify="end">
-        <el-button type="primary" @click="onSave">Save</el-button>
+        <el-button type="primary" @click="onSave" class="save-button">Save</el-button>
       </el-row>
     </main>
   </div>
@@ -46,6 +46,8 @@ export default Vue.extend({
       directory: preference.directory,
       theme: preference.theme,
       initialNote: preference.initialNote,
+      fontFamily: preference.fontFamily,
+      fontSize: preference.fontSize,
     }
   },
 
@@ -77,6 +79,8 @@ export default Vue.extend({
         directory: this.directory,
         theme: this.theme,
         initialNote: this.initialNote,
+        fontFamily: this.fontFamily,
+        fontSize: this.fontSize,
       }
       this.$store.commit('updatePreference', preference)
       this.$message({ type: 'success', message: 'Preference saved', showClose: true })
@@ -145,6 +149,10 @@ export default Vue.extend({
       background-color: $dark-input-bg-color;
       border-color: $dark-input-border-color;
     }
+  }
+
+  .save-button {
+    margin-top: 20px;
   }
 }
 </style>
