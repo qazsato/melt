@@ -63,6 +63,7 @@ export default Vue.extend({
 
   mounted() {
     this.editor = new Editor('editor', this.$store.state.preference.theme)
+    this.setStyle()
     this.editor.on('change', this.onChangeText)
     this.editor.on('paste', this.onPasteText)
     this.editor.on('drop', this.onDropFile)
@@ -86,6 +87,13 @@ export default Vue.extend({
   },
 
   methods: {
+    setStyle() {
+      const cm = document.querySelector('.CodeMirror') as HTMLElement
+      const ff = this.$store.state.preference.fontFamily
+      const fs = `${this.$store.state.preference.fontSize}px`
+      cm.setAttribute('style', `font-family: ${ff}; font-size:${fs};`)
+    },
+
     saveNote() {
       const content = this.editor?.getText()
       if (this.$store.state.note.filePath) {
@@ -186,8 +194,8 @@ export default Vue.extend({
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isInsertCodeBlock(event: any) {
-      // ペーストの場合対象外
-      if (event.origin === 'paste') {
+      // ペーストと復元の場合対象外
+      if (event.origin === 'paste' || event.origin === 'undo') {
         return false
       }
       // 入力文字が改行やBSの場合対象外

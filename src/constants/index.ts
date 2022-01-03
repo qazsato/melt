@@ -30,4 +30,6 @@ export const DEFAULT_PREFERENCE = {
   directory: '',
   theme: THEME.LIGHT,
   initialNote: INITIAL_NOTE.BLANK,
+  fontFamily: 'Source Code Pro',
+  fontSize: 16,
 }
