@@ -1,5 +1,10 @@
-@import './melt-light.scss';
-@import './melt-dark.scss';
+.melt-light {
+  @import './melt-light.scss';
+}
+
+.melt-dark {
+  @import './melt-dark.scss';
+}
 
 .melt-light,
 .melt-dark {
