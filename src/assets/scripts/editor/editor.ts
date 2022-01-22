@@ -155,6 +155,68 @@ class Editor {
     const text = this.getLineText(line)
     this.editor.setSelection({ line, ch: 0 }, { line, ch: text.length })
   }
+
+  /**
+   * 指定行同士のテキストを入れ替えます
+   * @param fromLine
+   * @param toLine
+   */
+  swapLine(fromLine: number, toLine: number): void {
+    const fromText = this.editor.getLine(fromLine)
+    const toText = this.editor.getLine(toLine)
+    this.editor.replaceRange(fromText, { line: toLine, ch: 0 }, { line: toLine, ch: toText.length })
+    this.editor.replaceRange(toText, { line: fromLine, ch: 0 }, { line: fromLine, ch: fromText.length })
+  }
+
+  swapAboveLine(): void {
+    const isSelection = !!this.getSelection()
+    if (isSelection) {
+      const pos = this.getSelectionPosition()
+      const minLine = pos.start.y
+      const maxLine = pos.end.x === 0 ? pos.end.y - 1 : pos.end.y
+      if (minLine === 0) {
+        return
+      }
+      for (let line = minLine; line <= maxLine; line++) {
+        this.swapLine(line, line - 1)
+      }
+      this.editor.setSelection({ line: pos.end.y - 1, ch: pos.end.x }, { line: pos.start.y - 1, ch: pos.start.x })
+    } else {
+      const position = this.editor.getCursor()
+      const fromLine = position.line
+      const toLine = fromLine - 1
+      if (fromLine === 0) {
+        return
+      }
+      this.swapLine(fromLine, toLine)
+      this.editor.setCursor({ line: toLine, ch: position.ch })
+    }
+  }
+
+  swapBelowLine(): void {
+    const isSelection = !!this.getSelection()
+    if (isSelection) {
+      const pos = this.getSelectionPosition()
+      const minLine = pos.start.y
+      const maxLine = pos.end.x === 0 ? pos.end.y - 1 : pos.end.y
+      if (maxLine === this.editor.lineCount() - 1) {
+        return
+      }
+      for (let line = maxLine; line >= minLine; line--) {
+        this.swapLine(line, line + 1)
+      }
+      this.editor.setSelection({ line: pos.end.y + 1, ch: pos.end.x }, { line: pos.start.y + 1, ch: pos.start.x })
+    } else {
+      const position = this.editor.getCursor()
+      const fromLine = position.line
+      const toLine = fromLine + 1
+      if (fromLine === this.editor.lineCount() - 1) {
+        return
+      }
+      this.swapLine(fromLine, toLine)
+      this.editor.setCursor({ line: toLine, ch: position.ch })
+    }
+  }
 }
 
 interface Pos {

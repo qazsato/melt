@@ -81,6 +81,8 @@ export default Vue.extend({
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveNote(),
       'Shift-Cmd-V': () => this.pasteAsPlainText(),
+      'Alt-Up': () => this.swapAboveLine(),
+      'Alt-Down': () => this.swapBelowLine(),
     })
     this.$store.commit('setEditor', this.editor)
     this.$nextTick().then(() => this.editor?.setText(this.$store.state.note.content))
@@ -212,6 +214,14 @@ export default Vue.extend({
         return true
       }
       return false
+    },
+
+    swapAboveLine() {
+      this.editor?.swapAboveLine()
+    },
+
+    swapBelowLine() {
+      this.editor?.swapBelowLine()
     },
   },
 })
