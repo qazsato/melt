@@ -35,6 +35,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { TableOfContent } from '@/assets/scripts/note/note'
+import { VIEW_MODE } from '@/constants'
 
 interface Suggestion {
   text: string
@@ -103,14 +104,15 @@ export default Vue.extend({
         if (this.isComposing) {
           return
         }
-        // TODO TEXTの場合は、行数にジャンプするようにする
         let i = 0
         const tocs = this.tableOfContents.slice(0, item.index)
         tocs.forEach((t) => {
           if (t.heading === item.heading) i++
         })
-        document.getElementsByTagName(`h${item.heading}`)[i].scrollIntoView()
+        this.$store.commit('changeViewMode', VIEW_MODE.PREVIEW)
         this.$store.commit('hideFindParagraphDialog')
+        // ビューモード切り替え直後のスクロール移動だと移動しないためタイミングをずらしている
+        setTimeout(() => document.getElementsByTagName(`h${item.heading}`)[i].scrollIntoView())
       })
     },
 
