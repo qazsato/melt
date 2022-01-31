@@ -10,6 +10,8 @@
   .CodeMirror-scroll {
     padding: 15px;
     box-sizing: border-box;
+    // ライブラリ側で auto !important と指定されているため強制上書き
+    overflow-x: hidden !important;
   }
 
   .cm-link {
