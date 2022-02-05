@@ -17,7 +17,7 @@
       placeholder="Find text in folder"
       :highlight-first-item="true"
       :popper-append-to-body="false"
-      @keydown.native="onKeydown"
+      @keyup.native="onKeyup"
       @select="onSelect"
     >
       <template slot-scope="{ item }">
@@ -105,12 +105,12 @@ export default Vue.extend({
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onKeydown(e: any) {
+    onKeyup(e: any) {
       this.isComposing = e.isComposing
     },
 
     onSelect(item: Suggestion) {
-      // HACK: イベント処理順を keydown => select としたいためタイミングをずらしている
+      // HACK: イベント処理順を keyup => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
           return
