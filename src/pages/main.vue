@@ -68,6 +68,8 @@ export default Vue.extend({
 
   footer {
     height: 20px;
+    position: relative;
+    z-index: 10;
   }
 }
 </style>

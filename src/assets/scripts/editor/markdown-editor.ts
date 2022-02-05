@@ -22,6 +22,7 @@ class MarkdownEditor extends Editor {
       },
       theme: theme,
       lineWrapping: true,
+      lineNumbers: true,
       autofocus: true,
       indentUnit: 4,
       indentWithTabs: true,

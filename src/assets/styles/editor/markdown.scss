@@ -4,14 +4,24 @@
 .CodeMirror {
   height: 100%;
   width: 100%;
+  padding: 15px;
   background: transparent;
   line-height: 1.5em;
 
   .CodeMirror-scroll {
-    padding: 15px;
     box-sizing: border-box;
     // ライブラリ側で auto !important と指定されているため強制上書き
     overflow-x: hidden !important;
+  }
+
+  // 行番号
+  .CodeMirror-gutters {
+    background: transparent;
+    border-right: none;
+  }
+
+  .CodeMirror-gutter-wrapper {
+    top: calc(50% - 12px);
   }
 
   .cm-link {
