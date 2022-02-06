@@ -13,6 +13,12 @@ import 'codemirror/mode/sql/sql.js'
 import 'codemirror/mode/shell/shell.js'
 import 'codemirror/addon/edit/continuelist.js'
 
+interface TableData {
+  start: number
+  end: number
+  rows: string[][]
+}
+
 class MarkdownEditor extends Editor {
   constructor(id: string, theme: string) {
     const option = {
@@ -272,22 +278,22 @@ class MarkdownEditor extends Editor {
    * テーブルを挿入します。
    */
   insertTable(row = 3, column = 3): void {
-    let r = '|'
-    let dr = '|'
+    let tr = '| '
+    let dr = '| '
     for (let i = 0; i < row - 1; i++) {
       if (i === 0) {
-        r += ' '
-        dr += '--'
+        tr += '   '
+        dr += '---'
       }
-      r += ' | '
-      dr += '|--'
+      tr += ' |    '
+      dr += ' | ---'
     }
-    r += ' |\n'
-    dr += '|\n'
+    tr += ' |\n'
+    dr += ' |\n'
 
-    let table = r + dr
+    let table = tr + dr
     for (let i = 0; i < column - 1; i++) {
-      table += r
+      table += tr
     }
     this.insert(table)
   }
@@ -399,6 +405,65 @@ class MarkdownEditor extends Editor {
       }
     }
     this.editor.execCommand('goLineStart')
+  }
+
+  optimizeText(): void {
+    // テーブル最適化
+    const tableData = this.getTableData()
+    tableData.forEach((d: TableData) => {
+      const rows = d.rows
+      rows.forEach((row: string[], i: number) => {
+        const padRowStr = row.map((cell: string, n: number) => {
+          const max = rows
+            .map((row: string[], m: number) => (m === 1 ? 3 : row[n].trim().length)) // 区切り行は最低3文字確保する
+            .reduce((a: number, b: number) => Math.max(a, b))
+          const str = cell.trim()
+          if (i === 1) {
+            // NOTE: 区切り行は 先頭/末尾 に ':' が設定可能なため、先頭/末尾のみ文字判定する
+            const first = str.slice(0, 1) === ':' ? ':' : '-'
+            const last = str.slice(-1) === ':' ? ':' : '-'
+            return `${first}${''.padEnd(max - 2, '-')}${last}`
+          }
+          return str.padEnd(max, ' ')
+        })
+        const text = `| ${padRowStr.join(' | ')} |`
+        this.setLineText(d.start + i, text)
+      })
+    })
+
+    // TODO: リスト最適化
+  }
+
+  isTableRow(lineText: string): boolean {
+    return !!lineText.match(/^\|/) && !!lineText.match(/\|$/)
+  }
+
+  getTableRow(lineText: string): string[] {
+    return lineText.replace(/^\|/, '').replace(/\|$/, '').split('|')
+  }
+
+  getTableData(): TableData[] {
+    const data: TableData[] = []
+    const maxLine = this.editor.lineCount()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let d: any = { start: null, end: null, rows: [] }
+    for (let i = 0; i < maxLine; i++) {
+      const lineText = this.getLineText(i)
+      if (this.isTableRow(lineText)) {
+        if (d.start === null) {
+          d.start = i
+        }
+        d.end = i
+        d.rows.push(this.getTableRow(lineText))
+      } else if (d.start !== null) {
+        data.push(d)
+        d = { start: null, end: null, rows: [] }
+      }
+    }
+    if (d.start !== null) {
+      data.push(d)
+    }
+    return data
   }
 }
 

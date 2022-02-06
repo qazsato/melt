@@ -101,6 +101,16 @@ class Editor {
   }
 
   /**
+   * 指定行数の文字を設定します。
+   * @param number
+   * @param text
+   */
+  setLineText(number: number, text: string): void {
+    const lineText = this.editor.getLine(number)
+    this.editor.replaceRange(text, { line: number, ch: 0 }, { line: number, ch: lineText.length })
+  }
+
+  /**
    * 選択中の文字の開始位置と終了位置を返却します。
    */
   getSelectionPosition(): Pos {

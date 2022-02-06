@@ -98,6 +98,7 @@ export default Vue.extend({
     },
 
     saveNote() {
+      this.editor?.optimizeText()
       const content = this.editor?.getText()
       if (this.$store.state.note.filePath) {
         this.$store.commit('updateNote', content)
