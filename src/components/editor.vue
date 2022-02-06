@@ -83,6 +83,7 @@ export default Vue.extend({
       'Shift-Cmd-V': () => this.pasteAsPlainText(),
       'Alt-Up': () => this.swapAboveLine(),
       'Alt-Down': () => this.swapBelowLine(),
+      'Ctrl-A': () => this.goLineStart(),
     })
     this.$store.commit('setEditor', this.editor)
     this.$nextTick().then(() => this.editor?.setText(this.$store.state.note.content))
@@ -222,6 +223,10 @@ export default Vue.extend({
 
     swapBelowLine() {
       this.editor?.swapBelowLine()
+    },
+
+    goLineStart() {
+      this.editor?.goLineStart()
     },
   },
 })

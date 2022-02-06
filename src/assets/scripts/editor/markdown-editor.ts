@@ -177,11 +177,29 @@ class MarkdownEditor extends Editor {
   }
 
   /**
+   * リストのテキスト開始位置を取得します
+   * @param listText
+   */
+  getListStartCh(listText: string): number {
+    const originalLength = listText.length
+    const trimmedLength = listText.trimStart().length
+    const diff = originalLength - trimmedLength
+    const text = listText.trimStart()
+    if (this.isTaskList(text)) {
+      if (this.isTaskChecked(text)) {
+        return text.indexOf(' [x] ') + diff + 5
+      }
+      return text.indexOf(' [ ] ') + diff + 5
+    }
+    return text.indexOf(' ') + diff + 1
+  }
+
+  /**
    * 箇条書きリストか判定します。
    */
   isBulletList(lineText: string): boolean {
-    const trimed = lineText.trimLeft()
-    if (trimed.indexOf('- ') === 0 || trimed.indexOf('* ') === 0 || trimed.indexOf('+ ') === 0) {
+    const text = lineText.trimStart()
+    if (text.indexOf('- ') === 0 || text.indexOf('* ') === 0 || text.indexOf('+ ') === 0) {
       return true
     }
     return false
@@ -191,8 +209,8 @@ class MarkdownEditor extends Editor {
    * 番号付きリストか判定します。
    */
   isOrderedList(lineText: string): boolean {
-    const trimed = lineText.trimLeft()
-    if (trimed.search(/^[0-9]+\./) !== -1) {
+    const text = lineText.trimStart()
+    if (text.search(/^[0-9]+\./) !== -1) {
       return true
     }
     return false
@@ -202,15 +220,26 @@ class MarkdownEditor extends Editor {
    * タスクリストか判定します。
    */
   isTaskList(lineText: string): boolean {
-    const trimed = lineText.trimLeft()
+    const text = lineText.trimStart()
     if (
-      trimed.indexOf('- [ ]') === 0 ||
-      trimed.indexOf('* [ ]') === 0 ||
-      trimed.indexOf('+ [ ]') === 0 ||
-      trimed.indexOf('- [x]') === 0 ||
-      trimed.indexOf('* [x]') === 0 ||
-      trimed.indexOf('+ [x]') === 0
+      text.indexOf('- [ ]') === 0 ||
+      text.indexOf('* [ ]') === 0 ||
+      text.indexOf('+ [ ]') === 0 ||
+      text.indexOf('- [x]') === 0 ||
+      text.indexOf('* [x]') === 0 ||
+      text.indexOf('+ [x]') === 0
     ) {
+      return true
+    }
+    return false
+  }
+
+  /**
+   * タスクがチェック済みか判定します。
+   */
+  isTaskChecked(lineText: string): boolean {
+    const text = lineText.trimStart()
+    if (text.indexOf('- [x]') === 0 || text.indexOf('* [x]') === 0 || text.indexOf('+ [x]') === 0) {
       return true
     }
     return false
@@ -354,6 +383,22 @@ class MarkdownEditor extends Editor {
       return ''
     }
     return re[1]
+  }
+
+  /**
+   * 文の先頭にカーソルを移動します。
+   */
+  goLineStart(): void {
+    const pos = this.editor.getCursor()
+    const text = this.getLineText(pos.line)
+    if (this.isList(text)) {
+      const ch = this.getListStartCh(text)
+      if (pos.ch > ch) {
+        this.editor.setCursor({ line: pos.line, ch })
+        return
+      }
+    }
+    this.editor.execCommand('goLineStart')
   }
 }
 
