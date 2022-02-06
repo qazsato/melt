@@ -272,22 +272,22 @@ class MarkdownEditor extends Editor {
    * テーブルを挿入します。
    */
   insertTable(row = 3, column = 3): void {
-    let tr = ''
-    let th = ''
+    let r = '|'
+    let dr = '|'
     for (let i = 0; i < row - 1; i++) {
       if (i === 0) {
-        tr += ' '
-        th += ':-'
+        r += ' '
+        dr += '--'
       }
-      tr += ' | '
-      th += '|:-'
+      r += ' | '
+      dr += '|--'
     }
-    tr += '\n'
-    th += '\n'
+    r += ' |\n'
+    dr += '|\n'
 
-    let table = tr + th
+    let table = r + dr
     for (let i = 0; i < column - 1; i++) {
-      table += tr
+      table += r
     }
     this.insert(table)
   }
