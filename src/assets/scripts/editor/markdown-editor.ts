@@ -1,4 +1,5 @@
 import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
+import { getCharWidth } from '@/utils/string'
 import { Editor as CM } from 'codemirror'
 import Editor from './editor'
 import 'codemirror/mode/gfm/gfm.js'
@@ -408,30 +409,8 @@ class MarkdownEditor extends Editor {
   }
 
   optimizeText(): void {
-    // テーブル最適化
-    const tableData = this.getTableData()
-    tableData.forEach((d: TableData) => {
-      const rows = d.rows
-      rows.forEach((row: string[], i: number) => {
-        const padRowStr = row.map((cell: string, n: number) => {
-          const max = rows
-            .map((row: string[], m: number) => (m === 1 ? 3 : row[n].trim().length)) // 区切り行は最低3文字確保する
-            .reduce((a: number, b: number) => Math.max(a, b))
-          const str = cell.trim()
-          if (i === 1) {
-            // NOTE: 区切り行は 先頭/末尾 に ':' が設定可能なため、先頭/末尾のみ文字判定する
-            const first = str.slice(0, 1) === ':' ? ':' : '-'
-            const last = str.slice(-1) === ':' ? ':' : '-'
-            return `${first}${''.padEnd(max - 2, '-')}${last}`
-          }
-          return str.padEnd(max, ' ')
-        })
-        const text = `| ${padRowStr.join(' | ')} |`
-        this.setLineText(d.start + i, text)
-      })
-    })
-
-    // TODO: リスト最適化
+    this.optimizeTable()
+    this.optimizeList()
   }
 
   isTableRow(lineText: string): boolean {
@@ -464,6 +443,44 @@ class MarkdownEditor extends Editor {
       data.push(d)
     }
     return data
+  }
+
+  optimizeTable(): void {
+    const tableData = this.getTableData()
+    tableData.forEach((d: TableData) => {
+      const rows = d.rows
+      rows.forEach((row: string[], i: number) => {
+        const padRowStr = row.map((cell: string, n: number) => {
+          const maxWidth = rows
+            .map((row: string[], m: number) => {
+              if (m === 1) {
+                return 3 // 区切り行は最低3つ確保	する
+              }
+              return getCharWidth(row[n].trim())
+            })
+            .reduce((a: number, b: number) => Math.max(a, b))
+          let str = cell.trim()
+          if (i === 1) {
+            // NOTE: 区切り行は 先頭/末尾 に ':' が設定可能なため、先頭/末尾のみ文字判定する
+            const first = str.slice(0, 1) === ':' ? ':' : '-'
+            const last = str.slice(-1) === ':' ? ':' : '-'
+            return `${first}${''.padEnd(maxWidth - 2, '-')}${last}`
+          }
+          const diff = maxWidth - getCharWidth(str)
+          if (diff % 1 === 0.5) {
+            str += '　' // 端数がある場合は全角スペース(1.5)で幅を調整する
+            return str.padEnd(str.length + diff - 1, ' ')
+          }
+          return str.padEnd(str.length + diff, ' ')
+        })
+        const text = `| ${padRowStr.join(' | ')} |`
+        this.setLineText(d.start + i, text)
+      })
+    })
+  }
+
+  optimizeList(): void {
+    console.log('TODO: リスト最適化')
   }
 }
 
