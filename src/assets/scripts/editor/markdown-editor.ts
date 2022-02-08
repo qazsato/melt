@@ -281,7 +281,7 @@ class MarkdownEditor extends Editor {
   insertTable(row = 3, column = 3): void {
     let tr = '| '
     let dr = '| '
-    for (let i = 0; i < row - 1; i++) {
+    for (let i = 0; i < column - 1; i++) {
       if (i === 0) {
         tr += '   '
         dr += '---'
@@ -293,7 +293,7 @@ class MarkdownEditor extends Editor {
     dr += ' |\n'
 
     let table = tr + dr
-    for (let i = 0; i < column - 1; i++) {
+    for (let i = 0; i < row - 1; i++) {
       table += tr
     }
     this.insert(table)
