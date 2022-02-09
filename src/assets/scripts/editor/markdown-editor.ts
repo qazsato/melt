@@ -12,12 +12,13 @@ import 'codemirror/mode/go/go.js'
 import 'codemirror/mode/sql/sql.js'
 import 'codemirror/mode/shell/shell.js'
 import 'codemirror/addon/edit/continuelist.js'
+import './addon/melt_gfm.js'
 
 class MarkdownEditor extends Editor {
   constructor(id: string, theme: string) {
     const option = {
       mode: {
-        name: 'gfm',
+        name: 'melt_gfm',
         highlightFormatting: true,
       },
       theme: theme,
