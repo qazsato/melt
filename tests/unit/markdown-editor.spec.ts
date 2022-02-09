@@ -123,7 +123,7 @@ test('テーブルを挿入する', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor', THEME.LIGHT)
   editor.insertTable()
-  const table = '  |  | \n:-|:-|:-\n  |  | \n  |  | \n'
+  const table = '|     |     |     |\n| --- | --- | --- |\n|     |     |     |\n|     |     |     |\n'
   expect(editor.getText()).toBe(table)
 })
 
