@@ -20,6 +20,12 @@ interface TableData {
   rows: string[][]
 }
 
+interface ListData {
+  line: number
+  text: string
+  depth: number
+}
+
 class MarkdownEditor extends Editor {
   constructor(id: string, theme: string) {
     const option = {
@@ -66,6 +72,7 @@ class MarkdownEditor extends Editor {
         cm.execCommand('insertTab')
       }
     }
+    this.optimizeList(cm)
   }
 
   /**
@@ -73,6 +80,7 @@ class MarkdownEditor extends Editor {
    */
   onPressShiftTab(cm: CM): void {
     cm.execCommand('indentLess')
+    this.optimizeList(cm)
   }
 
   /**
@@ -408,11 +416,6 @@ class MarkdownEditor extends Editor {
     this.editor.execCommand('goLineStart')
   }
 
-  optimizeText(): void {
-    this.optimizeTable()
-    this.optimizeList()
-  }
-
   isTableRow(lineText: string): boolean {
     return !!lineText.match(/^\|/) && !!lineText.match(/\|$/)
   }
@@ -479,8 +482,68 @@ class MarkdownEditor extends Editor {
     })
   }
 
-  optimizeList(): void {
-    console.log('TODO: リスト最適化')
+  optimizeList(cm: CM): void {
+    const ranges = cm.listSelections()
+    ranges.forEach((range) => {
+      const pos = range.head
+      const text = cm.getLine(pos.line)
+      if (!this.isList(text)) {
+        return
+      }
+      this.optimizeListPrefix(cm, pos)
+    })
+  }
+
+  // cf. https://github.com/codemirror/CodeMirror/blob/master/addon/edit/continuelist.js
+  optimizeListPrefix(cm: CM, pos: CodeMirror.Position): void {
+    const listRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/
+    let startLine = pos.line
+    // 前の行がリストの場合、番号を引き継ぐため前の行から最適化をおこなう。
+    if (pos.line - 1 >= 0 && this.isList(this.getLineText(pos.line - 1))) {
+      startLine = startLine - 1
+    }
+    let lookAhead = 0
+    let nextItem = null
+    const listData: ListData[] = []
+    do {
+      const nextLineNumber = startLine + lookAhead
+      const nextLine = cm.getLine(nextLineNumber)
+      nextItem = listRE.exec(nextLine)
+      if (nextItem) {
+        const tabMatch = nextItem[1].match(/\t/g)
+        const depth = tabMatch ? tabMatch.length : 0
+        listData.push({
+          line: nextLineNumber,
+          text: nextLine,
+          depth: depth,
+        })
+      }
+      lookAhead++
+    } while (nextItem)
+
+    const maxDepth = listData.map((d: ListData) => d.depth).reduce((a: number, b: number) => Math.max(a, b))
+    for (let i = 0; i <= maxDepth; i++) {
+      const filteredData = listData.filter((d) => d.depth === i)
+      filteredData.forEach((d, i) => {
+        const item = listRE.exec(d.text)
+        if (!item) {
+          return
+        }
+
+        const firstItem = listRE.exec(filteredData[0].text)
+        if (firstItem) {
+          if (this.isOrderedList(filteredData[0].text)) {
+            const prefix = String(Number(firstItem[2]) + i)
+            const text = d.text.replace(listRE, item[1] + prefix + item[4] + item[5])
+            this.setLineText(d.line, text)
+          } else {
+            const prefix = firstItem[2]
+            const text = d.text.replace(listRE, item[1] + prefix)
+            this.setLineText(d.line, text)
+          }
+        }
+      })
+    }
   }
 }
 
