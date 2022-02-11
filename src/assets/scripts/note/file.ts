@@ -1,6 +1,6 @@
 import fs, { Stats } from 'fs'
 import { updateBrowsingHistory, deleteBrowsingHistory } from '@/utils/local-storage'
-
+import { isExistPath } from '@/utils/note'
 class File {
   filePath = ''
   fileName = ''
@@ -54,14 +54,7 @@ class File {
   }
 
   isExist(path: string): boolean {
-    try {
-      const fileName = path.split('/').reverse()[0]
-      const filePath = path.replace(fileName, '')
-      const fileNames = fs.readdirSync(filePath)
-      return fileNames.some((f) => f === fileName)
-    } catch (e) {
-      return false
-    }
+    return isExistPath(path)
   }
 
   validatePath(path: string | undefined): boolean {
