@@ -9,10 +9,10 @@
   >
     <el-form label-width="45px">
       <el-form-item label="Row">
-        <el-input-number ref="tableRowInput" v-model="tableRow" :max="10" :min="1" @keyup.enter.native="insertTable" />
+        <el-input-number ref="tableRowInput" v-model="tableRow" :max="20" :min="2" @keyup.enter.native="insertTable" />
       </el-form-item>
       <el-form-item label="Col">
-        <el-input-number v-model="tableColumn" :max="10" :min="1" @keyup.enter.native="insertTable" />
+        <el-input-number v-model="tableColumn" :max="20" :min="2" @keyup.enter.native="insertTable" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

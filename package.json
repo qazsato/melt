@@ -1,11 +1,12 @@
 {
   "name": "melt",
-  "version": "2.4.4",
+  "version": "2.5.0",
   "private": true,
   "author": "qazsato",
   "scripts": {
     "serve": "vue-cli-service electron:serve",
     "build": "vue-cli-service electron:build",
+    "test": "npm run test:unit",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "postinstall": "electron-builder install-app-deps",
