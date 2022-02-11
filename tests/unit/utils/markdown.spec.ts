@@ -102,6 +102,9 @@ test('リストの階層の深さを取得する', () => {
   expect(getListDepth('\t- test')).toBe(1)
   expect(getListDepth('\t\t- test')).toBe(2)
   expect(getListDepth('\t\t\t- test')).toBe(3)
+  expect(() => {
+    getListDepth('test')
+  }).toThrowError(new Error('list format error'))
 })
 
 test('リストの接頭語を置換する', () => {
