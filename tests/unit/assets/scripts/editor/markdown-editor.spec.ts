@@ -77,48 +77,6 @@ test('タスクリストを挿入する', () => {
   expect(editor.getText()).toBe('- [ ] ')
 })
 
-test('箇条書きリストか判定する(true)', () => {
-  document.body.innerHTML = '<textarea id="editor"></textarea>'
-  const editor = new Editor('editor', THEME.LIGHT)
-  expect(editor.isBulletList('- test')).toBeTruthy()
-})
-
-test('箇条書きリストか判定する(false)', () => {
-  document.body.innerHTML = '<textarea id="editor"></textarea>'
-  const editor = new Editor('editor', THEME.LIGHT)
-  expect(editor.isBulletList('test')).toBeFalsy()
-})
-
-test('番号付きリストか判定する(true)', () => {
-  document.body.innerHTML = '<textarea id="editor"></textarea>'
-  const editor = new Editor('editor', THEME.LIGHT)
-  expect(editor.isOrderedList('1. test')).toBeTruthy()
-})
-
-test('番号付きリストか判定する(false)', () => {
-  document.body.innerHTML = '<textarea id="editor"></textarea>'
-  const editor = new Editor('editor', THEME.LIGHT)
-  expect(editor.isOrderedList('test')).toBeFalsy()
-})
-
-test('タスクリストか判定する チェック未(true)', () => {
-  document.body.innerHTML = '<textarea id="editor"></textarea>'
-  const editor = new Editor('editor', THEME.LIGHT)
-  expect(editor.isTaskList('- [ ] test')).toBeTruthy()
-})
-
-test('タスクリストか判定する チェック済(true)', () => {
-  document.body.innerHTML = '<textarea id="editor"></textarea>'
-  const editor = new Editor('editor', THEME.LIGHT)
-  expect(editor.isTaskList('- [x] test')).toBeTruthy()
-})
-
-test('タスクリストか判定する(false)', () => {
-  document.body.innerHTML = '<textarea id="editor"></textarea>'
-  const editor = new Editor('editor', THEME.LIGHT)
-  expect(editor.isTaskList('test')).toBeFalsy()
-})
-
 test('テーブルを挿入する', () => {
   document.body.innerHTML = '<textarea id="editor"></textarea>'
   const editor = new Editor('editor', THEME.LIGHT)

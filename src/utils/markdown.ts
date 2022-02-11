@@ -137,7 +137,7 @@ export const replaceListNumber = (lineText: string, number: number): string => {
 }
 
 /**
- * テーブルを挿入します。
+ * テーブルを挿入。
  */
 export const getDefaultTable = (row = 3, column = 3): string => {
   let tr = '| '
@@ -160,10 +160,20 @@ export const getDefaultTable = (row = 3, column = 3): string => {
   return table
 }
 
+/**
+ * テーブルの行か判定。
+ */
 export const isTableRow = (lineText: string): boolean => {
   return !!lineText.match(/^\|/) && !!lineText.match(/\|$/)
 }
 
+/**
+ * テーブルの行を取得。
+ */
 export const getTableRow = (lineText: string): string[] => {
-  return lineText.replace(/^\|/, '').replace(/\|$/, '').split('|')
+  return lineText
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split('|')
+    .map((r) => r.trim())
 }
