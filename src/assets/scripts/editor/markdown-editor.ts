@@ -1,5 +1,17 @@
-import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
+import { LIST_TYPE, LIST_RE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { getCharWidth } from '@/utils/string'
+import {
+  isList,
+  isOrderedList,
+  getListStartCh,
+  getListPrefix,
+  getDefaultTable,
+  getListDepth,
+  replaceListNumber,
+  replaceListPrefix,
+  isTableRow,
+  getTableRow,
+} from '@/utils/markdown'
 import { Editor as CM } from 'codemirror'
 import Editor from './editor'
 import 'codemirror/mode/gfm/gfm.js'
@@ -62,7 +74,7 @@ class MarkdownEditor extends Editor {
     if (cm.somethingSelected()) {
       cm.indentSelection('add')
     } else {
-      if (this.isList(text)) {
+      if (isList(text)) {
         if (this.isIndentableList(pos.line)) {
           cm.execCommand('goLineStart')
           cm.execCommand('insertTab')
@@ -185,82 +197,6 @@ class MarkdownEditor extends Editor {
   }
 
   /**
-   * リストか判定します。
-   */
-  isList(text: string): boolean {
-    return this.isBulletList(text) || this.isOrderedList(text) || this.isTaskList(text)
-  }
-
-  /**
-   * リストのテキスト開始位置を取得します
-   * @param listText
-   */
-  getListStartCh(listText: string): number {
-    const originalLength = listText.length
-    const trimmedLength = listText.trimStart().length
-    const diff = originalLength - trimmedLength
-    const text = listText.trimStart()
-    if (this.isTaskList(text)) {
-      if (this.isTaskChecked(text)) {
-        return text.indexOf(' [x] ') + diff + 5
-      }
-      return text.indexOf(' [ ] ') + diff + 5
-    }
-    return text.indexOf(' ') + diff + 1
-  }
-
-  /**
-   * 箇条書きリストか判定します。
-   */
-  isBulletList(lineText: string): boolean {
-    const text = lineText.trimStart()
-    if (text.indexOf('- ') === 0 || text.indexOf('* ') === 0 || text.indexOf('+ ') === 0) {
-      return true
-    }
-    return false
-  }
-
-  /**
-   * 番号付きリストか判定します。
-   */
-  isOrderedList(lineText: string): boolean {
-    const text = lineText.trimStart()
-    if (text.search(/^[0-9]+\./) !== -1) {
-      return true
-    }
-    return false
-  }
-
-  /**
-   * タスクリストか判定します。
-   */
-  isTaskList(lineText: string): boolean {
-    const text = lineText.trimStart()
-    if (
-      text.indexOf('- [ ]') === 0 ||
-      text.indexOf('* [ ]') === 0 ||
-      text.indexOf('+ [ ]') === 0 ||
-      text.indexOf('- [x]') === 0 ||
-      text.indexOf('* [x]') === 0 ||
-      text.indexOf('+ [x]') === 0
-    ) {
-      return true
-    }
-    return false
-  }
-
-  /**
-   * タスクがチェック済みか判定します。
-   */
-  isTaskChecked(lineText: string): boolean {
-    const text = lineText.trimStart()
-    if (text.indexOf('- [x]') === 0 || text.indexOf('* [x]') === 0 || text.indexOf('+ [x]') === 0) {
-      return true
-    }
-    return false
-  }
-
-  /**
    * 対象行のリストがインデント可能か判定します。
    */
   isIndentableList(lineNumber: number): boolean {
@@ -271,13 +207,13 @@ class MarkdownEditor extends Editor {
     const text = this.editor.getLine(lineNumber)
     const prevText = this.editor.getLine(lineNumber - 1)
     // 前の行がリストでない場合、字下げ不要
-    if (!this.isList(prevText)) {
+    if (!isList(prevText)) {
       return false
     }
-    const tabCount = (text.match(/\t/g) || []).length
-    const prevTabCount = (prevText.match(/\t/g) || []).length
+    const depth = getListDepth(text)
+    const prevDepth = getListDepth(prevText)
     // タブ数が前の行より1以上開くことはないため、字下げ不要
-    if (tabCount - prevTabCount >= 1) {
+    if (depth - prevDepth >= 1) {
       return false
     }
     return true
@@ -287,23 +223,7 @@ class MarkdownEditor extends Editor {
    * テーブルを挿入します。
    */
   insertTable(row = 3, column = 3): void {
-    let tr = '| '
-    let dr = '| '
-    for (let i = 0; i < column - 1; i++) {
-      if (i === 0) {
-        tr += '   '
-        dr += '---'
-      }
-      tr += ' |    '
-      dr += ' | ---'
-    }
-    tr += ' |\n'
-    dr += ' |\n'
-
-    let table = tr + dr
-    for (let i = 0; i < row - 1; i++) {
-      table += tr
-    }
+    const table = getDefaultTable(row, column)
     this.insert(table)
   }
 
@@ -353,7 +273,7 @@ class MarkdownEditor extends Editor {
     const pos = this.getSelectionPosition()
     if (pos.start.y === pos.end.y) {
       // 単一行
-      const prefix = this.getListPrefix(type)
+      const prefix = getListPrefix(type)
       this.insertPrefix(prefix)
     } else {
       // 複数行
@@ -361,7 +281,7 @@ class MarkdownEditor extends Editor {
       for (let i = pos.start.y; i <= pos.end.y; i++) {
         const line = this.editor.getLine(i)
         const number = i - pos.start.y + 1
-        const prefix = this.getListPrefix(type, number)
+        const prefix = getListPrefix(type, number)
         lineText += `${prefix}${line}`
         if (i !== pos.end.y) {
           lineText += '\n'
@@ -371,22 +291,6 @@ class MarkdownEditor extends Editor {
       const to = { line: pos.end.y, ch: this.editor.getLine(pos.end.y).length }
       this.insert(lineText, from, to)
     }
-  }
-
-  /**
-   * リストの種別毎のプレフィックスを返却します。
-   * @param type
-   * @param number
-   */
-  getListPrefix(type: string, number = 1): string {
-    if (type === LIST_TYPE.BULLET) {
-      return '- '
-    } else if (type === LIST_TYPE.ORDERED) {
-      return `${number}. `
-    } else if (type === LIST_TYPE.TASK) {
-      return '- [ ] '
-    }
-    return ''
   }
 
   /**
@@ -406,22 +310,14 @@ class MarkdownEditor extends Editor {
   goLineStart(): void {
     const pos = this.editor.getCursor()
     const text = this.getLineText(pos.line)
-    if (this.isList(text)) {
-      const ch = this.getListStartCh(text)
+    if (isList(text)) {
+      const ch = getListStartCh(text)
       if (pos.ch > ch) {
         this.editor.setCursor({ line: pos.line, ch })
         return
       }
     }
     this.editor.execCommand('goLineStart')
-  }
-
-  isTableRow(lineText: string): boolean {
-    return !!lineText.match(/^\|/) && !!lineText.match(/\|$/)
-  }
-
-  getTableRow(lineText: string): string[] {
-    return lineText.replace(/^\|/, '').replace(/\|$/, '').split('|')
   }
 
   getTableData(): TableData[] {
@@ -431,12 +327,12 @@ class MarkdownEditor extends Editor {
     let d: any = { start: null, end: null, rows: [] }
     for (let i = 0; i < maxLine; i++) {
       const lineText = this.getLineText(i)
-      if (this.isTableRow(lineText)) {
+      if (isTableRow(lineText)) {
         if (d.start === null) {
           d.start = i
         }
         d.end = i
-        d.rows.push(this.getTableRow(lineText))
+        d.rows.push(getTableRow(lineText))
       } else if (d.start !== null) {
         data.push(d)
         d = { start: null, end: null, rows: [] }
@@ -487,7 +383,7 @@ class MarkdownEditor extends Editor {
     ranges.forEach((range) => {
       const pos = range.head
       const text = cm.getLine(pos.line)
-      if (!this.isList(text)) {
+      if (!isList(text)) {
         return
       }
       this.optimizeListPrefix(cm, pos)
@@ -496,54 +392,56 @@ class MarkdownEditor extends Editor {
 
   // cf. https://github.com/codemirror/CodeMirror/blob/master/addon/edit/continuelist.js
   optimizeListPrefix(cm: CM, pos: CodeMirror.Position): void {
-    const listRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/
-    let startLine = pos.line
-    // 前の行がリストの場合、番号を引き継ぐため前の行から最適化をおこなう。
-    if (pos.line - 1 >= 0 && this.isList(this.getLineText(pos.line - 1))) {
-      startLine = startLine - 1
-    }
+    const startLine = this.getListStartLine(pos.line)
     let lookAhead = 0
-    let nextItem = null
+    let item = null
     const listData: ListData[] = []
     do {
-      const nextLineNumber = startLine + lookAhead
-      const nextLine = cm.getLine(nextLineNumber)
-      nextItem = listRE.exec(nextLine)
-      if (nextItem) {
-        const tabMatch = nextItem[1].match(/\t/g)
-        const depth = tabMatch ? tabMatch.length : 0
+      const lineNumber = startLine + lookAhead
+      let lineText = cm.getLine(lineNumber)
+      // 操作した行が番号付きリストの場合は、一番始まりとしたいため置換する
+      if (lineNumber === pos.line && isOrderedList(lineText)) {
+        lineText = replaceListNumber(lineText, 1)
+      }
+      item = !!(lineText && isList(lineText))
+      if (item) {
         listData.push({
-          line: nextLineNumber,
-          text: nextLine,
-          depth: depth,
+          line: lineNumber,
+          text: lineText,
+          depth: getListDepth(lineText),
         })
       }
       lookAhead++
-    } while (nextItem)
+    } while (item)
 
     const maxDepth = listData.map((d: ListData) => d.depth).reduce((a: number, b: number) => Math.max(a, b))
     for (let i = 0; i <= maxDepth; i++) {
       const filteredData = listData.filter((d) => d.depth === i)
       filteredData.forEach((d, i) => {
-        const item = listRE.exec(d.text)
-        if (!item) {
+        const firstText = filteredData[0].text
+        const firstItem = LIST_RE.exec(firstText)
+        if (!firstItem) {
           return
         }
-
-        const firstItem = listRE.exec(filteredData[0].text)
-        if (firstItem) {
-          if (this.isOrderedList(filteredData[0].text)) {
-            const prefix = String(Number(firstItem[2]) + i)
-            const text = d.text.replace(listRE, item[1] + prefix + item[4] + item[5])
-            this.setLineText(d.line, text)
-          } else {
-            const prefix = firstItem[2]
-            const text = d.text.replace(listRE, item[1] + prefix)
-            this.setLineText(d.line, text)
-          }
+        if (isOrderedList(firstText)) {
+          const text = replaceListNumber(d.text, Number(firstItem[2]) + i)
+          this.setLineText(d.line, text)
+        } else {
+          const text = replaceListPrefix(d.text, firstItem[2])
+          this.setLineText(d.line, text)
         }
       })
     }
+  }
+
+  getListStartLine(lineNumber: number): number {
+    for (let i = lineNumber; i >= 0; i--) {
+      const text = this.getLineText(i)
+      if (!isList(text)) {
+        return i + 1
+      }
+    }
+    return 0
   }
 }
 
