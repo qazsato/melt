@@ -32,7 +32,7 @@ interface TableData {
   rows: string[][]
 }
 
-interface ListData {
+interface ListItem {
   line: number
   text: string
   depth: number
@@ -395,7 +395,7 @@ class MarkdownEditor extends Editor {
     const startLine = this.getListStartLine(pos.line)
     let lookAhead = 0
     let item = null
-    const listData: ListData[] = []
+    const allListItems: ListItem[] = []
     do {
       const lineNumber = startLine + lookAhead
       let lineText = cm.getLine(lineNumber)
@@ -405,7 +405,7 @@ class MarkdownEditor extends Editor {
       }
       item = !!(lineText && isList(lineText))
       if (item) {
-        listData.push({
+        allListItems.push({
           line: lineNumber,
           text: lineText,
           depth: getListDepth(lineText),
@@ -414,22 +414,36 @@ class MarkdownEditor extends Editor {
       lookAhead++
     } while (item)
 
-    const maxDepth = listData.map((d: ListData) => d.depth).reduce((a: number, b: number) => Math.max(a, b))
-    for (let i = 0; i <= maxDepth; i++) {
-      const filteredData = listData.filter((d) => d.depth === i)
-      filteredData.forEach((d, i) => {
-        const firstText = filteredData[0].text
-        const firstItem = LIST_RE.exec(firstText)
-        if (!firstItem) {
-          return
+    const maxDepth = allListItems.map((l: ListItem) => l.depth).reduce((a: number, b: number) => Math.max(a, b))
+    for (let depth = 0; depth <= maxDepth; depth++) {
+      const listItemsByDepth: ListItem[][] = []
+      let listItems: ListItem[] = []
+      allListItems.forEach((l: ListItem, i: number) => {
+        if (l.depth === depth) {
+          listItems.push(l)
+          if (i !== allListItems.length - 1 && allListItems[i + 1].depth < depth) {
+            listItemsByDepth.push(listItems)
+            listItems = []
+          }
         }
-        if (isOrderedList(firstText)) {
-          const text = replaceListNumber(d.text, Number(firstItem[2]) + i)
-          this.setLineText(d.line, text)
-        } else {
-          const text = replaceListPrefix(d.text, firstItem[2])
-          this.setLineText(d.line, text)
-        }
+      })
+      listItemsByDepth.push(listItems)
+
+      listItemsByDepth.forEach((listItems: ListItem[]) => {
+        listItems.forEach((l: ListItem, i: number) => {
+          const firstText = listItems[0].text
+          const firstItem = LIST_RE.exec(firstText)
+          if (!firstItem) {
+            return
+          }
+          if (isOrderedList(firstText)) {
+            const text = replaceListNumber(l.text, Number(firstItem[2]) + i)
+            this.setLineText(l.line, text)
+          } else {
+            const text = replaceListPrefix(l.text, firstItem[2])
+            this.setLineText(l.line, text)
+          }
+        })
       })
     }
   }
