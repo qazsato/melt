@@ -8,7 +8,6 @@ import {
   getDefaultTable,
   getListDepth,
   replaceListNumber,
-  replaceListPrefix,
   isTableRow,
   getTableRow,
 } from '@/utils/markdown'
@@ -381,7 +380,7 @@ class MarkdownEditor extends Editor {
   optimizeList(cm: CM): void {
     const ranges = cm.listSelections()
     ranges.forEach((range) => {
-      const pos = range.head
+      const pos = range.head.line <= range.anchor.line ? range.head : range.anchor
       const text = cm.getLine(pos.line)
       if (!isList(text)) {
         return
@@ -440,9 +439,6 @@ class MarkdownEditor extends Editor {
           }
           if (isOrderedList(firstText)) {
             const text = replaceListNumber(l.text, Number(firstItem[2]) + i)
-            this.setLineText(l.line, text)
-          } else {
-            const text = replaceListPrefix(l.text, firstItem[2])
             this.setLineText(l.line, text)
           }
         })
