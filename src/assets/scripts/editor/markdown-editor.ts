@@ -8,7 +8,6 @@ import {
   getDefaultTable,
   getListDepth,
   replaceListNumber,
-  replaceListPrefix,
   isTableRow,
   getTableRow,
 } from '@/utils/markdown'
@@ -381,7 +380,7 @@ class MarkdownEditor extends Editor {
   optimizeList(cm: CM): void {
     const ranges = cm.listSelections()
     ranges.forEach((range) => {
-      const pos = range.head
+      const pos = range.head.line <= range.anchor.line ? range.head : range.anchor
       const text = cm.getLine(pos.line)
       if (!isList(text)) {
         return
@@ -418,17 +417,19 @@ class MarkdownEditor extends Editor {
     for (let depth = 0; depth <= maxDepth; depth++) {
       const listItemsByDepth: ListItem[][] = []
       let listItems: ListItem[] = []
-      allListItems.forEach((l: ListItem, i: number) => {
+      allListItems.forEach((l: ListItem) => {
         if (l.depth === depth) {
           listItems.push(l)
-          if (i !== allListItems.length - 1 && allListItems[i + 1].depth < depth) {
+        } else if (l.depth < depth) {
+          if (listItems.length > 0) {
             listItemsByDepth.push(listItems)
             listItems = []
           }
         }
       })
-      listItemsByDepth.push(listItems)
-
+      if (listItems.length > 0) {
+        listItemsByDepth.push(listItems)
+      }
       listItemsByDepth.forEach((listItems: ListItem[]) => {
         listItems.forEach((l: ListItem, i: number) => {
           const firstText = listItems[0].text
@@ -438,9 +439,6 @@ class MarkdownEditor extends Editor {
           }
           if (isOrderedList(firstText)) {
             const text = replaceListNumber(l.text, Number(firstItem[2]) + i)
-            this.setLineText(l.line, text)
-          } else {
-            const text = replaceListPrefix(l.text, firstItem[2])
             this.setLineText(l.line, text)
           }
         })
