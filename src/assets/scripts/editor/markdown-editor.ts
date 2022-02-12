@@ -418,17 +418,19 @@ class MarkdownEditor extends Editor {
     for (let depth = 0; depth <= maxDepth; depth++) {
       const listItemsByDepth: ListItem[][] = []
       let listItems: ListItem[] = []
-      allListItems.forEach((l: ListItem, i: number) => {
+      allListItems.forEach((l: ListItem) => {
         if (l.depth === depth) {
           listItems.push(l)
-          if (i !== allListItems.length - 1 && allListItems[i + 1].depth < depth) {
+        } else if (l.depth < depth) {
+          if (listItems.length > 0) {
             listItemsByDepth.push(listItems)
             listItems = []
           }
         }
       })
-      listItemsByDepth.push(listItems)
-
+      if (listItems.length > 0) {
+        listItemsByDepth.push(listItems)
+      }
       listItemsByDepth.forEach((listItems: ListItem[]) => {
         listItems.forEach((l: ListItem, i: number) => {
           const firstText = listItems[0].text
