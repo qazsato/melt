@@ -220,10 +220,12 @@ export default Vue.extend({
 
     swapAboveLine() {
       this.editor?.swapAboveLine()
+      this.editor?.optimizeList()
     },
 
     swapBelowLine() {
       this.editor?.swapBelowLine()
+      this.editor?.optimizeList()
     },
 
     goLineStart() {

@@ -68,8 +68,8 @@ class MarkdownEditor extends Editor {
    * Tabのハンドラ
    */
   onPressTab(cm: CM): void {
-    const pos = this.editor.getCursor()
-    const text = this.editor.getLine(pos.line)
+    const pos = this.cm.getCursor()
+    const text = this.cm.getLine(pos.line)
     if (cm.somethingSelected()) {
       cm.indentSelection('add')
     } else {
@@ -83,7 +83,7 @@ class MarkdownEditor extends Editor {
         cm.execCommand('insertTab')
       }
     }
-    this.optimizeList(cm)
+    this.optimizeList()
   }
 
   /**
@@ -91,7 +91,7 @@ class MarkdownEditor extends Editor {
    */
   onPressShiftTab(cm: CM): void {
     cm.execCommand('indentLess')
-    this.optimizeList(cm)
+    this.optimizeList()
   }
 
   /**
@@ -99,7 +99,7 @@ class MarkdownEditor extends Editor {
    * @param {string} text
    */
   insertText(text = ''): void {
-    this.editor.replaceSelection(text)
+    this.cm.replaceSelection(text)
   }
 
   /**
@@ -108,7 +108,7 @@ class MarkdownEditor extends Editor {
    * @param {string} url
    */
   insertLink(title = '', url = ''): void {
-    this.editor.replaceSelection(`[${title}](${url})`)
+    this.cm.replaceSelection(`[${title}](${url})`)
   }
 
   /**
@@ -119,7 +119,7 @@ class MarkdownEditor extends Editor {
    */
   insertImage(alt = '', url = '', isHtmlString = false): void {
     const text = isHtmlString ? `<img alt="${alt}" src="${url}">` : `![${alt}](${url})`
-    this.editor.replaceSelection(text)
+    this.cm.replaceSelection(text)
   }
 
   /**
@@ -162,14 +162,14 @@ class MarkdownEditor extends Editor {
       // 複数行
       let lineText = ''
       for (let i = pos.start.y; i <= pos.end.y; i++) {
-        const line = this.editor.getLine(i)
+        const line = this.cm.getLine(i)
         lineText += `> ${line}\t`
         if (i !== pos.end.y) {
           lineText += '\n'
         }
       }
       const from = { line: pos.start.y, ch: 0 }
-      const to = { line: pos.end.y, ch: this.editor.getLine(pos.end.y).length }
+      const to = { line: pos.end.y, ch: this.cm.getLine(pos.end.y).length }
       this.insert(lineText, from, to)
     }
   }
@@ -203,8 +203,8 @@ class MarkdownEditor extends Editor {
     if (lineNumber === 0) {
       return false
     }
-    const text = this.editor.getLine(lineNumber)
-    const prevText = this.editor.getLine(lineNumber - 1)
+    const text = this.cm.getLine(lineNumber)
+    const prevText = this.cm.getLine(lineNumber - 1)
     // 前の行がリストでない場合、字下げ不要
     if (!isList(prevText)) {
       return false
@@ -238,7 +238,7 @@ class MarkdownEditor extends Editor {
     const endY = pos.end.y
     if (startY === endY) {
       // 単一行
-      this.editor.replaceSelection(`${mark}${this.getSelection()}${mark}`)
+      this.cm.replaceSelection(`${mark}${this.getSelection()}${mark}`)
       if (startX === endX) {
         this.moveCursorPosition(-1 * mark.length, 0) // NOTE 未選択時の場合は入力のしやすさを考慮しカーソル移動する。
       }
@@ -246,7 +246,7 @@ class MarkdownEditor extends Editor {
       // 複数行
       let lineText = ''
       for (let i = startY; i <= endY; i++) {
-        const line = this.editor.getLine(i)
+        const line = this.cm.getLine(i)
         if (line.trim() !== '') {
           if (i === startY && startX !== 0) {
             lineText += `${mark}${line.slice(startX, line.length)}${mark}`
@@ -278,7 +278,7 @@ class MarkdownEditor extends Editor {
       // 複数行
       let lineText = ''
       for (let i = pos.start.y; i <= pos.end.y; i++) {
-        const line = this.editor.getLine(i)
+        const line = this.cm.getLine(i)
         const number = i - pos.start.y + 1
         const prefix = getListPrefix(type, number)
         lineText += `${prefix}${line}`
@@ -287,7 +287,7 @@ class MarkdownEditor extends Editor {
         }
       }
       const from = { line: pos.start.y, ch: 0 }
-      const to = { line: pos.end.y, ch: this.editor.getLine(pos.end.y).length }
+      const to = { line: pos.end.y, ch: this.cm.getLine(pos.end.y).length }
       this.insert(lineText, from, to)
     }
   }
@@ -296,7 +296,7 @@ class MarkdownEditor extends Editor {
    * 文書の見出し(Hタグ)を取得します。
    */
   getTitle(): string {
-    const re = /# (.+)\n/.exec(this.editor.getValue())
+    const re = /# (.+)\n/.exec(this.cm.getValue())
     if (re === null) {
       return ''
     }
@@ -307,21 +307,21 @@ class MarkdownEditor extends Editor {
    * 文の先頭にカーソルを移動します。
    */
   goLineStart(): void {
-    const pos = this.editor.getCursor()
+    const pos = this.cm.getCursor()
     const text = this.getLineText(pos.line)
     if (isList(text)) {
       const ch = getListStartCh(text)
       if (pos.ch > ch) {
-        this.editor.setCursor({ line: pos.line, ch })
+        this.cm.setCursor({ line: pos.line, ch })
         return
       }
     }
-    this.editor.execCommand('goLineStart')
+    this.cm.execCommand('goLineStart')
   }
 
   getTableData(): TableData[] {
     const data: TableData[] = []
-    const maxLine = this.editor.lineCount()
+    const maxLine = this.cm.lineCount()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let d: any = { start: null, end: null, rows: [] }
     for (let i = 0; i < maxLine; i++) {
@@ -377,31 +377,27 @@ class MarkdownEditor extends Editor {
     })
   }
 
-  optimizeList(cm: CM): void {
-    const ranges = cm.listSelections()
+  optimizeList(): void {
+    const ranges = this.cm.listSelections()
     ranges.forEach((range) => {
       const pos = range.head.line <= range.anchor.line ? range.head : range.anchor
-      const text = cm.getLine(pos.line)
+      const text = this.cm.getLine(pos.line)
       if (!isList(text)) {
         return
       }
-      this.optimizeListPrefix(cm, pos)
+      this.optimizeListPrefix(pos)
     })
   }
 
   // cf. https://github.com/codemirror/CodeMirror/blob/master/addon/edit/continuelist.js
-  optimizeListPrefix(cm: CM, pos: CodeMirror.Position): void {
+  optimizeListPrefix(pos: CodeMirror.Position): void {
     const startLine = this.getListStartLine(pos.line)
     let lookAhead = 0
     let item = null
     const allListItems: ListItem[] = []
     do {
       const lineNumber = startLine + lookAhead
-      let lineText = cm.getLine(lineNumber)
-      // 操作した行が番号付きリストの場合は、一番始まりとしたいため置換する
-      if (lineNumber === pos.line && isOrderedList(lineText)) {
-        lineText = replaceListNumber(lineText, 1)
-      }
+      const lineText = this.cm.getLine(lineNumber)
       item = !!(lineText && isList(lineText))
       if (item) {
         allListItems.push({
@@ -433,12 +429,8 @@ class MarkdownEditor extends Editor {
       listItemsByDepth.forEach((listItems: ListItem[]) => {
         listItems.forEach((l: ListItem, i: number) => {
           const firstText = listItems[0].text
-          const firstItem = LIST_RE.exec(firstText)
-          if (!firstItem) {
-            return
-          }
           if (isOrderedList(firstText)) {
-            const text = replaceListNumber(l.text, Number(firstItem[2]) + i)
+            const text = replaceListNumber(l.text, i + 1)
             this.setLineText(l.line, text)
           }
         })
