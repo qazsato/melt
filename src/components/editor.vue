@@ -211,11 +211,17 @@ export default Vue.extend({
         return false
       }
       const text = this.editor?.getLineText(event.to.line) || ''
-      const removed = event.removed[0]
-      if (isCodeBlock(text) && !isCodeBlock(removed)) {
-        return true
+      if (!isCodeBlock(text)) {
+        return false
       }
-      return false
+      if (text.length !== 3) {
+        return false
+      }
+      const removed = event.removed[0]
+      if (isCodeBlock(removed)) {
+        return false
+      }
+      return true
     },
 
     swapAboveLine() {
