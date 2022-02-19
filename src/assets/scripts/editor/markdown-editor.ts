@@ -1,4 +1,4 @@
-import { LIST_TYPE, LIST_RE, ALLOW_DROP_FILE_TYPES } from '@/constants'
+import { LIST_TYPE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { getCharWidth } from '@/utils/string'
 import {
   isList,
@@ -24,6 +24,7 @@ import 'codemirror/mode/go/go.js'
 import 'codemirror/mode/sql/sql.js'
 import 'codemirror/mode/shell/shell.js'
 import 'codemirror/addon/edit/continuelist.js'
+import './mode/meltgfm'
 
 interface TableData {
   start: number
@@ -41,7 +42,7 @@ class MarkdownEditor extends Editor {
   constructor(id: string, theme: string) {
     const option = {
       mode: {
-        name: 'gfm',
+        name: 'meltgfm',
         highlightFormatting: true,
       },
       theme: theme,
