@@ -83,6 +83,7 @@ export default Vue.extend({
       'Shift-Cmd-V': () => this.pasteAsPlainText(),
       'Alt-Up': () => this.swapAboveLine(),
       'Alt-Down': () => this.swapBelowLine(),
+      'Ctrl-A': () => this.goLineStart(),
     })
     this.$store.commit('setEditor', this.editor)
     this.$nextTick().then(() => this.editor?.setText(this.$store.state.note.content))
@@ -97,6 +98,7 @@ export default Vue.extend({
     },
 
     saveNote() {
+      this.editor?.optimizeTable()
       const content = this.editor?.getText()
       if (this.$store.state.note.filePath) {
         this.$store.commit('updateNote', content)
@@ -218,10 +220,16 @@ export default Vue.extend({
 
     swapAboveLine() {
       this.editor?.swapAboveLine()
+      this.editor?.optimizeList()
     },
 
     swapBelowLine() {
       this.editor?.swapBelowLine()
+      this.editor?.optimizeList()
+    },
+
+    goLineStart() {
+      this.editor?.goLineStart()
     },
   },
 })

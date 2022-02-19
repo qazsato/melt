@@ -24,12 +24,15 @@ export const LIST_TYPE = {
   TASK: 'task',
 }
 
+// cf. https://github.com/codemirror/CodeMirror/blob/master/addon/edit/continuelist.js#L14
+export const LIST_RE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/
+
 export const ALLOW_DROP_FILE_TYPES = ['image/png', 'image/jpeg', 'image/gif']
 
 export const DEFAULT_PREFERENCE = {
   directory: '',
   theme: THEME.LIGHT,
   initialNote: INITIAL_NOTE.BLANK,
-  fontFamily: 'Source Code Pro',
+  fontFamily: 'Source Han Code JP',
   fontSize: 16,
 }

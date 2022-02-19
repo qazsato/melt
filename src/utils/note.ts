@@ -1,3 +1,4 @@
+import fs from 'fs'
 import glob from 'glob'
 import _ from 'lodash'
 import Note from '@/assets/scripts/note/note'
@@ -33,4 +34,15 @@ export const readRecentlyOpenedNotes = (): Note[] => {
     }
   })
   return notes
+}
+
+export const isExistPath = (path: string): boolean => {
+  try {
+    const fileName = path.split('/').reverse()[0]
+    const filePath = path.replace(fileName, '')
+    const fileNames = fs.readdirSync(filePath)
+    return fileNames.some((f) => f === fileName)
+  } catch (e) {
+    return false
+  }
 }

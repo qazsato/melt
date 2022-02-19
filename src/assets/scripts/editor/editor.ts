@@ -1,16 +1,16 @@
 import CodeMirror, { EditorConfiguration, KeyMap, Position } from 'codemirror'
 
 class Editor {
-  editor: CodeMirror.Editor
+  cm: CodeMirror.Editor
   focused = false
 
   constructor(id: string, option: EditorConfiguration) {
     const element: HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById(id)
-    this.editor = CodeMirror.fromTextArea(element, option)
-    this.editor.on('focus', () => {
+    this.cm = CodeMirror.fromTextArea(element, option)
+    this.cm.on('focus', () => {
       this.focused = true
     })
-    this.editor.on('blur', () => {
+    this.cm.on('blur', () => {
       this.focused = false
     })
   }
@@ -20,7 +20,7 @@ class Editor {
    * @param theme
    */
   setTheme(theme: string): void {
-    this.editor.setOption('theme', theme)
+    this.cm.setOption('theme', theme)
   }
 
   /**
@@ -28,7 +28,7 @@ class Editor {
    * @param map
    */
   addKeyMap(map: KeyMap): void {
-    this.editor.addKeyMap(map)
+    this.cm.addKeyMap(map)
   }
 
   /**
@@ -38,14 +38,14 @@ class Editor {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   on(event: any, handler: any): void {
-    this.editor.on(event, handler)
+    this.cm.on(event, handler)
   }
 
   /**
    * エディタにフォーカスします。
    */
   focus(): void {
-    this.editor.focus()
+    this.cm.focus()
   }
 
   /**
@@ -56,9 +56,9 @@ class Editor {
    */
   insert(text: string, from?: Position, to?: Position): void {
     if (!from) {
-      from = this.editor.getCursor()
+      from = this.cm.getCursor()
     }
-    this.editor.replaceRange(text, from, to)
+    this.cm.replaceRange(text, from, to)
   }
 
   /**
@@ -66,15 +66,15 @@ class Editor {
    * @param text
    */
   insertPrefix(text: string): void {
-    const pos = this.editor.getCursor()
-    this.editor.replaceRange(text, { line: pos.line, ch: 0 })
+    const pos = this.cm.getCursor()
+    this.cm.replaceRange(text, { line: pos.line, ch: 0 })
   }
 
   /**
    * エディタの文字を全て返却します。
    */
   getText(): string {
-    return this.editor.getValue()
+    return this.cm.getValue()
   }
 
   /**
@@ -82,14 +82,14 @@ class Editor {
    * @param val
    */
   setText(val: string): void {
-    this.editor.setValue(val)
+    this.cm.setValue(val)
   }
 
   /**
    * 選択中の文字を返却します。
    */
   getSelection(): string {
-    return this.editor.getSelection()
+    return this.cm.getSelection()
   }
 
   /**
@@ -97,14 +97,24 @@ class Editor {
    * @param number
    */
   getLineText(number: number): string {
-    return this.editor.getLine(number)
+    return this.cm.getLine(number)
+  }
+
+  /**
+   * 指定行数の文字を設定します。
+   * @param number
+   * @param text
+   */
+  setLineText(number: number, text: string): void {
+    const lineText = this.cm.getLine(number)
+    this.cm.replaceRange(text, { line: number, ch: 0 }, { line: number, ch: lineText.length })
   }
 
   /**
    * 選択中の文字の開始位置と終了位置を返却します。
    */
   getSelectionPosition(): Pos {
-    const selection = this.editor.listSelections()[0]
+    const selection = this.cm.listSelections()[0]
     const head = selection.head
     const anchor = selection.anchor
     // NOTE 三平方の定理でエディタの起点(0,0)からの距離を求め、start/endの判定を行う。
@@ -128,8 +138,8 @@ class Editor {
    * @param {number} y Y座標の相対値
    */
   moveCursorPosition(x = 0, y = 0): void {
-    const pos = this.editor.getCursor()
-    this.editor.setCursor({ line: pos.line + y, ch: pos.ch + x })
+    const pos = this.cm.getCursor()
+    this.cm.setCursor({ line: pos.line + y, ch: pos.ch + x })
   }
 
   /**
@@ -144,7 +154,7 @@ class Editor {
    * @param line
    */
   gotoLine(line: number): void {
-    this.editor.setCursor({ ch: 0, line })
+    this.cm.setCursor({ ch: 0, line })
   }
 
   /**
@@ -153,7 +163,7 @@ class Editor {
    */
   selectLine(line: number): void {
     const text = this.getLineText(line)
-    this.editor.setSelection({ line, ch: 0 }, { line, ch: text.length })
+    this.cm.setSelection({ line, ch: 0 }, { line, ch: text.length })
   }
 
   /**
@@ -162,10 +172,10 @@ class Editor {
    * @param toLine
    */
   swapLine(fromLine: number, toLine: number): void {
-    const fromText = this.editor.getLine(fromLine)
-    const toText = this.editor.getLine(toLine)
-    this.editor.replaceRange(fromText, { line: toLine, ch: 0 }, { line: toLine, ch: toText.length })
-    this.editor.replaceRange(toText, { line: fromLine, ch: 0 }, { line: fromLine, ch: fromText.length })
+    const fromText = this.cm.getLine(fromLine)
+    const toText = this.cm.getLine(toLine)
+    this.cm.replaceRange(fromText, { line: toLine, ch: 0 }, { line: toLine, ch: toText.length })
+    this.cm.replaceRange(toText, { line: fromLine, ch: 0 }, { line: fromLine, ch: fromText.length })
   }
 
   swapAboveLine(): void {
@@ -180,16 +190,16 @@ class Editor {
       for (let line = minLine; line <= maxLine; line++) {
         this.swapLine(line, line - 1)
       }
-      this.editor.setSelection({ line: pos.end.y - 1, ch: pos.end.x }, { line: pos.start.y - 1, ch: pos.start.x })
+      this.cm.setSelection({ line: pos.end.y - 1, ch: pos.end.x }, { line: pos.start.y - 1, ch: pos.start.x })
     } else {
-      const position = this.editor.getCursor()
+      const position = this.cm.getCursor()
       const fromLine = position.line
       const toLine = fromLine - 1
       if (fromLine === 0) {
         return
       }
       this.swapLine(fromLine, toLine)
-      this.editor.setCursor({ line: toLine, ch: position.ch })
+      this.cm.setCursor({ line: toLine, ch: position.ch })
     }
   }
 
@@ -199,22 +209,22 @@ class Editor {
       const pos = this.getSelectionPosition()
       const minLine = pos.start.y
       const maxLine = pos.end.x === 0 ? pos.end.y - 1 : pos.end.y
-      if (maxLine === this.editor.lineCount() - 1) {
+      if (maxLine === this.cm.lineCount() - 1) {
         return
       }
       for (let line = maxLine; line >= minLine; line--) {
         this.swapLine(line, line + 1)
       }
-      this.editor.setSelection({ line: pos.end.y + 1, ch: pos.end.x }, { line: pos.start.y + 1, ch: pos.start.x })
+      this.cm.setSelection({ line: pos.end.y + 1, ch: pos.end.x }, { line: pos.start.y + 1, ch: pos.start.x })
     } else {
-      const position = this.editor.getCursor()
+      const position = this.cm.getCursor()
       const fromLine = position.line
       const toLine = fromLine + 1
-      if (fromLine === this.editor.lineCount() - 1) {
+      if (fromLine === this.cm.lineCount() - 1) {
         return
       }
       this.swapLine(fromLine, toLine)
-      this.editor.setCursor({ line: toLine, ch: position.ch })
+      this.cm.setCursor({ line: toLine, ch: position.ch })
     }
   }
 }
