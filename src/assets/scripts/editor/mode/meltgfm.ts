@@ -1,6 +1,7 @@
 // CodeMirror gfm モードの独自拡張
 // cf. https://github.com/codemirror/CodeMirror/blob/master/mode/gfm/gfm.js
 /* eslint-disable */
+// @ts-nocheck
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE
 import CodeMirror from 'codemirror'

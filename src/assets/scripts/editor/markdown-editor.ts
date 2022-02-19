@@ -24,7 +24,7 @@ import 'codemirror/mode/go/go.js'
 import 'codemirror/mode/sql/sql.js'
 import 'codemirror/mode/shell/shell.js'
 import 'codemirror/addon/edit/continuelist.js'
-import './mode/meltgfm.js'
+import './mode/meltgfm'
 
 interface TableData {
   start: number
