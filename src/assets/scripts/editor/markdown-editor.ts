@@ -334,7 +334,9 @@ class MarkdownEditor extends Editor {
         d.end = i
         d.rows.push(getTableRow(lineText))
       } else if (d.start !== null) {
-        data.push(d)
+        if (d.rows.length > 1) {
+          data.push(d)
+        }
         d = { start: null, end: null, rows: [] }
       }
     }
