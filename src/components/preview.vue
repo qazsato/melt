@@ -49,6 +49,7 @@ export default Vue.extend({
     },
 
     content() {
+      this.markedText = this.markdown.render(this.content)
       this.$nextTick().then(() => {
         const element = this.$refs.markdown as HTMLElement
         const cbElements = element.querySelectorAll('.clipboard')
