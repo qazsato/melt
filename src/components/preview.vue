@@ -45,10 +45,19 @@ export default Vue.extend({
       if (!this.isViewModePreview) {
         return
       }
-      this.markedText = this.markdown.render(this.content)
+      this.draw()
     },
 
     content() {
+      if (!this.isViewModePreview) {
+        return
+      }
+      this.draw()
+    },
+  },
+
+  methods: {
+    draw() {
       this.markedText = this.markdown.render(this.content)
       this.$nextTick().then(() => {
         const element = this.$refs.markdown as HTMLElement
@@ -56,9 +65,7 @@ export default Vue.extend({
         cbElements.forEach((e) => e.addEventListener('click', this.copyClipboard))
       })
     },
-  },
 
-  methods: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     copyClipboard(event: any) {
       const code = event.target.nextElementSibling.innerText.trim() // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
