@@ -14,12 +14,14 @@ import { VIEW_MODE } from '@/constants'
 
 interface DataType {
   markdown: Markdown
+  markedText: string
 }
 
 export default Vue.extend({
   data() {
     const data: DataType = {
       markdown: new Markdown(),
+      markedText: '',
     }
     return data
   },
@@ -36,14 +38,16 @@ export default Vue.extend({
     isViewModePreview() {
       return this.$store.state.viewMode === VIEW_MODE.PREVIEW
     },
-
-    markedText() {
-      // @ts-ignore
-      return this.markdown.render(this.content)
-    },
   },
 
   watch: {
+    isViewModePreview() {
+      if (!this.isViewModePreview) {
+        return
+      }
+      this.markedText = this.markdown.render(this.content)
+    },
+
     content() {
       this.$nextTick().then(() => {
         const element = this.$refs.markdown as HTMLElement
