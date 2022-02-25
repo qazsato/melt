@@ -14,12 +14,14 @@ import { VIEW_MODE } from '@/constants'
 
 interface DataType {
   markdown: Markdown
+  markedText: string
 }
 
 export default Vue.extend({
   data() {
     const data: DataType = {
       markdown: new Markdown(),
+      markedText: '',
     }
     return data
   },
@@ -36,24 +38,34 @@ export default Vue.extend({
     isViewModePreview() {
       return this.$store.state.viewMode === VIEW_MODE.PREVIEW
     },
-
-    markedText() {
-      // @ts-ignore
-      return this.markdown.render(this.content)
-    },
   },
 
   watch: {
+    isViewModePreview() {
+      if (!this.isViewModePreview) {
+        return
+      }
+      this.draw()
+    },
+
     content() {
+      if (!this.isViewModePreview) {
+        return
+      }
+      this.draw()
+    },
+  },
+
+  methods: {
+    draw() {
+      this.markedText = this.markdown.render(this.content)
       this.$nextTick().then(() => {
         const element = this.$refs.markdown as HTMLElement
         const cbElements = element.querySelectorAll('.clipboard')
         cbElements.forEach((e) => e.addEventListener('click', this.copyClipboard))
       })
     },
-  },
 
-  methods: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     copyClipboard(event: any) {
       const code = event.target.nextElementSibling.innerText.trim() // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
