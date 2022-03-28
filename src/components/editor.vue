@@ -150,7 +150,7 @@ export default Vue.extend({
       } catch (error) {
         return // URLに変換できない場合何もしない
       }
-      const url = `${setting.api}/sites/metadata?url=${text}`
+      const url = `${setting.api}/sites/meta?url=${text}`
       axios
         .get(url)
         .then((res) => {
