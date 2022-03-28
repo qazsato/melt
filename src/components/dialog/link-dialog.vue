@@ -54,7 +54,7 @@ export default Vue.extend({
           // eslint-disable-next-line no-new
           new URL(text)
           this.linkUrl = text
-          const url = `${setting.api}/sites/metadata?url=${this.linkUrl}`
+          const url = `${setting.api}/sites/meta?url=${this.linkUrl}`
           axios.get(url).then((res) => {
             if (this.linkTitle === '' && this.$store.state.visibleLinkDialog === true) {
               this.linkTitle = res.data.title
