@@ -31,6 +31,8 @@
 import Vue from 'vue'
 import setting from '@/config/setting'
 import axios from 'axios'
+import dotenv from 'dotenv'
+const API_KEY = dotenv.config().parsed?.MELT_API_KEY
 
 interface DataType {
   linkTitle: string
@@ -54,7 +56,7 @@ export default Vue.extend({
           // eslint-disable-next-line no-new
           new URL(text)
           this.linkUrl = text
-          const url = `${setting.api}/sites/meta?url=${this.linkUrl}`
+          const url = `${setting.api}/sites/meta?url=${this.linkUrl}&api_key=${API_KEY}`
           axios.get(url).then((res) => {
             if (this.linkTitle === '' && this.$store.state.visibleLinkDialog === true) {
               this.linkTitle = res.data.title
