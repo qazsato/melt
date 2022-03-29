@@ -15,6 +15,8 @@ import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { isCodeBlock, getDefaultCodeBlock } from '@/utils/markdown'
 import 'codemirror/lib/codemirror.css'
 import '@/assets/styles/editor/markdown.scss'
+import dotenv from 'dotenv'
+const API_KEY = dotenv.config().parsed?.MELT_API_KEY
 
 interface DataType {
   editor: Editor | null
@@ -150,7 +152,7 @@ export default Vue.extend({
       } catch (error) {
         return // URLに変換できない場合何もしない
       }
-      const url = `${setting.api}/sites/meta?url=${text}`
+      const url = `${setting.api}/sites/meta?url=${text}&api_key=${API_KEY}`
       axios
         .get(url)
         .then((res) => {
@@ -184,7 +186,7 @@ export default Vue.extend({
           type: file.type,
           attachment: e.target?.result,
         }
-        axios.post(`${setting.api}/images`, data).then((res) => {
+        axios.post(`${setting.api}/images?api_key=${API_KEY}`, data).then((res) => {
           this.editor?.insertImage(res.data.name, res.data.url, true)
         })
       }
