@@ -31,8 +31,7 @@
 import Vue from 'vue'
 import setting from '@/config/setting'
 import axios from 'axios'
-import dotenv from 'dotenv'
-const API_KEY = dotenv.config().parsed?.MELT_API_KEY
+const API_KEY = process.env.VUE_APP_MELT_API_KEY
 
 interface DataType {
   linkTitle: string

@@ -15,8 +15,7 @@ import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { isCodeBlock, getDefaultCodeBlock } from '@/utils/markdown'
 import 'codemirror/lib/codemirror.css'
 import '@/assets/styles/editor/markdown.scss'
-import dotenv from 'dotenv'
-const API_KEY = dotenv.config().parsed?.MELT_API_KEY
+const API_KEY = process.env.VUE_APP_MELT_API_KEY
 
 interface DataType {
   editor: Editor | null
