@@ -244,8 +244,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .editor-area {
-  flex: 1;
-  min-width: 50%;
+  width: 100%;
   height: 100%;
 }
 
