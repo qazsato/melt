@@ -186,7 +186,7 @@ export default Vue.extend({
           attachment: e.target?.result,
         }
         axios.post(`${setting.api}/images?api_key=${API_KEY}`, data).then((res) => {
-          this.editor?.insertImage(res.data.name, res.data.url, true)
+          this.editor?.insertImage(file.name, res.data.url, true)
         })
       }
     },
