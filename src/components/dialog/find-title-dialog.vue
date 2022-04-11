@@ -32,9 +32,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { readAllNotes, readRecentlyOpenedNotes } from '@/utils/note'
+import { readAllNotePaths } from '@/utils/note'
+import { getBrowsingHistories } from '@/utils/local-storage'
 import { VIEW_MODE } from '@/constants'
-import Note from '@/assets/scripts/note/note'
 
 interface Suggestion {
   label: string
@@ -44,7 +44,7 @@ interface Suggestion {
 
 interface DataType {
   notePath: string
-  notes: Note[]
+  notePaths: string[]
   suggestions: Suggestion[]
   isComposing: boolean
 }
@@ -53,7 +53,7 @@ export default Vue.extend({
   data() {
     const data: DataType = {
       notePath: '',
-      notes: [],
+      notePaths: [],
       suggestions: [],
       isComposing: false, // 日本語入力(IME)が未確定か否か
     }
@@ -79,23 +79,24 @@ export default Vue.extend({
 
   methods: {
     queryFindTitle(query: string, callback: (suggestion: Suggestion[]) => void) {
-      let filteredNotes = []
+      let filteredNotePaths = []
       if (query) {
-        filteredNotes = this.notes.filter((n: Note) => {
-          const relativePath = n.filePath.split(this.$store.state.preference.directory)[1]
+        filteredNotePaths = this.notePaths.filter((path: string) => {
+          const relativePath = path.split(this.$store.state.preference.directory)[1]
           return relativePath.toLowerCase().includes(query.toLowerCase())
         })
       } else {
-        filteredNotes = readRecentlyOpenedNotes()
+        filteredNotePaths = getBrowsingHistories()
       }
-      this.suggestions = filteredNotes.map((n) => {
-        let displayPath = n.filePath
+      this.suggestions = filteredNotePaths.map((path: string) => {
+        let displayPath = path
         if (this.$store.state.preference.directory) {
-          displayPath = n.filePath.replace(this.$store.state.preference.directory, '.')
+          displayPath = path.replace(this.$store.state.preference.directory, '.')
         }
+        const fileName = path.split('/').reverse()[0]
         return {
-          label: n.fileName,
-          path: n.filePath,
+          label: fileName,
+          path: path,
           displayPath: displayPath,
         }
       })
@@ -127,7 +128,7 @@ export default Vue.extend({
     },
 
     openDialog() {
-      this.notes = readAllNotes(this.$store.state.preference.directory)
+      this.notePaths = readAllNotePaths(this.$store.state.preference.directory)
       // HACK: closeDialogで消えたままになっているため戻す
       const ele = document.querySelector('.find-title-popper') as HTMLElement
       if (ele && this.suggestions.length > 0) {
