@@ -108,7 +108,6 @@ const store = new Vuex.Store({
 
     updatePreference(state, preference: Preference) {
       state.preference = preference
-      state.editor?.setTheme(preference.theme)
       updatePreference(preference)
     },
 

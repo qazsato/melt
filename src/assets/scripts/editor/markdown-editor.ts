@@ -39,14 +39,12 @@ interface ListItem {
 }
 
 class MarkdownEditor extends Editor {
-  constructor(id: string, theme: string) {
-    const option = {
+  constructor(id: string, option: object = {}) {
+    const defaultOption = {
       mode: {
         name: 'meltgfm',
         highlightFormatting: true,
       },
-      theme: theme,
-      lineWrapping: true,
       autofocus: true,
       indentUnit: 4,
       indentWithTabs: true,
@@ -62,7 +60,7 @@ class MarkdownEditor extends Editor {
         },
       },
     }
-    super(id, option)
+    super(id, { ...defaultOption, ...option })
   }
 
   /**
