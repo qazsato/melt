@@ -11,7 +11,7 @@ import {
   isTableRow,
   getTableRow,
 } from '@/utils/markdown'
-import { Editor as CM } from 'codemirror'
+import { Editor as CM, Position } from 'codemirror'
 import Editor from './editor'
 import 'codemirror/mode/gfm/gfm.js'
 import 'codemirror/mode/htmlmixed/htmlmixed.js'
@@ -51,18 +51,10 @@ class MarkdownEditor extends Editor {
       dragDrop: true,
       allowDropFileTypes: ALLOW_DROP_FILE_TYPES,
       extraKeys: {
-        Backspace: (cm: CM) => {
-          this.onPressBackspace(cm)
-        },
-        Enter: (cm: CM) => {
-          this.onPressEnter(cm)
-        },
-        Tab: (cm: CM) => {
-          this.onPressTab(cm)
-        },
-        'Shift-Tab': (cm: CM) => {
-          this.onPressShiftTab(cm)
-        },
+        Backspace: (cm: CM) => this.onPressBackspace(cm),
+        Enter: (cm: CM) => this.onPressEnter(cm),
+        Tab: (cm: CM) => this.onPressTab(cm),
+        'Shift-Tab': (cm: CM) => this.onPressShiftTab(cm),
       },
     }
     super(id, { ...defaultOption, ...option })
@@ -73,7 +65,12 @@ class MarkdownEditor extends Editor {
    */
   onPressBackspace(cm: CM): void {
     const pos = cm.getCursor()
-    // 行数が減ることで、番号付きリストがマージされる可能性があるので最適化を実施する。
+    // フォーカス位置が行の末尾かつリストの先頭時は行の文字を消す
+    if (this.isDeleteListPrefix(pos)) {
+      cm.execCommand('delLineLeft')
+      return
+    }
+    // 行数が減ることで番号付きリストがマージされる可能性があるので最適化を実施する
     if (pos.ch === 0) {
       cm.execCommand('delCharBefore')
       this.optimizeList()
@@ -86,8 +83,14 @@ class MarkdownEditor extends Editor {
    * Enter のハンドラ
    */
   onPressEnter(cm: CM): void {
+    const pos = cm.getCursor()
+    // フォーカス位置が行の末尾かつリストの先頭時は行の文字を消す
+    if (this.isDeleteListPrefix(pos)) {
+      cm.execCommand('delLineLeft')
+      return
+    }
     cm.execCommand('newlineAndIndentContinueMarkdownList')
-    // 行数が増えることで、番号付きリストが分断される可能性があるので最適化を実施する。
+    // 行数が増えることで番号付きリストが分断される可能性があるので最適化を実施する
     this.optimizeListForEnter()
   }
 
@@ -95,8 +98,8 @@ class MarkdownEditor extends Editor {
    * Tab のハンドラ
    */
   onPressTab(cm: CM): void {
-    const pos = this.cm.getCursor()
-    const text = this.cm.getLine(pos.line)
+    const pos = cm.getCursor()
+    const text = cm.getLine(pos.line)
     if (cm.somethingSelected()) {
       cm.indentSelection('add')
     } else {
@@ -489,6 +492,17 @@ class MarkdownEditor extends Editor {
       }
     }
     return 0
+  }
+
+  isDeleteListPrefix(pos: Position): boolean {
+    const text = this.cm.getLine(pos.line)
+    if (isList(text)) {
+      const ch = getListStartCh(text)
+      if (pos.ch === text.length && pos.ch === ch) {
+        return true
+      }
+    }
+    return false
   }
 }
 
