@@ -65,6 +65,7 @@ class MarkdownEditor extends Editor {
    */
   onPressBackspace(cm: CM): void {
     const pos = cm.getCursor()
+    // フォーカス位置が行の末尾かつリストの先頭時は行の文字を消す
     if (this.isDeleteListPrefix(pos)) {
       cm.execCommand('delLineLeft')
       return
@@ -83,6 +84,7 @@ class MarkdownEditor extends Editor {
    */
   onPressEnter(cm: CM): void {
     const pos = cm.getCursor()
+    // フォーカス位置が行の末尾かつリストの先頭時は行の文字を消す
     if (this.isDeleteListPrefix(pos)) {
       cm.execCommand('delLineLeft')
       return
@@ -496,7 +498,6 @@ class MarkdownEditor extends Editor {
     const text = this.cm.getLine(pos.line)
     if (isList(text)) {
       const ch = getListStartCh(text)
-      // フォーカス位置が行の末尾かつリストの先頭時は行の文字を消す
       if (pos.ch === text.length && pos.ch === ch) {
         return true
       }
