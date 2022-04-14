@@ -39,21 +39,24 @@ interface ListItem {
 }
 
 class MarkdownEditor extends Editor {
-  constructor(id: string, theme: string) {
-    const option = {
+  constructor(id: string, option: object = {}) {
+    const defaultOption = {
       mode: {
         name: 'meltgfm',
         highlightFormatting: true,
       },
-      theme: theme,
-      lineWrapping: true,
       autofocus: true,
       indentUnit: 4,
       indentWithTabs: true,
       dragDrop: true,
       allowDropFileTypes: ALLOW_DROP_FILE_TYPES,
       extraKeys: {
-        Enter: 'newlineAndIndentContinueMarkdownList',
+        Backspace: (cm: CM) => {
+          this.onPressBackspace(cm)
+        },
+        Enter: (cm: CM) => {
+          this.onPressEnter(cm)
+        },
         Tab: (cm: CM) => {
           this.onPressTab(cm)
         },
@@ -62,11 +65,34 @@ class MarkdownEditor extends Editor {
         },
       },
     }
-    super(id, option)
+    super(id, { ...defaultOption, ...option })
   }
 
   /**
-   * Tabのハンドラ
+   * Backspace のハンドラ
+   */
+  onPressBackspace(cm: CM): void {
+    const pos = cm.getCursor()
+    // 行数が減ることで、番号付きリストがマージされる可能性があるので最適化を実施する。
+    if (pos.ch === 0) {
+      cm.execCommand('delCharBefore')
+      this.optimizeList()
+    } else {
+      cm.execCommand('delCharBefore')
+    }
+  }
+
+  /**
+   * Enter のハンドラ
+   */
+  onPressEnter(cm: CM): void {
+    cm.execCommand('newlineAndIndentContinueMarkdownList')
+    // 行数が増えることで、番号付きリストが分断される可能性があるので最適化を実施する。
+    this.optimizeListForEnter()
+  }
+
+  /**
+   * Tab のハンドラ
    */
   onPressTab(cm: CM): void {
     const pos = this.cm.getCursor()
@@ -388,13 +414,27 @@ class MarkdownEditor extends Editor {
       if (!isList(text)) {
         return
       }
-      this.optimizeListPrefix(pos)
+      this.optimizeListPrefix(pos.line)
     })
   }
 
+  optimizeListForEnter(): void {
+    const pos = this.cm.getCursor()
+    const nextLine = pos.line + 1
+    const maxLineCount = this.cm.lineCount()
+    if (nextLine >= maxLineCount) {
+      return
+    }
+    const nextLineText = this.cm.getLine(nextLine)
+    if (!isOrderedList(nextLineText)) {
+      return
+    }
+    this.optimizeListPrefix(nextLine)
+  }
+
   // cf. https://github.com/codemirror/CodeMirror/blob/master/addon/edit/continuelist.js
-  optimizeListPrefix(pos: CodeMirror.Position): void {
-    const startLine = this.getListStartLine(pos.line)
+  optimizeListPrefix(line: number): void {
+    const startLine = this.getListStartLine(line)
     let lookAhead = 0
     let item = null
     const allListItems: ListItem[] = []

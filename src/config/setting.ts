@@ -4,6 +4,7 @@ export interface Preference {
   initialNote: string
   fontFamily: string
   fontSize: number
+  wordWrap: boolean
 }
 
 interface Setting {

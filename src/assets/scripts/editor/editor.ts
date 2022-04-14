@@ -16,14 +16,6 @@ class Editor {
   }
 
   /**
-   * テーマを設定します。
-   * @param theme
-   */
-  setTheme(theme: string): void {
-    this.cm.setOption('theme', theme)
-  }
-
-  /**
    * キーバインドを登録します。
    * @param map
    */

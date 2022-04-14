@@ -10,7 +10,7 @@ import setting from '@/config/setting'
 import axios from 'axios'
 import { ipcRenderer } from 'electron'
 import { Editor as CM } from 'codemirror'
-import Editor from '@/assets/scripts/editor/markdown-editor'
+import MarkdownEditor from '@/assets/scripts/editor/markdown-editor'
 import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { isCodeBlock, getDefaultCodeBlock } from '@/utils/markdown'
 import 'codemirror/lib/codemirror.css'
@@ -18,7 +18,7 @@ import '@/assets/styles/editor/markdown.scss'
 const API_KEY = process.env.VUE_APP_MELT_API_KEY
 
 interface DataType {
-  editor: Editor | null
+  editor: MarkdownEditor | null
   isPasteAsPlainText: boolean
 }
 
@@ -63,7 +63,11 @@ export default Vue.extend({
   },
 
   mounted() {
-    this.editor = new Editor('editor', this.$store.state.preference.theme)
+    const option = {
+      theme: this.$store.state.preference.theme,
+      lineWrapping: this.$store.state.preference.wordWrap,
+    }
+    this.editor = new MarkdownEditor('editor', option)
     this.setStyle()
     this.editor.on('change', this.onChangeText)
     this.editor.on('paste', this.onPasteText)

@@ -35,4 +35,5 @@ export const DEFAULT_PREFERENCE = {
   initialNote: INITIAL_NOTE.BLANK,
   fontFamily: 'Source Han Code JP',
   fontSize: 16,
+  wordWrap: true,
 }

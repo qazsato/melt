@@ -25,6 +25,8 @@
         <el-input v-model="fontFamily"></el-input>
         <h3>Font Size</h3>
         <el-slider v-model="fontSize" :min="10" :max="30" show-input></el-slider>
+        <h3>Word Wrap</h3>
+        <el-switch v-model="wordWrap"></el-switch>
       </section>
       <el-row type="flex" justify="end">
         <el-button type="primary" @click="onSave" class="save-button">Save</el-button>
@@ -48,6 +50,7 @@ export default Vue.extend({
       initialNote: preference.initialNote,
       fontFamily: preference.fontFamily,
       fontSize: preference.fontSize,
+      wordWrap: preference.wordWrap,
     }
   },
 
@@ -81,9 +84,11 @@ export default Vue.extend({
         initialNote: this.initialNote,
         fontFamily: this.fontFamily,
         fontSize: this.fontSize,
+        wordWrap: this.wordWrap,
       }
       this.$store.commit('updatePreference', preference)
       this.$message({ type: 'success', message: 'Preference saved', showClose: true })
+      this.$router.push({ name: PAGE.MAIN })
     },
   },
 })
