@@ -107,7 +107,7 @@ export default Vue.extend({
       line-height: 50px;
       color: #fff;
 
-      /deep/ .el-page-header__content {
+      ::v-deep .el-page-header__content {
         color: #fff;
       }
     }
@@ -130,7 +130,7 @@ export default Vue.extend({
       color: $light-color;
     }
 
-    /deep/ .el-input__inner {
+    ::v-deep .el-input__inner {
       color: $light-color;
       background-color: $light-input-bg-color;
       border-color: $light-input-border-color;
@@ -149,7 +149,7 @@ export default Vue.extend({
       color: $dark-color;
     }
 
-    /deep/ .el-input__inner {
+    ::v-deep .el-input__inner {
       color: $dark-color;
       background-color: $dark-input-bg-color;
       border-color: $dark-input-border-color;

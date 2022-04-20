@@ -127,7 +127,7 @@ export default Vue.extend({
     top: 12px;
     right: 15px;
 
-    /deep/ .el-radio-button__inner {
+    ::v-deep .el-radio-button__inner {
       padding: 6px 10px;
     }
   }
