@@ -65,11 +65,6 @@ class MarkdownEditor extends Editor {
    */
   onPressBackspace(cm: CM): void {
     const pos = cm.getCursor()
-    // フォーカス位置が行の末尾かつリストの先頭時は行の文字を消す
-    if (this.isDeleteListPrefix(pos)) {
-      cm.execCommand('delLineLeft')
-      return
-    }
     // 行数が減ることで番号付きリストがマージされる可能性があるので最適化を実施する
     if (pos.ch === 0) {
       cm.execCommand('delCharBefore')
@@ -107,7 +102,7 @@ class MarkdownEditor extends Editor {
         if (this.isIndentableList(pos.line)) {
           cm.execCommand('goLineStart')
           cm.execCommand('insertTab')
-          cm.execCommand('goLineEnd')
+          cm.setCursor({ ch: pos.ch + 1, line: pos.line })
         }
       } else {
         cm.execCommand('insertTab')
