@@ -3,6 +3,9 @@
   "version": "2.8.2",
   "private": true,
   "author": "qazsato",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "serve": "vue-cli-service electron:serve",
     "build": "vue-cli-service electron:build",
@@ -58,12 +61,17 @@
     "eslint": "7.32.0",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-vue": "7.17.0",
-    "node-sass": "4.13.1",
     "prettier": "2.5.1",
+    "sass": "1.32.13",
     "sass-loader": "8.0.2",
     "typescript": "4.5.5",
     "vue-cli-plugin-electron-builder": "2.1.1",
     "vue-template-compiler": "2.6.14"
+  },
+  "overrides": {
+    "vue-cli-plugin-electron-builder": {
+      "electron-builder": "23.0.3"
+    }
   },
   "keywords": [
     "markdown",
