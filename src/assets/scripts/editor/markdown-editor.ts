@@ -247,8 +247,31 @@ class MarkdownEditor extends Editor {
    * テーブルを挿入します。
    */
   insertTable(row = 3, column = 3): void {
+    const pos = this.cm.getCursor()
     const table = getDefaultTable(row, column)
     this.insert(table)
+    this.focusTableCell(pos.line, 1)
+  }
+
+  /**
+   * 該当セルにフォーカスを移動します。
+   */
+  focusTableCell(line: number, cell: number): void {
+    const lineText = this.getLineText(line)
+    if (!isTableRow(lineText)) {
+      return
+    }
+
+    let cnt = 0
+    for (let i = 0; i < lineText.length; i++) {
+      if (lineText[i] === '|') {
+        cnt++
+        if (cnt === cell) {
+          this.cm.setCursor({ line: line, ch: i + 2 })
+          return
+        }
+      }
+    }
   }
 
   /**
