@@ -95,6 +95,15 @@ class MarkdownEditor extends Editor {
   onPressTab(cm: CM): void {
     const pos = cm.getCursor()
     const text = cm.getLine(pos.line)
+
+    if (isTableRow(text)) {
+      const cell = this.getFocusTableCell()
+      if (cell !== null) {
+        this.focusTableCell(pos.line, cell + 1)
+      }
+      return
+    }
+
     if (cm.somethingSelected()) {
       cm.indentSelection('add')
     } else {
@@ -115,6 +124,17 @@ class MarkdownEditor extends Editor {
    * Shift + Tab のハンドラ
    */
   onPressShiftTab(cm: CM): void {
+    const pos = cm.getCursor()
+    const text = cm.getLine(pos.line)
+
+    if (isTableRow(text)) {
+      const cell = this.getFocusTableCell()
+      if (cell !== null) {
+        this.focusTableCell(pos.line, cell - 1)
+      }
+      return
+    }
+
     cm.execCommand('indentLess')
     this.optimizeList()
   }
@@ -251,6 +271,22 @@ class MarkdownEditor extends Editor {
     const table = getDefaultTable(row, column)
     this.insert(table)
     this.focusTableCell(pos.line, 1)
+  }
+
+  getFocusTableCell(): number | null {
+    const pos = this.cm.getCursor()
+    const lineText = this.getLineText(pos.line)
+    if (!isTableRow(lineText)) {
+      return null
+    }
+
+    let cnt = 0
+    for (let i = 0; i < pos.ch; i++) {
+      if (lineText[i] === '|') {
+        cnt++
+      }
+    }
+    return cnt
   }
 
   /**
