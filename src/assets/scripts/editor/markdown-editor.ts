@@ -303,7 +303,9 @@ class MarkdownEditor extends Editor {
       if (lineText[i] === '|') {
         cnt++
         if (cnt === cell) {
-          this.cm.setCursor({ line: line, ch: i + 2 })
+          const startCh = i + 2
+          const textLength = lineText.split('|')[cell].trim().length
+          this.cm.setCursor({ line: line, ch: startCh + textLength })
           return
         }
       }
@@ -430,6 +432,8 @@ class MarkdownEditor extends Editor {
   }
 
   optimizeTable(): void {
+    const pos = this.cm.getCursor()
+    const cell = this.getFocusTableCell()
     const tableData = this.getTableData()
     tableData.forEach((d: TableData) => {
       const rows = d.rows
@@ -461,6 +465,9 @@ class MarkdownEditor extends Editor {
         this.setLineText(d.start + i, text)
       })
     })
+    if (cell !== null) {
+      this.focusTableCell(pos.line, cell)
+    }
   }
 
   optimizeList(): void {
