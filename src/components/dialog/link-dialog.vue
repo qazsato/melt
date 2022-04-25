@@ -21,8 +21,8 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="insertLink"> Insert </el-button>
-      <el-button @click="closeDialog"> Cancel </el-button>
+      <el-button @click="closeDialog">Cancel</el-button>
+      <el-button type="primary" @click="insertLink">Insert</el-button>
     </span>
   </el-dialog>
 </template>
