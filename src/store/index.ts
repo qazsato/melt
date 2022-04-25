@@ -20,6 +20,7 @@ interface State {
   visibleTableDialog: boolean
   visibleFindParagraphDialog: boolean
   visibleFindTitleDialog: boolean
+  visibleFindTextDialog: boolean
   visibleFindContentDialog: boolean
   visibleRenameDialog: boolean
 }
@@ -44,6 +45,7 @@ const state: State = {
   visibleTableDialog: false,
   visibleFindParagraphDialog: false,
   visibleFindTitleDialog: false,
+  visibleFindTextDialog: false,
   visibleFindContentDialog: false,
   visibleRenameDialog: false,
 }
@@ -160,6 +162,14 @@ const store = new Vuex.Store({
 
     hideFindTitleDialog(state) {
       state.visibleFindTitleDialog = false
+    },
+
+    showFindTextDialog(state) {
+      state.visibleFindTextDialog = true
+    },
+
+    hideFindTextDialog(state) {
+      state.visibleFindTextDialog = false
     },
 
     showFindContentDialog(state) {

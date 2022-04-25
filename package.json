@@ -24,7 +24,6 @@
     "codemirror": "5.65.3",
     "dayjs": "1.11.1",
     "dotenv": "16.0.0",
-    "electron-find": "1.0.7",
     "element-ui": "2.15.8",
     "glob": "8.0.1",
     "highlight.js": "11.5.1",
