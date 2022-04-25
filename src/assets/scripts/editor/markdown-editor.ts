@@ -472,7 +472,16 @@ class MarkdownEditor extends Editor {
     if (d.start !== null) {
       data.push(d)
     }
-    return data
+    // テーブルの列数が同一なもののみに絞り込む
+    const filteredData: TableData[] = []
+    data.forEach((d) => {
+      const maxCellCnt = d.rows.map((r) => r.length).reduce((a, b) => Math.max(a, b))
+      const minCellCnt = d.rows.map((r) => r.length).reduce((a, b) => Math.min(a, b))
+      if (maxCellCnt === minCellCnt) {
+        filteredData.push(d)
+      }
+    })
+    return filteredData
   }
 
   setTableData(d: TableData) {
