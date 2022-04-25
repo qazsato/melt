@@ -79,11 +79,36 @@ class MarkdownEditor extends Editor {
    */
   onPressEnter(cm: CM): void {
     const pos = cm.getCursor()
+    const text = cm.getLine(pos.line)
+
     // フォーカス位置が行の末尾かつリストの先頭時は行の文字を消す
     if (this.isDeleteListPrefix(pos)) {
       cm.execCommand('delLineLeft')
       return
     }
+
+    // フォーカス位置が行の末尾かつTD行の場合は新規テーブル行を挿入する
+    if (pos.ch === text.length && isTableRow(text)) {
+      const tableData = this.getFocusTableData()
+      if (tableData && tableData.start + 1 < pos.line) {
+        const maxLineCount = this.cm.lineCount()
+        // 最終行の場合は行自体を事前に作成しておく
+        if (tableData.end === maxLineCount - 1) {
+          this.cm.execCommand('newlineAndIndent')
+        }
+        const target = pos.line - tableData.start + 1
+        tableData.rows.splice(
+          target,
+          0,
+          tableData.rows[0].map(() => '')
+        )
+        this.setTableData(tableData)
+        this.optimizeTable()
+        this.focusTableCell(pos.line + 1, 1)
+        return
+      }
+    }
+
     cm.execCommand('newlineAndIndentContinueMarkdownList')
     // 行数が増えることで番号付きリストが分断される可能性があるので最適化を実施する
     this.optimizeListForEnter()
@@ -99,7 +124,6 @@ class MarkdownEditor extends Editor {
     if (isTableRow(text)) {
       const tableData = this.getFocusTableData()
       const cellNum = this.getFocusTableCellNumber()
-      console.log(cellNum)
       if (cellNum !== null) {
         // 最終列の場合は新規に列を挿入する
         if (tableData && cellNum === tableData.rows[0].length) {
