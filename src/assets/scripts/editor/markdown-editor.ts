@@ -437,32 +437,41 @@ class MarkdownEditor extends Editor {
     const tableData = this.getTableData()
     tableData.forEach((d: TableData) => {
       const rows = d.rows
-      rows.forEach((row: string[], i: number) => {
-        const padRowStr = row.map((cell: string, n: number) => {
-          const maxWidth = rows
+      // NOTE: 行毎の各セルの文字に対して、半角を1, 全角を1.5として文字幅を計算する
+      // 文字幅に端数(小数点)がある場合は全角スペース(1.5)を追加して幅を調整する
+      const adjustedRows = rows.map((row: string[]) => {
+        return row.map((cell: string) => {
+          const width = getCharWidth(cell)
+          if (width % 1 === 0.5) {
+            return cell + '　'
+          }
+          return cell
+        })
+      })
+      // 行単位でテキスト幅の最適化を実施
+      adjustedRows.forEach((row: string[], i: number) => {
+        // 各行のセル単位で幅の調整を実施
+        const cellTexts = row.map((cell: string, n: number) => {
+          // N列の最大幅を取得する
+          const maxCharWidth = adjustedRows
             .map((row: string[], m: number) => {
-              if (m === 1) {
-                return 3 // 区切り行は最低3つ確保	する
-              }
-              return getCharWidth(row[n].trim())
+              if (m === 1) return 3 // 区切り行は最低3つ確保する
+              return getCharWidth(row[n])
             })
             .reduce((a: number, b: number) => Math.max(a, b))
-          let str = cell.trim()
+          // 区切り行の場合
           if (i === 1) {
             // NOTE: 区切り行は 先頭/末尾 に ':' が設定可能なため、先頭/末尾のみ文字判定する
-            const first = str.slice(0, 1) === ':' ? ':' : '-'
-            const last = str.slice(-1) === ':' ? ':' : '-'
-            return `${first}${''.padEnd(maxWidth - 2, '-')}${last}`
+            const first = cell.slice(0, 1) === ':' ? ':' : '-'
+            const last = cell.slice(-1) === ':' ? ':' : '-'
+            return `${first}${''.padEnd(maxCharWidth - 2, '-')}${last}`
+          } else {
+            const diff = maxCharWidth - getCharWidth(cell)
+            return cell.padEnd(cell.length + diff, ' ')
           }
-          const diff = maxWidth - getCharWidth(str)
-          if (diff % 1 === 0.5) {
-            str += '　' // 端数がある場合は全角スペース(1.5)で幅を調整する
-            return str.padEnd(str.length + diff - 1, ' ')
-          }
-          return str.padEnd(str.length + diff, ' ')
         })
-        const text = `| ${padRowStr.join(' | ')} |`
-        this.setLineText(d.start + i, text)
+        const lineText = `| ${cellTexts.join(' | ')} |`
+        this.setLineText(d.start + i, lineText)
       })
     })
     if (cell !== null) {
