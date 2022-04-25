@@ -97,9 +97,17 @@ class MarkdownEditor extends Editor {
     const text = cm.getLine(pos.line)
 
     if (isTableRow(text)) {
-      const cell = this.getFocusTableCell()
-      if (cell !== null) {
-        this.focusTableCell(pos.line, cell + 1)
+      const tableData = this.getFocusTableData()
+      const cellNum = this.getFocusTableCellNumber()
+      console.log(cellNum)
+      if (cellNum !== null) {
+        // 最終列の場合は新規に列を挿入する
+        if (tableData && cellNum === tableData.rows[0].length) {
+          tableData.rows.forEach((row) => row.push(''))
+          this.setTableData(tableData)
+          this.optimizeTable()
+        }
+        this.focusTableCell(pos.line, cellNum + 1)
       }
       return
     }
@@ -128,9 +136,9 @@ class MarkdownEditor extends Editor {
     const text = cm.getLine(pos.line)
 
     if (isTableRow(text)) {
-      const cell = this.getFocusTableCell()
-      if (cell !== null) {
-        this.focusTableCell(pos.line, cell - 1)
+      const cellNum = this.getFocusTableCellNumber()
+      if (cellNum !== null) {
+        this.focusTableCell(pos.line, cellNum - 1)
       }
       return
     }
@@ -273,7 +281,19 @@ class MarkdownEditor extends Editor {
     this.focusTableCell(pos.line, 1)
   }
 
-  getFocusTableCell(): number | null {
+  getFocusTableData(): TableData | null {
+    const focusLine = this.cm.getCursor().line
+    const tableData = this.getTableData()
+    const result = tableData.find((d: TableData) => {
+      return d.start <= focusLine && focusLine <= d.end
+    })
+    if (result) {
+      return result
+    }
+    return null
+  }
+
+  getFocusTableCellNumber(): number | null {
     const pos = this.cm.getCursor()
     const lineText = this.getLineText(pos.line)
     if (!isTableRow(lineText)) {
@@ -431,9 +451,16 @@ class MarkdownEditor extends Editor {
     return data
   }
 
+  setTableData(d: TableData) {
+    d.rows.forEach((row, i) => {
+      const lineText = `| ${row.join(' | ')} |`
+      this.setLineText(d.start + i, lineText)
+    })
+  }
+
   optimizeTable(): void {
     const pos = this.cm.getCursor()
-    const cell = this.getFocusTableCell()
+    const cellNum = this.getFocusTableCellNumber()
     const tableData = this.getTableData()
     tableData.forEach((d: TableData) => {
       const rows = d.rows
@@ -474,8 +501,8 @@ class MarkdownEditor extends Editor {
         this.setLineText(d.start + i, lineText)
       })
     })
-    if (cell !== null) {
-      this.focusTableCell(pos.line, cell)
+    if (cellNum !== null) {
+      this.focusTableCell(pos.line, cellNum)
     }
   }
 
