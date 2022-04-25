@@ -12,7 +12,7 @@ import { ipcRenderer } from 'electron'
 import { Editor as CM } from 'codemirror'
 import MarkdownEditor from '@/assets/scripts/editor/markdown-editor'
 import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@/constants'
-import { isCodeBlock, getDefaultCodeBlock } from '@/utils/markdown'
+import { isCodeBlock, getDefaultCodeBlock, isTableRow } from '@/utils/markdown'
 import 'codemirror/lib/codemirror.css'
 import '@/assets/styles/editor/markdown.scss'
 const API_KEY = process.env.VUE_APP_MELT_API_KEY
@@ -131,9 +131,20 @@ export default Vue.extend({
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onChangeText(editor: CM, event: any) {
+    onChangeText(cm: CM, event: any) {
+      const pos = cm.getCursor()
+      const lineText = this.editor?.getLineText(pos.line)
+      if (lineText && isTableRow(lineText)) {
+        // 英数・かな入力（スペース除く）、BS、ペースト時のみテーブル最適化
+        if (
+          (['+input', '*compose'].includes(event.origin) && event.text[0].trim().length > 0) ||
+          ['+delete', 'paste'].includes(event.origin)
+        ) {
+          this.editor?.optimizeTable()
+        }
+      }
       if (this.isInsertCodeBlock(event)) {
-        const currentLine = editor.getCursor().line
+        const currentLine = cm.getCursor().line
         this.editor?.selectLine(currentLine)
         this.editor?.insertText(getDefaultCodeBlock())
         this.editor?.gotoLine(currentLine + 1)
@@ -142,7 +153,7 @@ export default Vue.extend({
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onPasteText(editor: CM, event: any) {
+    onPasteText(cm: CM, event: any) {
       if (this.isPasteAsPlainText) {
         return
       }
@@ -172,7 +183,7 @@ export default Vue.extend({
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onDropFile(editor: CM, event: any) {
+    onDropFile(cm: CM, event: any) {
       const files = event.dataTransfer.files
       if (files.length > 1) {
         return

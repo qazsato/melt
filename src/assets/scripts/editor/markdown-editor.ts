@@ -79,11 +79,36 @@ class MarkdownEditor extends Editor {
    */
   onPressEnter(cm: CM): void {
     const pos = cm.getCursor()
+    const text = cm.getLine(pos.line)
+
     // フォーカス位置が行の末尾かつリストの先頭時は行の文字を消す
     if (this.isDeleteListPrefix(pos)) {
       cm.execCommand('delLineLeft')
       return
     }
+
+    // フォーカス位置が行の末尾かつTD行の場合は新規テーブル行を挿入する
+    if (pos.ch === text.length && isTableRow(text)) {
+      const tableData = this.getFocusTableData()
+      if (tableData && tableData.start + 1 < pos.line) {
+        const maxLineCount = this.cm.lineCount()
+        // 最終行の場合は行自体を事前に作成しておく
+        if (tableData.end === maxLineCount - 1) {
+          this.cm.execCommand('newlineAndIndent')
+        }
+        const target = pos.line - tableData.start + 1
+        tableData.rows.splice(
+          target,
+          0,
+          tableData.rows[0].map(() => '')
+        )
+        this.setTableData(tableData)
+        this.optimizeTable()
+        this.focusTableCell(pos.line + 1, 1)
+        return
+      }
+    }
+
     cm.execCommand('newlineAndIndentContinueMarkdownList')
     // 行数が増えることで番号付きリストが分断される可能性があるので最適化を実施する
     this.optimizeListForEnter()
@@ -95,6 +120,22 @@ class MarkdownEditor extends Editor {
   onPressTab(cm: CM): void {
     const pos = cm.getCursor()
     const text = cm.getLine(pos.line)
+
+    if (isTableRow(text)) {
+      const tableData = this.getFocusTableData()
+      const cellNum = this.getFocusTableCellNumber()
+      if (cellNum !== null) {
+        // 最終列の場合は新規に列を挿入する
+        if (tableData && cellNum === tableData.rows[0].length) {
+          tableData.rows.forEach((row) => row.push(''))
+          this.setTableData(tableData)
+          this.optimizeTable()
+        }
+        this.focusTableCell(pos.line, cellNum + 1)
+      }
+      return
+    }
+
     if (cm.somethingSelected()) {
       cm.indentSelection('add')
     } else {
@@ -115,6 +156,17 @@ class MarkdownEditor extends Editor {
    * Shift + Tab のハンドラ
    */
   onPressShiftTab(cm: CM): void {
+    const pos = cm.getCursor()
+    const text = cm.getLine(pos.line)
+
+    if (isTableRow(text)) {
+      const cellNum = this.getFocusTableCellNumber()
+      if (cellNum !== null) {
+        this.focusTableCell(pos.line, cellNum - 1)
+      }
+      return
+    }
+
     cm.execCommand('indentLess')
     this.optimizeList()
   }
@@ -247,8 +299,61 @@ class MarkdownEditor extends Editor {
    * テーブルを挿入します。
    */
   insertTable(row = 3, column = 3): void {
+    const pos = this.cm.getCursor()
     const table = getDefaultTable(row, column)
     this.insert(table)
+    this.focusTableCell(pos.line, 1)
+  }
+
+  getFocusTableData(): TableData | null {
+    const focusLine = this.cm.getCursor().line
+    const tableData = this.getTableData()
+    const result = tableData.find((d: TableData) => {
+      return d.start <= focusLine && focusLine <= d.end
+    })
+    if (result) {
+      return result
+    }
+    return null
+  }
+
+  getFocusTableCellNumber(): number | null {
+    const pos = this.cm.getCursor()
+    const lineText = this.getLineText(pos.line)
+    if (!isTableRow(lineText)) {
+      return null
+    }
+
+    let cnt = 0
+    for (let i = 0; i < pos.ch; i++) {
+      if (lineText[i] === '|') {
+        cnt++
+      }
+    }
+    return cnt
+  }
+
+  /**
+   * 該当セルにフォーカスを移動します。
+   */
+  focusTableCell(line: number, cell: number): void {
+    const lineText = this.getLineText(line)
+    if (!isTableRow(lineText)) {
+      return
+    }
+
+    let cnt = 0
+    for (let i = 0; i < lineText.length; i++) {
+      if (lineText[i] === '|') {
+        cnt++
+        if (cnt === cell) {
+          const startCh = i + 2
+          const textLength = lineText.split('|')[cell].trim().length
+          this.cm.setCursor({ line: line, ch: startCh + textLength })
+          return
+        }
+      }
+    }
   }
 
   /**
@@ -367,41 +472,71 @@ class MarkdownEditor extends Editor {
     if (d.start !== null) {
       data.push(d)
     }
-    return data
+    // テーブルの列数が同一なもののみに絞り込む
+    const filteredData: TableData[] = []
+    data.forEach((d) => {
+      const maxCellCnt = d.rows.map((r) => r.length).reduce((a, b) => Math.max(a, b))
+      const minCellCnt = d.rows.map((r) => r.length).reduce((a, b) => Math.min(a, b))
+      if (maxCellCnt === minCellCnt) {
+        filteredData.push(d)
+      }
+    })
+    return filteredData
+  }
+
+  setTableData(d: TableData) {
+    d.rows.forEach((row, i) => {
+      const lineText = `| ${row.join(' | ')} |`
+      this.setLineText(d.start + i, lineText)
+    })
   }
 
   optimizeTable(): void {
+    const pos = this.cm.getCursor()
+    const cellNum = this.getFocusTableCellNumber()
     const tableData = this.getTableData()
     tableData.forEach((d: TableData) => {
       const rows = d.rows
-      rows.forEach((row: string[], i: number) => {
-        const padRowStr = row.map((cell: string, n: number) => {
-          const maxWidth = rows
+      // NOTE: 行毎の各セルの文字に対して、半角を1, 全角を1.5として文字幅を計算する
+      // 文字幅に端数(小数点)がある場合は全角スペース(1.5)を追加して幅を調整する
+      const adjustedRows = rows.map((row: string[]) => {
+        return row.map((cell: string) => {
+          const width = getCharWidth(cell)
+          if (width % 1 === 0.5) {
+            return cell + '　'
+          }
+          return cell
+        })
+      })
+      // 行単位でテキスト幅の最適化を実施
+      adjustedRows.forEach((row: string[], i: number) => {
+        // 各行のセル単位で幅の調整を実施
+        const cellTexts = row.map((cell: string, n: number) => {
+          // N列の最大幅を取得する
+          const maxCharWidth = adjustedRows
             .map((row: string[], m: number) => {
-              if (m === 1) {
-                return 3 // 区切り行は最低3つ確保	する
-              }
-              return getCharWidth(row[n].trim())
+              if (m === 1) return 3 // 区切り行は最低3つ確保する
+              return getCharWidth(row[n])
             })
             .reduce((a: number, b: number) => Math.max(a, b))
-          let str = cell.trim()
+          // 区切り行の場合
           if (i === 1) {
             // NOTE: 区切り行は 先頭/末尾 に ':' が設定可能なため、先頭/末尾のみ文字判定する
-            const first = str.slice(0, 1) === ':' ? ':' : '-'
-            const last = str.slice(-1) === ':' ? ':' : '-'
-            return `${first}${''.padEnd(maxWidth - 2, '-')}${last}`
+            const first = cell.slice(0, 1) === ':' ? ':' : '-'
+            const last = cell.slice(-1) === ':' ? ':' : '-'
+            return `${first}${''.padEnd(maxCharWidth - 2, '-')}${last}`
+          } else {
+            const diff = maxCharWidth - getCharWidth(cell)
+            return cell.padEnd(cell.length + diff, ' ')
           }
-          const diff = maxWidth - getCharWidth(str)
-          if (diff % 1 === 0.5) {
-            str += '　' // 端数がある場合は全角スペース(1.5)で幅を調整する
-            return str.padEnd(str.length + diff - 1, ' ')
-          }
-          return str.padEnd(str.length + diff, ' ')
         })
-        const text = `| ${padRowStr.join(' | ')} |`
-        this.setLineText(d.start + i, text)
+        const lineText = `| ${cellTexts.join(' | ')} |`
+        this.setLineText(d.start + i, lineText)
       })
     })
+    if (cellNum !== null) {
+      this.focusTableCell(pos.line, cellNum)
+    }
   }
 
   optimizeList(): void {

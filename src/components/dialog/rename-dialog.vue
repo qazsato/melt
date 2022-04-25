@@ -11,8 +11,8 @@
       <template slot="append"> .md </template>
     </el-input>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" :disabled="isDisabledChange" @click="changeFileName"> Change </el-button>
-      <el-button @click="closeDialog"> Cancel </el-button>
+      <el-button @click="closeDialog">Cancel</el-button>
+      <el-button type="primary" :disabled="isDisabledChange" @click="changeFileName">Change</el-button>
     </span>
   </el-dialog>
 </template>
