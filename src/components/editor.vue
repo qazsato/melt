@@ -135,7 +135,7 @@ export default Vue.extend({
       const pos = cm.getCursor()
       const lineText = this.editor?.getLineText(pos.line)
       if (lineText && isTableRow(lineText)) {
-        // 英数・かな入力、BS、ペースト時のみテーブル最適化
+        // 英数・かな入力（スペース除く）、BS、ペースト時のみテーブル最適化
         if (
           (['+input', '*compose'].includes(event.origin) && event.text[0].trim().length > 0) ||
           ['+delete', 'paste'].includes(event.origin)
