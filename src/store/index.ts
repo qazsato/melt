@@ -165,7 +165,11 @@ const store = new Vuex.Store({
     },
 
     showFindTextDialog(state) {
-      state.visibleFindTextDialog = true
+      state.viewMode = VIEW_MODE.EDITOR
+      void Vue.nextTick().then(() => {
+        state.editor?.focus()
+        state.editor?.openSearchDialog()
+      })
     },
 
     hideFindTextDialog(state) {

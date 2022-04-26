@@ -73,6 +73,7 @@ export default Vue.extend({
     this.editor.on('paste', this.onPasteText)
     this.editor.on('drop', this.onDropFile)
     this.editor.addKeyMap({
+      'Cmd-F': () => this.editor?.openSearchDialog(),
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
       'Shift-Cmd-L': () => this.$store.commit('showImageDialog'),
       'Cmd-B': () => this.editor?.insertBold(),

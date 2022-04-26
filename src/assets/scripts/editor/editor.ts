@@ -1,4 +1,8 @@
 import CodeMirror, { EditorConfiguration, KeyMap, Position } from 'codemirror'
+import 'codemirror/addon/search/search.js'
+import 'codemirror/addon/search/searchcursor.js'
+import 'codemirror/addon/dialog/dialog.js'
+import 'codemirror/addon/dialog/dialog.css'
 
 class Editor {
   cm: CodeMirror.Editor
@@ -218,6 +222,13 @@ class Editor {
       this.swapLine(fromLine, toLine)
       this.cm.setCursor({ line: toLine, ch: position.ch })
     }
+  }
+
+  /**
+   * 検索ダイアログを表示します
+   */
+  openSearchDialog() {
+    this.cm.execCommand('findPersistent')
   }
 }
 
