@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { ipcRenderer, remote } from 'electron'
+import { ipcRenderer } from 'electron'
 import { PAGE } from '@/constants'
 import Element from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/ja'
