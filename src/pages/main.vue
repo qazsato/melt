@@ -13,7 +13,6 @@
     <div>
       <find-paragraph-dialog />
       <find-title-dialog />
-      <find-text-dialog />
       <find-content-dialog />
       <image-dialog />
       <link-dialog />
@@ -31,7 +30,6 @@ import preview from '@/components/preview.vue'
 import statusBar from '@/components/status-bar.vue'
 import findParagraphDialog from '@/components/dialog/find-paragraph-dialog.vue'
 import findTitleDialog from '@/components/dialog/find-title-dialog.vue'
-import findTextDialog from '@/components/dialog/find-text-dialog.vue'
 import findContentDialog from '@/components/dialog/find-content-dialog.vue'
 import imageDialog from '@/components/dialog/image-dialog.vue'
 import linkDialog from '@/components/dialog/link-dialog.vue'
@@ -46,7 +44,6 @@ export default Vue.extend({
     statusBar,
     findParagraphDialog,
     findTitleDialog,
-    findTextDialog,
     findContentDialog,
     imageDialog,
     linkDialog,
