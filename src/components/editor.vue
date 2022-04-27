@@ -101,7 +101,7 @@ export default Vue.extend({
       const cm = document.querySelector('.CodeMirror') as HTMLElement
       const ff = this.$store.state.preference.fontFamily
       const fs = `${this.$store.state.preference.fontSize}px`
-      const padding = this.$store.state.preference.lineNumber ? '0px' : '15px'
+      const padding = this.$store.state.preference.lineNumber ? '0 0 15px 0' : '15px'
       cm.setAttribute('style', `font-family: ${ff}; font-size:${fs}; padding: ${padding}`)
     },
 
