@@ -6,8 +6,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { ipcRenderer, remote } from 'electron'
-import { FindInPage } from 'electron-find'
+import { ipcRenderer } from 'electron'
 import { PAGE } from '@/constants'
 import Element from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/ja'
@@ -15,19 +14,7 @@ import '@/assets/styles/element-variables.scss'
 import '@/assets/styles/main.scss'
 Vue.use(Element, { locale })
 
-interface DataType {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  findInPage: any
-}
-
 export default Vue.extend({
-  data() {
-    const data: DataType = {
-      findInPage: null,
-    }
-    return data
-  },
-
   computed: {
     theme() {
       return this.$store.state.preference.theme
@@ -45,18 +32,6 @@ export default Vue.extend({
   },
 
   mounted() {
-    this.findInPage = new FindInPage(remote.getCurrentWebContents(), {
-      offsetTop: 8,
-      boxBgColor: '#4a4a4a',
-      boxShadowColor: '#4a4a4a',
-      inputColor: '#aaa',
-      inputBgColor: '#222',
-      inputFocusColor: '#00b1b3',
-      textColor: '#aaa',
-      textHoverBgColor: '#555',
-      caseSelectedColor: '#555',
-    })
-
     ipcRenderer.on('show-setting', () => {
       if (this.$route.name === PAGE.PREFERENCE) {
         return
@@ -77,7 +52,7 @@ export default Vue.extend({
     })
 
     ipcRenderer.on('find-text', () => {
-      this.findInPage?.openFindWindow()
+      this.$store.commit('showFindTextDialog')
     })
 
     ipcRenderer.on('find-text-in-folder', () => {

@@ -32,8 +32,9 @@ export const ALLOW_DROP_FILE_TYPES = ['image/png', 'image/jpeg', 'image/gif']
 export const DEFAULT_PREFERENCE = {
   directory: '',
   theme: THEME.LIGHT,
-  initialNote: INITIAL_NOTE.BLANK,
+  initialNote: INITIAL_NOTE.RECENTRY_OPENED,
   fontFamily: 'Source Han Code JP',
   fontSize: 16,
   wordWrap: true,
+  lineNumber: false,
 }

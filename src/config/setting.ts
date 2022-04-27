@@ -5,6 +5,7 @@ export interface Preference {
   fontFamily: string
   fontSize: number
   wordWrap: boolean
+  lineNumber: boolean
 }
 
 interface Setting {

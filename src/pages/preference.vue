@@ -27,6 +27,8 @@
         <el-slider v-model="fontSize" :min="10" :max="30" show-input></el-slider>
         <h3>Word Wrap</h3>
         <el-switch v-model="wordWrap"></el-switch>
+        <h3>Line Number</h3>
+        <el-switch v-model="lineNumber"></el-switch>
       </section>
       <el-row type="flex" justify="end">
         <el-button type="primary" @click="onSave" class="save-button">Save</el-button>
@@ -51,6 +53,7 @@ export default Vue.extend({
       fontFamily: preference.fontFamily,
       fontSize: preference.fontSize,
       wordWrap: preference.wordWrap,
+      lineNumber: preference.lineNumber,
     }
   },
 
@@ -85,6 +88,7 @@ export default Vue.extend({
         fontFamily: this.fontFamily,
         fontSize: this.fontSize,
         wordWrap: this.wordWrap,
+        lineNumber: this.lineNumber,
       }
       this.$store.commit('updatePreference', preference)
       this.$message({ type: 'success', message: 'Preference saved', showClose: true })
