@@ -66,6 +66,7 @@ export default Vue.extend({
     const option = {
       theme: this.$store.state.preference.theme,
       lineWrapping: this.$store.state.preference.wordWrap,
+      lineNumbers: this.$store.state.preference.lineNumber,
     }
     this.editor = new MarkdownEditor('editor', option)
     this.setStyle()
@@ -100,7 +101,8 @@ export default Vue.extend({
       const cm = document.querySelector('.CodeMirror') as HTMLElement
       const ff = this.$store.state.preference.fontFamily
       const fs = `${this.$store.state.preference.fontSize}px`
-      cm.setAttribute('style', `font-family: ${ff}; font-size:${fs};`)
+      const padding = this.$store.state.preference.lineNumber ? '0px' : '15px'
+      cm.setAttribute('style', `font-family: ${ff}; font-size:${fs}; padding: ${padding}`)
     },
 
     saveNote() {

@@ -65,7 +65,14 @@
     color: #00b1b3;
   }
 
+  // 検索ダイアログ
   .CodeMirror-dialog-top {
-    border-bottom-color: #eee;
+    background-color: $light-bg-color;
+    border-bottom-color: $light-border-color;
+  }
+
+  // 行番号
+  .CodeMirror-gutters {
+    border-right-color: $light-border-color;
   }
 }
