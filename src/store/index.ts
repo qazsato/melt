@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { nextTick } from 'vue'
+import { createStore } from 'vuex'
 import Note from '@/assets/scripts/note/note'
 import { INITIAL_NOTE, VIEW_MODE } from '@/constants'
 import { updateBrowsingHistory } from '@/utils/local-storage'
@@ -7,8 +7,6 @@ import Editor from '@/assets/scripts/editor/markdown-editor'
 import { Preference } from '@/config/setting'
 import { getPreference, updatePreference, getBrowsingHistories } from '@/utils/local-storage'
 import { isExistPath } from '@/utils/note'
-
-Vue.use(Vuex)
 
 interface State {
   preference: Preference
@@ -48,7 +46,7 @@ const state: State = {
   visibleRenameDialog: false,
 }
 
-const store = new Vuex.Store({
+export const store = createStore({
   state,
 
   mutations: {
@@ -60,7 +58,7 @@ const store = new Vuex.Store({
       }
       state.note = new Note()
       state.viewMode = VIEW_MODE.EDITOR
-      void Vue.nextTick().then(() => {
+      void nextTick().then(() => {
         state.editor?.setText('')
         state.editor?.focus()
       })
@@ -102,7 +100,7 @@ const store = new Vuex.Store({
         state.viewMode = VIEW_MODE.PREVIEW
       } else {
         state.viewMode = VIEW_MODE.EDITOR
-        void Vue.nextTick().then(() => state.editor?.focus())
+        void nextTick().then(() => state.editor?.focus())
       }
     },
 
@@ -114,7 +112,7 @@ const store = new Vuex.Store({
     changeViewMode(state, viewMode: string) {
       state.viewMode = viewMode
       if (state.viewMode === VIEW_MODE.EDITOR) {
-        void Vue.nextTick().then(() => state.editor?.focus())
+        void nextTick().then(() => state.editor?.focus())
       }
     },
 
@@ -164,7 +162,7 @@ const store = new Vuex.Store({
 
     showFindTextDialog(state) {
       state.viewMode = VIEW_MODE.EDITOR
-      void Vue.nextTick().then(() => {
+      void nextTick().then(() => {
         state.editor?.focus()
         state.editor?.openSearchDialog()
       })
@@ -187,5 +185,3 @@ const store = new Vuex.Store({
     },
   },
 })
-
-export default store

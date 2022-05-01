@@ -1,26 +1,26 @@
-import Vue from 'vue'
-import router from './router'
-import store from './store'
+import { createApp } from 'vue'
+import { router } from './router'
+import { store } from './store'
 import App from './app.vue'
 import * as Sentry from '@sentry/vue'
-import { Integrations } from '@sentry/tracing'
+import { BrowserTracing } from '@sentry/tracing'
+
+const app = createApp({ App })
+
+app.use(router)
+
+app.use(store)
+
+app.mount('#app')
 
 Sentry.init({
-  Vue,
+  app,
   dsn: process.env.VUE_APP_SENTRY_DSN,
   integrations: [
-    new Integrations.BrowserTracing({
+    new BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
     }),
   ],
   tracesSampleRate: 1.0,
   environment: process.env.NODE_ENV,
-})
-
-// eslint-disable-next-line no-new
-new Vue({
-  el: '#app',
-  router,
-  store,
-  render: (h) => h(App),
 })
