@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { readAllNotePaths } from '@/utils/note'
 import { getBrowsingHistories } from '@/utils/local-storage'
 import { VIEW_MODE } from '@/constants'
@@ -49,7 +49,7 @@ interface DataType {
   isComposing: boolean
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       notePath: '',

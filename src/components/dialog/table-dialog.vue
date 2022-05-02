@@ -23,14 +23,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 
 interface DataType {
   tableRow: number
   tableColumn: number
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       tableRow: 3,

@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
 
 interface DataType {
@@ -26,7 +26,7 @@ interface DataType {
   lastModifiedAt: string | null
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       paragraph: 0,

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import setting from '@/config/setting'
 import axios from 'axios'
 import { ipcRenderer } from 'electron'
@@ -22,7 +22,7 @@ interface DataType {
   isPasteAsPlainText: boolean
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       editor: null,

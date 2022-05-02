@@ -5,16 +5,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { ipcRenderer } from 'electron'
 import { PAGE } from '@/constants'
-import Element from 'element-ui'
-import locale from 'element-ui/lib/locale/lang/ja'
-import '@/assets/styles/element-variables.scss'
+// TODO: vue3
+// import Element from 'element-ui'
+// import locale from 'element-ui/lib/locale/lang/ja'
+// import '@/assets/styles/element-variables.scss'
 import '@/assets/styles/main.scss'
-Vue.use(Element, { locale })
+// Vue.use(Element, { locale })
 
-export default Vue.extend({
+export default defineComponent({
   computed: {
     theme() {
       return this.$store.state.preference.theme

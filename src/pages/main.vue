@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import toolBar from '@/components/tool-bar.vue'
 import editor from '@/components/editor.vue'
 import preview from '@/components/preview.vue'
@@ -36,7 +36,7 @@ import linkDialog from '@/components/dialog/link-dialog.vue'
 import tableDialog from '@/components/dialog/table-dialog.vue'
 import renameDialog from '@/components/dialog/rename-dialog.vue'
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     toolBar,
     editor,

@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import setting from '@/config/setting'
 import axios from 'axios'
 const API_KEY = process.env.VUE_APP_MELT_API_KEY
@@ -38,7 +38,7 @@ interface DataType {
   linkUrl: string
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       linkTitle: '',

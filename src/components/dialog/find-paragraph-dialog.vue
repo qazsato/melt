@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { TableOfContent } from '@/assets/scripts/note/note'
 import { VIEW_MODE } from '@/constants'
 
@@ -50,7 +50,7 @@ interface DataType {
   isComposing: boolean
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       paragraphText: '',

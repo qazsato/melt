@@ -34,14 +34,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 
 interface DataType {
   viewMode: string
   visiblePopover: boolean
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       viewMode: this.$store.state.viewMode,

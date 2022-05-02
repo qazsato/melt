@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import Markdown from '@/assets/scripts/markdown/markdown'
 import '@/assets/styles/preview/markdown.scss'
 import { VIEW_MODE } from '@/constants'
@@ -17,7 +17,7 @@ interface DataType {
   markedText: string
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       markdown: new Markdown(),

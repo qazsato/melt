@@ -38,12 +38,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { THEME, INITIAL_NOTE, PAGE } from '@/constants'
 import { Preference } from '@/config/setting'
 import { getPreference } from '@/utils/local-storage'
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const preference: Preference = getPreference()
     return {

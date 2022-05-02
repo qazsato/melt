@@ -18,13 +18,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 
 interface DataType {
   fileName: string
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       fileName: '',
