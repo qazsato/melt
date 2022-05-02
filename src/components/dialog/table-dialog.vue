@@ -1,7 +1,7 @@
 <template>
   <el-dialog
+    v-model:visible="$store.state.visibleTableDialog"
     title="Table"
-    :visible.sync="$store.state.visibleTableDialog"
     :close-on-click-modal="false"
     width="400px"
     :before-close="closeDialog"

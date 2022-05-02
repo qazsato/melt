@@ -1,14 +1,14 @@
 <template>
   <el-dialog
+    v-model:visible="$store.state.visibleRenameDialog"
     title="Rename"
-    :visible.sync="$store.state.visibleRenameDialog"
     :close-on-click-modal="false"
     width="400px"
     :before-close="closeDialog"
     @open="openDialog"
   >
     <el-input ref="fileNameInput" v-model="fileName" placeholder="Please input" @keyup.enter.native="changeFileName">
-      <template slot="append"> .md </template>
+      <template #append> .md </template>
     </el-input>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog">Cancel</el-button>

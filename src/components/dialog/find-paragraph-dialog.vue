@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :visible.sync="$store.state.visibleFindParagraphDialog"
+    v-model:visible="$store.state.visibleFindParagraphDialog"
     :show-close="false"
     :lock-scroll="false"
     custom-class="find-paragraph-dialog"
@@ -20,7 +20,7 @@
       @keyup.native="onKeyup"
       @select="onSelect"
     >
-      <template slot-scope="{ item }">
+      <template #default="{ item }">
         <div class="item">
           <div class="heading">H{{ item.heading }}</div>
           <div class="text" :class="`heading-${item.heading}`">

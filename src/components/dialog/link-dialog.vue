@@ -1,7 +1,7 @@
 <template>
   <el-dialog
+    v-model:visible="$store.state.visibleLinkDialog"
     title="Hyperlink"
-    :visible.sync="$store.state.visibleLinkDialog"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     width="400px"

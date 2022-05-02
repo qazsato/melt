@@ -1,7 +1,7 @@
 <template>
   <div class="preference" :class="theme">
     <header>
-      <el-page-header @back="goBack" content="Preference"></el-page-header>
+      <el-page-header content="Preference" @back="goBack"></el-page-header>
     </header>
     <main>
       <section>
@@ -31,7 +31,7 @@
         <el-switch v-model="lineNumber"></el-switch>
       </section>
       <el-row type="flex" justify="end">
-        <el-button type="primary" @click="onSave" class="save-button">Save</el-button>
+        <el-button type="primary" class="save-button" @click="onSave">Save</el-button>
       </el-row>
     </main>
   </div>

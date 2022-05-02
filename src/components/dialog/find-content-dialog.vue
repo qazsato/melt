@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :visible.sync="$store.state.visibleFindContentDialog"
+    v-model:visible="$store.state.visibleFindContentDialog"
     :show-close="false"
     :lock-scroll="false"
     custom-class="find-content-dialog"
@@ -20,7 +20,7 @@
       @keyup.native="onKeyup"
       @select="onSelect"
     >
-      <template slot-scope="{ item }">
+      <template #default="{ item }">
         <div class="label">
           {{ item.label }}
         </div>
