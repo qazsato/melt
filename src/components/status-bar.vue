@@ -10,7 +10,7 @@
     </div>
     <div class="spacer" />
     <div v-if="lastModifiedAt" class="last-modified">
-      <i class="el-icon-refresh" />
+      <el-icon><refresh /></el-icon>
       <span>{{ lastModifiedAt }}</span>
     </div>
   </section>
@@ -94,5 +94,14 @@ export default defineComponent({
 .paragraph,
 .line {
   margin-right: 5px;
+}
+
+.last-modified {
+  display: flex;
+  align-items: center;
+
+  .el-icon {
+    margin-right: 3px;
+  }
 }
 </style>

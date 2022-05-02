@@ -8,12 +8,17 @@ import '@/assets/styles/element.scss'
 import ElementPlus from 'element-plus'
 import locale from 'element-plus/es/locale/lang/en'
 import '@/assets/styles/main.scss'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 const app = createApp(App)
 app.use(router)
 app.use(store)
 app.use(ElementPlus, { locale })
 app.mount('#app')
+
+Object.entries(ElementPlusIconsVue).forEach(([key, value]) => {
+  app.component(key, value)
+})
 
 Sentry.init({
   app,
