@@ -123,28 +123,28 @@ export default defineComponent({
   }
 
   &.melt-light {
-    color: $light-color;
-    background-color: $light-bg-color;
+    color: var.$light-color;
+    background-color: var.$light-bg-color;
 
     .el-page-header {
-      background-color: $light-header-bg-color;
+      background-color: var.$light-header-bg-color;
     }
 
     .el-radio {
-      color: $light-color;
+      color: var.$light-color;
     }
   }
 
   &.melt-dark {
-    color: $dark-color;
-    background-color: $dark-bg-color;
+    color: var.$dark-color;
+    background-color: var.$dark-bg-color;
 
     .el-page-header {
-      background-color: $dark-header-bg-color;
+      background-color: var.$dark-header-bg-color;
     }
 
     .el-radio {
-      color: $dark-color;
+      color: var.$dark-color;
     }
   }
 

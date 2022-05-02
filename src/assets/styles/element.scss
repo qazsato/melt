@@ -1,0 +1,10 @@
+// cf. https://element-plus.org/en-US/guide/theming.html#how-to-override-it
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #00b1b3,
+    ),
+  )
+);
+
+@use 'element-plus/theme-chalk/src/index.scss' as *;

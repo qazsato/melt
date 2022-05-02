@@ -25,31 +25,31 @@ button {
 
 .melt-light {
   .el-radio {
-    color: $light-color;
+    color: var.$light-color;
   }
 
   .el-input {
     .el-input__wrapper {
-      color: $light-color;
-      background-color: $light-input-bg-color;
-      box-shadow: 0 0 0 1px $light-input-border-color;
+      color: var.$light-color;
+      background-color: var.$light-input-bg-color;
+      box-shadow: 0 0 0 1px var.$light-input-border-color;
     }
   }
 
   .el-autocomplete-suggestion {
-    background-color: $light-bg-color;
-    border-color: $light-input-border-color;
+    background-color: var.$light-bg-color;
+    border-color: var.$light-input-border-color;
 
     li {
-      color: $light-color;
+      color: var.$light-color;
 
       &.highlighted {
-        background-color: $light-bg-color;
+        background-color: var.$light-bg-color;
         opacity: 0.5;
       }
 
       &:hover {
-        background-color: $light-bg-color;
+        background-color: var.$light-bg-color;
         opacity: 0.5;
       }
     }
@@ -57,10 +57,10 @@ button {
 
   .el-popper[x-placement^='bottom'] {
     .popper__arrow {
-      border-bottom-color: $light-input-border-color;
+      border-bottom-color: var.$light-input-border-color;
 
       &:after {
-        border-bottom-color: $light-bg-color;
+        border-bottom-color: var.$light-bg-color;
       }
     }
   }
@@ -68,31 +68,31 @@ button {
 
 .melt-dark {
   .el-radio {
-    color: $dark-color;
+    color: var.$dark-color;
   }
 
   .el-input {
     .el-input__wrapper {
-      color: $dark-color;
-      background-color: $dark-input-bg-color;
-      box-shadow: 0 0 0 1px $dark-input-border-color;
+      color: var.$dark-color;
+      background-color: var.$dark-input-bg-color;
+      box-shadow: 0 0 0 1px var.$dark-input-border-color;
     }
   }
 
   .el-autocomplete-suggestion {
-    background-color: $dark-bg-color;
-    border-color: $dark-input-border-color;
+    background-color: var.$dark-bg-color;
+    border-color: var.$dark-input-border-color;
 
     li {
-      color: $dark-color;
+      color: var.$dark-color;
 
       &.highlighted {
-        background-color: $dark-bg-color;
+        background-color: var.$dark-bg-color;
         opacity: 0.5;
       }
 
       &:hover {
-        background-color: $dark-bg-color;
+        background-color: var.$dark-bg-color;
         opacity: 0.5;
       }
     }
@@ -100,10 +100,10 @@ button {
 
   .el-popper[x-placement^='bottom'] {
     .popper__arrow {
-      border-bottom-color: $dark-input-border-color;
+      border-bottom-color: var.$dark-input-border-color;
 
       &:after {
-        border-bottom-color: $dark-bg-color;
+        border-bottom-color: var.$dark-bg-color;
       }
     }
   }

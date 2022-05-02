@@ -134,11 +134,11 @@ export default defineComponent({
   }
 
   &.melt-light {
-    background-color: $light-header-bg-color;
+    background-color: var.$light-header-bg-color;
   }
 
   &.melt-dark {
-    background-color: $dark-header-bg-color;
+    background-color: var.$dark-header-bg-color;
   }
 }
 </style>

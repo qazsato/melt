@@ -61,12 +61,12 @@ export default defineComponent({
 #app {
   &.melt-light {
     color-scheme: light;
-    background: $light-bg-color;
+    background: var.$light-bg-color;
   }
 
   &.melt-dark {
     color-scheme: dark;
-    background: $dark-bg-color;
+    background: var.$dark-bg-color;
   }
 }
 </style>

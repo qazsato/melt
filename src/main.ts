@@ -4,10 +4,9 @@ import { store } from './store'
 import App from './app.vue'
 import * as Sentry from '@sentry/vue'
 import { BrowserTracing } from '@sentry/tracing'
+import '@/assets/styles/element.scss'
 import ElementPlus from 'element-plus'
 import locale from 'element-plus/es/locale/lang/en'
-import 'element-plus/dist/index.css'
-import '@/assets/styles/element-variables.scss'
 import '@/assets/styles/main.scss'
 
 const app = createApp(App)

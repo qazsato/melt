@@ -67,12 +67,12 @@
 
   // 検索ダイアログ
   .CodeMirror-dialog-top {
-    background-color: $dark-bg-color;
-    border-bottom-color: $dark-border-color;
+    background-color: var.$dark-bg-color;
+    border-bottom-color: var.$dark-border-color;
   }
 
   // 行番号
   .CodeMirror-gutters {
-    border-right-color: $dark-border-color;
+    border-right-color: var.$dark-border-color;
   }
 }
