@@ -8,7 +8,7 @@ import { Preference } from '@/config/setting'
 import { getPreference, updatePreference, getBrowsingHistories } from '@/utils/local-storage'
 import { isExistPath } from '@/utils/note'
 
-interface State {
+export interface State {
   preference: Preference
   note: Note
   editor: Editor | null

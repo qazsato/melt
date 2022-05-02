@@ -9,16 +9,18 @@
   >
     <el-form label-width="45px">
       <el-form-item label="Row">
-        <el-input-number ref="tableRowInput" v-model="tableRow" :max="20" :min="2" @keyup.enter.native="insertTable" />
+        <el-input-number ref="tableRowInput" v-model="tableRow" :max="20" :min="2" @keyup.enter="insertTable" />
       </el-form-item>
       <el-form-item label="Col">
-        <el-input-number v-model="tableColumn" :max="20" :min="2" @keyup.enter.native="insertTable" />
+        <el-input-number v-model="tableColumn" :max="20" :min="2" @keyup.enter="insertTable" />
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="closeDialog">Cancel</el-button>
-      <el-button type="primary" @click="insertTable">Insert</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="closeDialog">Cancel</el-button>
+        <el-button type="primary" @click="insertTable">Insert</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 

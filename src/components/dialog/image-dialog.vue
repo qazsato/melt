@@ -9,16 +9,18 @@
   >
     <el-form label-width="45px">
       <el-form-item label="Alt">
-        <el-input ref="imageAltInput" v-model="imageAlt" placeholder="Please input" @keyup.enter.native="insertImage" />
+        <el-input ref="imageAltInput" v-model="imageAlt" placeholder="Please input" @keyup.enter="insertImage" />
       </el-form-item>
       <el-form-item label="URL">
-        <el-input ref="imageUrlInput" v-model="imageUrl" placeholder="Please input" @keyup.enter.native="insertImage" />
+        <el-input ref="imageUrlInput" v-model="imageUrl" placeholder="Please input" @keyup.enter="insertImage" />
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="closeDialog">Cancel</el-button>
-      <el-button type="primary" @click="insertImage">Insert</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="closeDialog">Cancel</el-button>
+        <el-button type="primary" @click="insertImage">Insert</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 

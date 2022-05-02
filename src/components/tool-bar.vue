@@ -15,9 +15,9 @@
           <el-row>
             <el-link type="danger" icon="el-icon-delete" @click="onClickDelete"> delete </el-link>
           </el-row>
-          <div slot="reference" :class="{ editable: !isChanged }">
-            {{ $store.state.note.title }}
-          </div>
+          <template #reference>
+            <div :class="{ editable: !isChanged }">{{ $store.state.note.title }}</div>
+          </template>
         </el-popover>
       </template>
       <template v-else>
@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { State } from '@/store'
 
 interface DataType {
   viewMode: string
@@ -62,8 +63,8 @@ export default defineComponent({
 
   mounted() {
     this.$store.watch(
-      (state) => state.viewMode,
-      (value) => {
+      (state: State) => state.viewMode,
+      (value: string) => {
         this.viewMode = value
       }
     )

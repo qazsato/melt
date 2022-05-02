@@ -17,7 +17,7 @@
       placeholder="Find paragraph in note"
       :highlight-first-item="true"
       :popper-append-to-body="false"
-      @keyup.native="onKeyup"
+      @keyup="onKeyup"
       @select="onSelect"
     >
       <template #default="{ item }">

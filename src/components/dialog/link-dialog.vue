@@ -9,21 +9,18 @@
   >
     <el-form label-width="45px">
       <el-form-item label="Title">
-        <el-input
-          ref="linkTitleInput"
-          v-model="linkTitle"
-          placeholder="Please input"
-          @keyup.enter.native="insertLink"
-        />
+        <el-input ref="linkTitleInput" v-model="linkTitle" placeholder="Please input" @keyup.enter="insertLink" />
       </el-form-item>
       <el-form-item label="URL">
-        <el-input ref="linkUrlInput" v-model="linkUrl" placeholder="Please input" @keyup.enter.native="insertLink" />
+        <el-input ref="linkUrlInput" v-model="linkUrl" placeholder="Please input" @keyup.enter="insertLink" />
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="closeDialog">Cancel</el-button>
-      <el-button type="primary" @click="insertLink">Insert</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="closeDialog">Cancel</el-button>
+        <el-button type="primary" @click="insertLink">Insert</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
