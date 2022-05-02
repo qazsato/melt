@@ -5,7 +5,7 @@ import App from './app.vue'
 import * as Sentry from '@sentry/vue'
 import { BrowserTracing } from '@sentry/tracing'
 
-const app = createApp({ App })
+const app = createApp(App)
 
 app.use(router)
 

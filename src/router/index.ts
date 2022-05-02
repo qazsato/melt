@@ -1,13 +1,14 @@
-import { createRouter } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { PAGE } from '@/constants'
 import Main from '@/pages/main.vue'
 import Preference from '@/pages/preference.vue'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   { path: '/', name: PAGE.MAIN, component: Main },
   { path: '/preference', name: PAGE.PREFERENCE, component: Preference },
 ]
 
-// TODO: vue3
-// @ts-ignore
-export const router = createRouter({ routes })
+export const router = createRouter({
+  history: createWebHistory(),
+  routes,
+})
