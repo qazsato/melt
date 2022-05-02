@@ -70,7 +70,8 @@ export default defineComponent({
     copyClipboard(event: any) {
       const code = event.target.nextElementSibling.innerText.trim() // コピーボタンの隣接要素(=codeタグ)のテキスト情報を取得
       navigator.clipboard.writeText(code).then(() => {
-        this.$message({ type: 'success', message: 'Copied to clipboard', showClose: true })
+        // TODO: vue3
+        // this.$message({ type: 'success', message: 'Copied to clipboard', showClose: true })
       })
     },
   },

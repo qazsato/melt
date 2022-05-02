@@ -91,7 +91,8 @@ export default defineComponent({
         lineNumber: this.lineNumber,
       }
       this.$store.commit('updatePreference', preference)
-      this.$message({ type: 'success', message: 'Preference saved', showClose: true })
+      // TODO: vue3
+      // this.$message({ type: 'success', message: 'Preference saved', showClose: true })
       this.$router.push({ name: PAGE.MAIN })
     },
   },
