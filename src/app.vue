@@ -8,12 +8,6 @@
 import { defineComponent } from 'vue'
 import { ipcRenderer } from 'electron'
 import { PAGE } from '@/constants'
-// TODO: vue3
-// import Element from 'element-ui'
-// import locale from 'element-ui/lib/locale/lang/ja'
-// import '@/assets/styles/element-variables.scss'
-import '@/assets/styles/main.scss'
-// Vue.use(Element, { locale })
 
 export default defineComponent({
   computed: {

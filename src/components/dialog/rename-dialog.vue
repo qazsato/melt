@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model:visible="$store.state.visibleRenameDialog"
+    v-model="$store.state.visibleRenameDialog"
     title="Rename"
     :close-on-click-modal="false"
     width="400px"

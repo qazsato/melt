@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model:visible="$store.state.visibleFindParagraphDialog"
+    v-model="$store.state.visibleFindParagraphDialog"
     :show-close="false"
     :lock-scroll="false"
     custom-class="find-paragraph-dialog"
@@ -16,7 +16,7 @@
       :fetch-suggestions="queryFindParagraph"
       placeholder="Find paragraph in note"
       :highlight-first-item="true"
-      :popper-append-to-body="false"
+      :teleported="false"
       @keyup="onKeyup"
       @select="onSelect"
     >
@@ -72,14 +72,15 @@ export default defineComponent({
       if (value) {
         this.$nextTick().then(() => {
           // @ts-ignore
-          this.$refs.paragraphInput.$refs.input.focus()
+          this.$refs.paragraphInput.focus()
         })
       }
     },
   },
 
   methods: {
-    queryFindParagraph(query: string, callback: (suggestion: Suggestion[]) => void) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    queryFindParagraph(query: string, callback: any) {
       const filteredParagraphs = query
         ? this.tableOfContents.filter((t) => t.text.toLowerCase().includes(query.toLowerCase()))
         : this.tableOfContents
@@ -98,7 +99,8 @@ export default defineComponent({
       this.isComposing = e.isComposing
     },
 
-    onSelect(item: Suggestion) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSelect(item: any) {
       // HACK: イベント処理順を keyup => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {

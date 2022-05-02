@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model:visible="$store.state.visibleImageDialog"
+    v-model="$store.state.visibleImageDialog"
     title="Image"
     :close-on-click-modal="false"
     width="400px"

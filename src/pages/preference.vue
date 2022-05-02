@@ -91,8 +91,7 @@ export default defineComponent({
         lineNumber: this.lineNumber,
       }
       this.$store.commit('updatePreference', preference)
-      // TODO: vue3
-      // this.$message({ type: 'success', message: 'Preference saved', showClose: true })
+      this.$message({ type: 'success', message: 'Preference saved', showClose: true })
       this.$router.push({ name: PAGE.MAIN })
     },
   },
@@ -112,7 +111,7 @@ export default defineComponent({
       line-height: 50px;
       color: #fff;
 
-      ::v-deep .el-page-header__content {
+      ::v-deep(.el-page-header__content) {
         color: #fff;
       }
     }
@@ -134,12 +133,6 @@ export default defineComponent({
     .el-radio {
       color: $light-color;
     }
-
-    ::v-deep .el-input__inner {
-      color: $light-color;
-      background-color: $light-input-bg-color;
-      border-color: $light-input-border-color;
-    }
   }
 
   &.melt-dark {
@@ -152,12 +145,6 @@ export default defineComponent({
 
     .el-radio {
       color: $dark-color;
-    }
-
-    ::v-deep .el-input__inner {
-      color: $dark-color;
-      background-color: $dark-input-bg-color;
-      border-color: $dark-input-border-color;
     }
   }
 

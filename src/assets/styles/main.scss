@@ -18,9 +18,8 @@ button {
   outline: none;
 }
 
-// Element UIのdialogがアニメーションを止める設定がないためCSSで強制的に無効にする
-.el-dialog__wrapper,
-.v-modal {
+// Element UIの dialog がアニメーションを止める設定がないため強制的に無効にする
+.el-overlay {
   animation: none !important;
 }
 
@@ -30,10 +29,10 @@ button {
   }
 
   .el-input {
-    .el-input__inner {
+    .el-input__wrapper {
       color: $light-color;
       background-color: $light-input-bg-color;
-      border-color: $light-input-border-color;
+      box-shadow: 0 0 0 1px $light-input-border-color;
     }
   }
 
@@ -73,10 +72,10 @@ button {
   }
 
   .el-input {
-    .el-input__inner {
+    .el-input__wrapper {
       color: $dark-color;
       background-color: $dark-input-bg-color;
-      border-color: $dark-input-border-color;
+      box-shadow: 0 0 0 1px $dark-input-border-color;
     }
   }
 

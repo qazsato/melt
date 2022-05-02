@@ -26,7 +26,7 @@
       <span v-if="isChanged" class="changed">*</span>
     </h1>
 
-    <el-radio-group v-model="viewMode" class="checkbox-mode" size="mini" @change="changeViewMode">
+    <el-radio-group v-model="viewMode" class="checkbox-mode" size="small" @change="changeViewMode">
       <el-radio-button label="editor">TEXT</el-radio-button>
       <el-radio-button label="preview">HTML</el-radio-button>
     </el-radio-group>
@@ -128,7 +128,7 @@ export default defineComponent({
     top: 12px;
     right: 15px;
 
-    ::v-deep .el-radio-button__inner {
+    ::v-deep(.el-radio-button__inner) {
       padding: 6px 10px;
     }
   }

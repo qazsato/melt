@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model:visible="$store.state.visibleTableDialog"
+    v-model="$store.state.visibleTableDialog"
     title="Table"
     :close-on-click-modal="false"
     width="400px"

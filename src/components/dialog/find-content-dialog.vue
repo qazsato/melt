@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model:visible="$store.state.visibleFindContentDialog"
+    v-model="$store.state.visibleFindContentDialog"
     :show-close="false"
     :lock-scroll="false"
     custom-class="find-content-dialog"
@@ -16,7 +16,7 @@
       :fetch-suggestions="queryFindContent"
       placeholder="Find text in folder"
       :highlight-first-item="true"
-      :popper-append-to-body="false"
+      :teleported="false"
       @keyup="onKeyup"
       @select="onSelect"
     >
@@ -75,14 +75,15 @@ export default defineComponent({
       if (value) {
         this.$nextTick().then(() => {
           // @ts-ignore
-          this.$refs.noteInput.$refs.input.focus()
+          this.$refs.noteInput.focus()
         })
       }
     },
   },
 
   methods: {
-    queryFindContent(query: string, callback: (suggestion: Suggestion[]) => void) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    queryFindContent(query: string, callback: any) {
       let filteredNotes = []
       if (query) {
         filteredNotes = this.notes.filter((n: Note) => n.find(query).length > 0)
@@ -109,7 +110,8 @@ export default defineComponent({
       this.isComposing = e.isComposing
     },
 
-    onSelect(item: Suggestion) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSelect(item: any) {
       // HACK: イベント処理順を keyup => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
