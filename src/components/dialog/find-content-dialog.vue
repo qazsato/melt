@@ -170,6 +170,8 @@ export default defineComponent({
 }
 
 .find-content-popper {
+  width: 100%;
+
   .el-autocomplete-suggestion__list {
     > li {
       line-height: normal;

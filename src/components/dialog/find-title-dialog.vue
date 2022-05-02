@@ -169,6 +169,8 @@ export default defineComponent({
 }
 
 .find-title-popper {
+  width: 100%;
+
   ul {
     li {
       line-height: normal;

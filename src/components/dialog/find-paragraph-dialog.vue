@@ -158,6 +158,8 @@ export default defineComponent({
 }
 
 .find-paragraph-popper {
+  width: 100%;
+
   ul {
     li {
       line-height: normal;
