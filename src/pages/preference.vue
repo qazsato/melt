@@ -119,7 +119,9 @@ export default defineComponent({
 
   main {
     height: calc(100% - 50px);
-    padding: 0 20px;
+    padding: 0 20px 20px;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 
   &.melt-light {
