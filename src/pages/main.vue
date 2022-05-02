@@ -4,7 +4,7 @@
       <tool-bar />
     </header>
     <main>
-      <editor />
+      <editor :insert-image="insertImage" :insert-link="insertLink" :insert-table="insertTable" />
       <preview />
     </main>
     <footer>
@@ -14,9 +14,9 @@
       <find-paragraph-dialog />
       <find-title-dialog />
       <find-content-dialog />
-      <image-dialog />
-      <link-dialog />
-      <table-dialog />
+      <image-dialog @insert="onInsertImage" />
+      <link-dialog @insert="onInsertLink" />
+      <table-dialog @insert="onInsertTable" />
       <rename-dialog />
     </div>
   </div>
@@ -36,6 +36,27 @@ import linkDialog from '@/components/dialog/link-dialog.vue'
 import tableDialog from '@/components/dialog/table-dialog.vue'
 import renameDialog from '@/components/dialog/rename-dialog.vue'
 
+interface InsertImage {
+  imageAlt: string
+  imageUrl: string
+}
+
+interface InsertLink {
+  linkTitle: string
+  linkUrl: string
+}
+
+interface InsertTable {
+  tableRow: number
+  tableColumn: number
+}
+
+interface DataType {
+  insertImage: InsertImage | undefined
+  insertLink: InsertLink | undefined
+  insertTable: InsertTable | undefined
+}
+
 export default defineComponent({
   components: {
     toolBar,
@@ -49,6 +70,41 @@ export default defineComponent({
     linkDialog,
     tableDialog,
     renameDialog,
+  },
+
+  data() {
+    const data: DataType = {
+      insertImage: undefined,
+      insertLink: undefined,
+      insertTable: undefined,
+    }
+    return data
+  },
+
+  methods: {
+    onInsertImage(alt: string, url: string) {
+      const insertImage: InsertImage = {
+        imageAlt: alt,
+        imageUrl: url,
+      }
+      this.insertImage = insertImage
+    },
+
+    onInsertLink(title: string, url: string) {
+      const insertLink: InsertLink = {
+        linkTitle: title,
+        linkUrl: url,
+      }
+      this.insertLink = insertLink
+    },
+
+    onInsertTable(row: number, column: number) {
+      const insertTable: InsertTable = {
+        tableRow: row,
+        tableColumn: column,
+      }
+      this.insertTable = insertTable
+    },
   },
 })
 </script>

@@ -33,6 +33,8 @@ interface DataType {
 }
 
 export default defineComponent({
+  emits: ['insert'],
+
   data() {
     const data: DataType = {
       imageAlt: '',
@@ -43,40 +45,20 @@ export default defineComponent({
 
   methods: {
     openDialog() {
-      const text = this.$store.state.editor.getSelection()
-      if (text) {
-        try {
-          // eslint-disable-next-line no-new
-          new URL(text)
-          this.imageUrl = text
-          this.$nextTick().then(() => {
-            // @ts-ignore
-            this.$refs.imageAltInput.$refs.input.focus()
-          })
-        } catch (e) {
-          this.imageAlt = text
-          this.$nextTick().then(() => {
-            // @ts-ignore
-            this.$refs.imageUrlInput.$refs.input.focus()
-          })
-        }
-      } else {
-        this.$nextTick().then(() => {
-          // @ts-ignore
-          this.$refs.imageAltInput.$refs.input.focus()
-        })
-      }
+      this.$nextTick().then(() => {
+        // @ts-ignore
+        this.$refs.imageAltInput.focus()
+      })
     },
 
     closeDialog() {
       this.imageAlt = ''
       this.imageUrl = ''
-      this.$store.state.editor.focus()
       this.$store.commit('hideImageDialog')
     },
 
     insertImage() {
-      this.$store.state.editor.insertImage(this.imageAlt, this.imageUrl)
+      this.$emit('insert', this.imageAlt, this.imageUrl)
       this.closeDialog()
     },
   },

@@ -26,9 +26,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import setting from '@/config/setting'
-import axios from 'axios'
-const API_KEY = process.env.VUE_APP_MELT_API_KEY
 
 interface DataType {
   linkTitle: string
@@ -36,6 +33,8 @@ interface DataType {
 }
 
 export default defineComponent({
+  emits: ['insert'],
+
   data() {
     const data: DataType = {
       linkTitle: '',
@@ -46,46 +45,20 @@ export default defineComponent({
 
   methods: {
     openDialog() {
-      const text = this.$store.state.editor.getSelection()
-      if (text) {
-        try {
-          // eslint-disable-next-line no-new
-          new URL(text)
-          this.linkUrl = text
-          const url = `${setting.api}/sites/meta?url=${this.linkUrl}&api_key=${API_KEY}`
-          axios.get(url).then((res) => {
-            if (this.linkTitle === '' && this.$store.state.visibleLinkDialog === true) {
-              this.linkTitle = res.data.title
-            }
-          })
-          this.$nextTick().then(() => {
-            // @ts-ignore
-            this.$refs.linkTitleInput.$refs.input.focus()
-          })
-        } catch (e) {
-          this.linkTitle = text
-          this.$nextTick().then(() => {
-            // @ts-ignore
-            this.$refs.linkUrlInput.$refs.input.focus()
-          })
-        }
-      } else {
-        this.$nextTick().then(() => {
-          // @ts-ignore
-          this.$refs.linkTitleInput.$refs.input.focus()
-        })
-      }
+      this.$nextTick().then(() => {
+        // @ts-ignore
+        this.$refs.linkTitleInput.focus()
+      })
     },
 
     closeDialog() {
       this.linkTitle = ''
       this.linkUrl = ''
-      this.$store.state.editor.focus()
       this.$store.commit('hideLinkDialog')
     },
 
     insertLink() {
-      this.$store.state.editor.insertLink(this.linkTitle, this.linkUrl)
+      this.$emit('insert', this.linkTitle, this.linkUrl)
       this.closeDialog()
     },
   },

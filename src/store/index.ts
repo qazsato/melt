@@ -1,9 +1,7 @@
-import { nextTick } from 'vue'
 import { createStore } from 'vuex'
 import Note from '@/assets/scripts/note/note'
 import { INITIAL_NOTE, VIEW_MODE } from '@/constants'
 import { updateBrowsingHistory } from '@/utils/local-storage'
-import Editor from '@/assets/scripts/editor/markdown-editor'
 import { Preference } from '@/config/setting'
 import { getPreference, updatePreference, getBrowsingHistories } from '@/utils/local-storage'
 import { isExistPath } from '@/utils/note'
@@ -11,7 +9,6 @@ import { isExistPath } from '@/utils/note'
 export interface State {
   preference: Preference
   note: Note
-  editor: Editor | null
   viewMode: string
   visibleLinkDialog: boolean
   visibleImageDialog: boolean
@@ -35,7 +32,6 @@ const note: Note = new Note(path)
 const state: State = {
   preference: preference,
   note: note,
-  editor: null,
   viewMode: VIEW_MODE.EDITOR,
   visibleLinkDialog: false,
   visibleImageDialog: false,
@@ -58,10 +54,6 @@ export const store = createStore({
       }
       state.note = new Note()
       state.viewMode = VIEW_MODE.EDITOR
-      void nextTick().then(() => {
-        state.editor?.setText('')
-        state.editor?.focus()
-      })
     },
 
     changeNote(state, path) {
@@ -100,7 +92,6 @@ export const store = createStore({
         state.viewMode = VIEW_MODE.PREVIEW
       } else {
         state.viewMode = VIEW_MODE.EDITOR
-        void nextTick().then(() => state.editor?.focus())
       }
     },
 
@@ -111,13 +102,6 @@ export const store = createStore({
 
     changeViewMode(state, viewMode: string) {
       state.viewMode = viewMode
-      if (state.viewMode === VIEW_MODE.EDITOR) {
-        void nextTick().then(() => state.editor?.focus())
-      }
-    },
-
-    setEditor(state, editor: Editor) {
-      state.editor = editor
     },
 
     showLinkDialog(state) {
@@ -158,14 +142,6 @@ export const store = createStore({
 
     hideFindTitleDialog(state) {
       state.visibleFindTitleDialog = false
-    },
-
-    showFindTextDialog(state) {
-      state.viewMode = VIEW_MODE.EDITOR
-      void nextTick().then(() => {
-        state.editor?.focus()
-        state.editor?.openSearchDialog()
-      })
     },
 
     showFindContentDialog(state) {

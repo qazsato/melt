@@ -17,15 +17,33 @@ import 'codemirror/lib/codemirror.css'
 import '@/assets/styles/editor/markdown.scss'
 const API_KEY = process.env.VUE_APP_MELT_API_KEY
 
+// cf. https://github.com/codemirror/CodeMirror/issues/6805
+let editor: MarkdownEditor | null
+
 interface DataType {
-  editor: MarkdownEditor | null
   isPasteAsPlainText: boolean
 }
 
 export default defineComponent({
+  props: {
+    insertImage: {
+      type: Object,
+      default: null,
+    },
+
+    insertLink: {
+      type: Object,
+      default: null,
+    },
+
+    insertTable: {
+      type: Object,
+      default: null,
+    },
+  },
+
   data() {
     const data: DataType = {
-      editor: null,
       isPasteAsPlainText: false,
     }
     return data
@@ -52,13 +70,30 @@ export default defineComponent({
       if (value === VIEW_MODE.EDITOR) {
         // 変更済みの情報を上書きしないように、未変更の場合のみ設定する
         if (!this.$store.state.note.isChanged) {
-          this.$nextTick().then(() => this.editor?.setText(this.$store.state.note.content))
+          this.$nextTick().then(() => editor?.setText(this.$store.state.note.content))
         }
+        this.$nextTick().then(() => editor?.focus())
       }
     },
 
     note(note) {
-      this.editor?.setText(note.content)
+      editor?.setText(note.content)
+      editor?.focus()
+    },
+
+    insertImage(value) {
+      editor?.insertImage(value.imageAlt, value.imageUrl)
+      editor?.focus()
+    },
+
+    insertLink(value) {
+      editor?.insertLink(value.linkTitle, value.linkUrl)
+      editor?.focus()
+    },
+
+    insertTable(value) {
+      editor?.insertTable(value.tableRow, value.tableColumn)
+      editor?.focus()
     },
   },
 
@@ -68,23 +103,23 @@ export default defineComponent({
       lineWrapping: this.$store.state.preference.wordWrap,
       lineNumbers: this.$store.state.preference.lineNumber,
     }
-    this.editor = new MarkdownEditor('editor', option)
+    editor = new MarkdownEditor('editor', option)
     this.setStyle()
-    this.editor.on('change', this.onChangeText)
-    this.editor.on('paste', this.onPasteText)
-    this.editor.on('drop', this.onDropFile)
-    this.editor.addKeyMap({
-      'Cmd-F': () => this.editor?.openSearchDialog(),
+    editor.on('change', this.onChangeText)
+    editor.on('paste', this.onPasteText)
+    editor.on('drop', this.onDropFile)
+    editor.addKeyMap({
+      'Cmd-F': () => editor?.openSearchDialog(),
       'Cmd-L': () => this.$store.commit('showLinkDialog'),
       'Shift-Cmd-L': () => this.$store.commit('showImageDialog'),
-      'Cmd-B': () => this.editor?.insertBold(),
-      'Cmd-I': () => this.editor?.insertItalic(),
-      'Cmd-D': () => this.editor?.insertStrikethrough(),
-      'Cmd-K': () => this.editor?.insertCode(),
-      'Cmd-U': () => this.editor?.insertQuote(),
-      'Shift-Cmd-U': () => this.editor?.insertBulletList(),
-      'Shift-Cmd-O': () => this.editor?.insertOrderedList(),
-      'Shift-Cmd-X': () => this.editor?.insertTaskList(),
+      'Cmd-B': () => editor?.insertBold(),
+      'Cmd-I': () => editor?.insertItalic(),
+      'Cmd-D': () => editor?.insertStrikethrough(),
+      'Cmd-K': () => editor?.insertCode(),
+      'Cmd-U': () => editor?.insertQuote(),
+      'Shift-Cmd-U': () => editor?.insertBulletList(),
+      'Shift-Cmd-O': () => editor?.insertOrderedList(),
+      'Shift-Cmd-X': () => editor?.insertTaskList(),
       'Cmd-T': () => this.$store.commit('showTableDialog'),
       'Cmd-S': () => this.saveNote(),
       'Shift-Cmd-V': () => this.pasteAsPlainText(),
@@ -92,8 +127,7 @@ export default defineComponent({
       'Alt-Down': () => this.swapBelowLine(),
       'Ctrl-A': () => this.goLineStart(),
     })
-    this.$store.commit('setEditor', this.editor)
-    this.$nextTick().then(() => this.editor?.setText(this.$store.state.note.content))
+    this.$nextTick().then(() => editor?.setText(this.$store.state.note.content))
   },
 
   methods: {
@@ -106,8 +140,8 @@ export default defineComponent({
     },
 
     saveNote() {
-      this.editor?.optimizeTable()
-      const content = this.editor?.getText()
+      editor?.optimizeTable()
+      const content = editor?.getText()
       if (this.$store.state.note.filePath) {
         this.$store.commit('updateNote', content)
         this.$store.commit('saveNote')
@@ -136,23 +170,23 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChangeText(cm: CM, event: any) {
       const pos = cm.getCursor()
-      const lineText = this.editor?.getLineText(pos.line)
+      const lineText = editor?.getLineText(pos.line)
       if (lineText && isTableRow(lineText)) {
         // 英数・かな入力（スペース除く）、BS、ペースト時のみテーブル最適化
         if (
           (['+input', '*compose'].includes(event.origin) && event.text[0].trim().length > 0) ||
           ['+delete', 'paste'].includes(event.origin)
         ) {
-          this.editor?.optimizeTable()
+          editor?.optimizeTable()
         }
       }
       if (this.isInsertCodeBlock(event)) {
         const currentLine = cm.getCursor().line
-        this.editor?.selectLine(currentLine)
-        this.editor?.insertText(getDefaultCodeBlock())
-        this.editor?.gotoLine(currentLine + 1)
+        editor?.selectLine(currentLine)
+        editor?.insertText(getDefaultCodeBlock())
+        editor?.gotoLine(currentLine + 1)
       }
-      this.$store.commit('updateNote', this.editor?.getText())
+      this.$store.commit('updateNote', editor?.getText())
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -174,13 +208,13 @@ export default defineComponent({
         .get(url)
         .then((res) => {
           if (res.data.title) {
-            this.editor?.insertLink(res.data.title, text)
+            editor?.insertLink(res.data.title, text)
           } else {
-            this.editor?.insertText(text)
+            editor?.insertText(text)
           }
         })
         .catch(() => {
-          this.editor?.insertText(text)
+          editor?.insertText(text)
         })
       event.preventDefault()
     },
@@ -204,7 +238,7 @@ export default defineComponent({
           attachment: e.target?.result,
         }
         axios.post(`${setting.api}/images?api_key=${API_KEY}`, data).then((res) => {
-          this.editor?.insertImage(file.name, res.data.url, true)
+          editor?.insertImage(file.name, res.data.url, true)
         })
       }
     },
@@ -229,7 +263,7 @@ export default defineComponent({
       if (event.from.line !== event.to.line) {
         return false
       }
-      const text = this.editor?.getLineText(event.to.line) || ''
+      const text = editor?.getLineText(event.to.line) || ''
       if (!isCodeBlock(text)) {
         return false
       }
@@ -244,17 +278,17 @@ export default defineComponent({
     },
 
     swapAboveLine() {
-      this.editor?.swapAboveLine()
-      this.editor?.optimizeList()
+      editor?.swapAboveLine()
+      editor?.optimizeList()
     },
 
     swapBelowLine() {
-      this.editor?.swapBelowLine()
-      this.editor?.optimizeList()
+      editor?.swapBelowLine()
+      editor?.optimizeList()
     },
 
     goLineStart() {
-      this.editor?.goLineStart()
+      editor?.goLineStart()
     },
   },
 })

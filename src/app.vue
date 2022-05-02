@@ -46,10 +46,6 @@ export default defineComponent({
       this.$store.commit('showFindParagraphDialog')
     })
 
-    ipcRenderer.on('find-text', () => {
-      this.$store.commit('showFindTextDialog')
-    })
-
     ipcRenderer.on('find-text-in-folder', () => {
       this.$store.commit('showFindContentDialog')
     })

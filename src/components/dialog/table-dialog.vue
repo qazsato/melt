@@ -33,6 +33,8 @@ interface DataType {
 }
 
 export default defineComponent({
+  emits: ['insert'],
+
   data() {
     const data: DataType = {
       tableRow: 3,
@@ -45,19 +47,18 @@ export default defineComponent({
     openDialog() {
       this.$nextTick().then(() => {
         // @ts-ignore
-        this.$refs.tableRowInput.$refs.input.focus()
+        this.$refs.tableRowInput.focus()
       })
     },
 
     closeDialog() {
       this.tableRow = 3
       this.tableColumn = 3
-      this.$store.state.editor.focus()
       this.$store.commit('hideTableDialog')
     },
 
     insertTable() {
-      this.$store.state.editor.insertTable(this.tableRow, this.tableColumn)
+      this.$emit('insert', this.tableRow, this.tableColumn)
       this.closeDialog()
     },
   },
