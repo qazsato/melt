@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :visible.sync="$store.state.visibleFindTitleDialog"
+    v-model="$store.state.visibleFindTitleDialog"
     :show-close="false"
     :lock-scroll="false"
     custom-class="find-title-dialog"
@@ -16,11 +16,11 @@
       :fetch-suggestions="queryFindTitle"
       placeholder="Find name in folder"
       :highlight-first-item="true"
-      :popper-append-to-body="false"
-      @keyup.native="onKeyup"
+      :teleported="false"
+      @keyup="onKeyup"
       @select="onSelect"
     >
-      <template slot-scope="{ item }">
+      <template #default="{ item }">
         <div class="label">
           {{ item.label }}
         </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { readAllNotePaths } from '@/utils/note'
 import { getBrowsingHistories } from '@/utils/local-storage'
 import { VIEW_MODE } from '@/constants'
@@ -49,7 +49,7 @@ interface DataType {
   isComposing: boolean
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       notePath: '',
@@ -71,14 +71,15 @@ export default Vue.extend({
       if (value) {
         this.$nextTick().then(() => {
           // @ts-ignore
-          this.$refs.noteInput.$refs.input.focus()
+          this.$refs.noteInput.focus()
         })
       }
     },
   },
 
   methods: {
-    queryFindTitle(query: string, callback: (suggestion: Suggestion[]) => void) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    queryFindTitle(query: string, callback: any) {
       let filteredNotePaths = []
       if (query) {
         filteredNotePaths = this.notePaths.filter((path: string) => {
@@ -108,7 +109,8 @@ export default Vue.extend({
       this.isComposing = e.isComposing
     },
 
-    onSelect(item: Suggestion) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSelect(item: any) {
       // HACK: イベント処理順を keyup => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
@@ -167,6 +169,8 @@ export default Vue.extend({
 }
 
 .find-title-popper {
+  width: 100%;
+
   ul {
     li {
       line-height: normal;

@@ -135,15 +135,6 @@ function createMenu() {
           },
         },
         {
-          label: 'Find Text',
-          accelerator: 'CmdOrCtrl+F',
-          click() {
-            const win = BrowserWindow.getFocusedWindow()
-            if (!win) return
-            win.webContents.send('find-text')
-          },
-        },
-        {
           label: 'Find Text in folder',
           accelerator: 'CmdOrCtrl+Shift+F',
           click() {

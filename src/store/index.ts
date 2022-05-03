@@ -1,19 +1,14 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import Note from '@/assets/scripts/note/note'
 import { INITIAL_NOTE, VIEW_MODE } from '@/constants'
 import { updateBrowsingHistory } from '@/utils/local-storage'
-import Editor from '@/assets/scripts/editor/markdown-editor'
 import { Preference } from '@/config/setting'
 import { getPreference, updatePreference, getBrowsingHistories } from '@/utils/local-storage'
 import { isExistPath } from '@/utils/note'
 
-Vue.use(Vuex)
-
-interface State {
+export interface State {
   preference: Preference
   note: Note
-  editor: Editor | null
   viewMode: string
   visibleLinkDialog: boolean
   visibleImageDialog: boolean
@@ -37,7 +32,6 @@ const note: Note = new Note(path)
 const state: State = {
   preference: preference,
   note: note,
-  editor: null,
   viewMode: VIEW_MODE.EDITOR,
   visibleLinkDialog: false,
   visibleImageDialog: false,
@@ -48,7 +42,7 @@ const state: State = {
   visibleRenameDialog: false,
 }
 
-const store = new Vuex.Store({
+export const store = createStore({
   state,
 
   mutations: {
@@ -60,10 +54,6 @@ const store = new Vuex.Store({
       }
       state.note = new Note()
       state.viewMode = VIEW_MODE.EDITOR
-      void Vue.nextTick().then(() => {
-        state.editor?.setText('')
-        state.editor?.focus()
-      })
     },
 
     changeNote(state, path) {
@@ -102,7 +92,6 @@ const store = new Vuex.Store({
         state.viewMode = VIEW_MODE.PREVIEW
       } else {
         state.viewMode = VIEW_MODE.EDITOR
-        void Vue.nextTick().then(() => state.editor?.focus())
       }
     },
 
@@ -113,13 +102,6 @@ const store = new Vuex.Store({
 
     changeViewMode(state, viewMode: string) {
       state.viewMode = viewMode
-      if (state.viewMode === VIEW_MODE.EDITOR) {
-        void Vue.nextTick().then(() => state.editor?.focus())
-      }
-    },
-
-    setEditor(state, editor: Editor) {
-      state.editor = editor
     },
 
     showLinkDialog(state) {
@@ -162,14 +144,6 @@ const store = new Vuex.Store({
       state.visibleFindTitleDialog = false
     },
 
-    showFindTextDialog(state) {
-      state.viewMode = VIEW_MODE.EDITOR
-      void Vue.nextTick().then(() => {
-        state.editor?.focus()
-        state.editor?.openSearchDialog()
-      })
-    },
-
     showFindContentDialog(state) {
       state.visibleFindContentDialog = true
     },
@@ -187,5 +161,3 @@ const store = new Vuex.Store({
     },
   },
 })
-
-export default store

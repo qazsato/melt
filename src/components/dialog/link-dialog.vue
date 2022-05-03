@@ -1,7 +1,7 @@
 <template>
   <el-dialog
+    v-model="$store.state.visibleLinkDialog"
     title="Hyperlink"
-    :visible.sync="$store.state.visibleLinkDialog"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     width="400px"
@@ -9,36 +9,32 @@
   >
     <el-form label-width="45px">
       <el-form-item label="Title">
-        <el-input
-          ref="linkTitleInput"
-          v-model="linkTitle"
-          placeholder="Please input"
-          @keyup.enter.native="insertLink"
-        />
+        <el-input ref="linkTitleInput" v-model="linkTitle" placeholder="Please input" @keyup.enter="insertLink" />
       </el-form-item>
       <el-form-item label="URL">
-        <el-input ref="linkUrlInput" v-model="linkUrl" placeholder="Please input" @keyup.enter.native="insertLink" />
+        <el-input ref="linkUrlInput" v-model="linkUrl" placeholder="Please input" @keyup.enter="insertLink" />
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="closeDialog">Cancel</el-button>
-      <el-button type="primary" @click="insertLink">Insert</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="closeDialog">Cancel</el-button>
+        <el-button type="primary" @click="insertLink">Insert</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import setting from '@/config/setting'
-import axios from 'axios'
-const API_KEY = process.env.VUE_APP_MELT_API_KEY
+import { defineComponent } from 'vue'
 
 interface DataType {
   linkTitle: string
   linkUrl: string
 }
 
-export default Vue.extend({
+export default defineComponent({
+  emits: ['insert'],
+
   data() {
     const data: DataType = {
       linkTitle: '',
@@ -49,46 +45,20 @@ export default Vue.extend({
 
   methods: {
     openDialog() {
-      const text = this.$store.state.editor.getSelection()
-      if (text) {
-        try {
-          // eslint-disable-next-line no-new
-          new URL(text)
-          this.linkUrl = text
-          const url = `${setting.api}/sites/meta?url=${this.linkUrl}&api_key=${API_KEY}`
-          axios.get(url).then((res) => {
-            if (this.linkTitle === '' && this.$store.state.visibleLinkDialog === true) {
-              this.linkTitle = res.data.title
-            }
-          })
-          this.$nextTick().then(() => {
-            // @ts-ignore
-            this.$refs.linkTitleInput.$refs.input.focus()
-          })
-        } catch (e) {
-          this.linkTitle = text
-          this.$nextTick().then(() => {
-            // @ts-ignore
-            this.$refs.linkUrlInput.$refs.input.focus()
-          })
-        }
-      } else {
-        this.$nextTick().then(() => {
-          // @ts-ignore
-          this.$refs.linkTitleInput.$refs.input.focus()
-        })
-      }
+      this.$nextTick().then(() => {
+        // @ts-ignore
+        this.$refs.linkTitleInput.focus()
+      })
     },
 
     closeDialog() {
       this.linkTitle = ''
       this.linkUrl = ''
-      this.$store.state.editor.focus()
       this.$store.commit('hideLinkDialog')
     },
 
     insertLink() {
-      this.$store.state.editor.insertLink(this.linkTitle, this.linkUrl)
+      this.$emit('insert', this.linkTitle, this.linkUrl)
       this.closeDialog()
     },
   },

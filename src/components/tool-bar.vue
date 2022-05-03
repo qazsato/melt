@@ -6,18 +6,20 @@
           v-model="visiblePopover"
           placement="right"
           trigger="click"
+          width="70px"
+          :offset="20"
           popper-class="file-name-popper"
           :disabled="isChanged"
         >
           <el-row>
-            <el-link type="primary" icon="el-icon-edit" @click="onClickEdit"> rename </el-link>
+            <el-link type="primary" icon="EditPen" :underline="false" @click="onClickEdit">rename</el-link>
           </el-row>
           <el-row>
-            <el-link type="danger" icon="el-icon-delete" @click="onClickDelete"> delete </el-link>
+            <el-link type="danger" icon="Delete" :underline="false" @click="onClickDelete">delete</el-link>
           </el-row>
-          <div slot="reference" :class="{ editable: !isChanged }">
-            {{ $store.state.note.title }}
-          </div>
+          <template #reference>
+            <div :class="{ editable: !isChanged }">{{ $store.state.note.title }}</div>
+          </template>
         </el-popover>
       </template>
       <template v-else>
@@ -26,7 +28,7 @@
       <span v-if="isChanged" class="changed">*</span>
     </h1>
 
-    <el-radio-group v-model="viewMode" class="checkbox-mode" size="mini" @change="changeViewMode">
+    <el-radio-group v-model="viewMode" class="checkbox-mode" size="small" @change="changeViewMode">
       <el-radio-button label="editor">TEXT</el-radio-button>
       <el-radio-button label="preview">HTML</el-radio-button>
     </el-radio-group>
@@ -34,14 +36,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
+import { State } from '@/store'
 
 interface DataType {
   viewMode: string
   visiblePopover: boolean
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       viewMode: this.$store.state.viewMode,
@@ -62,8 +65,8 @@ export default Vue.extend({
 
   mounted() {
     this.$store.watch(
-      (state) => state.viewMode,
-      (value) => {
+      (state: State) => state.viewMode,
+      (value: string) => {
         this.viewMode = value
       }
     )
@@ -127,34 +130,36 @@ export default Vue.extend({
     top: 12px;
     right: 15px;
 
-    ::v-deep .el-radio-button__inner {
+    ::v-deep(.el-radio-button__inner) {
       padding: 6px 10px;
     }
   }
 
   &.melt-light {
-    background-color: $light-header-bg-color;
+    background-color: var.$light-header-bg-color;
   }
 
   &.melt-dark {
-    background-color: $dark-header-bg-color;
+    background-color: var.$dark-header-bg-color;
   }
 }
 </style>
 
 <style lang="scss">
 .file-name-popper {
-  &.el-popover {
-    padding: 8px 16px;
-    min-width: auto;
+  &.el-popper {
+    &.el-popover {
+      padding: 6px 14px 10px;
+      min-width: auto;
+    }
   }
 
-  &.el-popper[x-placement^='right'] {
-    margin-left: 20px;
+  .el-link {
+    line-height: 26px;
   }
 
-  .el-row {
-    margin-bottom: 5px;
+  .el-icon {
+    margin-right: 6px;
   }
 }
 </style>

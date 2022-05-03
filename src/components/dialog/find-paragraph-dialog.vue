@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :visible.sync="$store.state.visibleFindParagraphDialog"
+    v-model="$store.state.visibleFindParagraphDialog"
     :show-close="false"
     :lock-scroll="false"
     custom-class="find-paragraph-dialog"
@@ -16,11 +16,11 @@
       :fetch-suggestions="queryFindParagraph"
       placeholder="Find paragraph in note"
       :highlight-first-item="true"
-      :popper-append-to-body="false"
-      @keyup.native="onKeyup"
+      :teleported="false"
+      @keyup="onKeyup"
       @select="onSelect"
     >
-      <template slot-scope="{ item }">
+      <template #default="{ item }">
         <div class="item">
           <div class="heading">H{{ item.heading }}</div>
           <div class="text" :class="`heading-${item.heading}`">
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { TableOfContent } from '@/assets/scripts/note/note'
 import { VIEW_MODE } from '@/constants'
 
@@ -50,7 +50,7 @@ interface DataType {
   isComposing: boolean
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       paragraphText: '',
@@ -72,14 +72,15 @@ export default Vue.extend({
       if (value) {
         this.$nextTick().then(() => {
           // @ts-ignore
-          this.$refs.paragraphInput.$refs.input.focus()
+          this.$refs.paragraphInput.focus()
         })
       }
     },
   },
 
   methods: {
-    queryFindParagraph(query: string, callback: (suggestion: Suggestion[]) => void) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    queryFindParagraph(query: string, callback: any) {
       const filteredParagraphs = query
         ? this.tableOfContents.filter((t) => t.text.toLowerCase().includes(query.toLowerCase()))
         : this.tableOfContents
@@ -98,7 +99,8 @@ export default Vue.extend({
       this.isComposing = e.isComposing
     },
 
-    onSelect(item: Suggestion) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSelect(item: any) {
       // HACK: イベント処理順を keyup => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
@@ -156,6 +158,8 @@ export default Vue.extend({
 }
 
 .find-paragraph-popper {
+  width: 100%;
+
   ul {
     li {
       line-height: normal;

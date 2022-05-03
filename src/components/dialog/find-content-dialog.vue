@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :visible.sync="$store.state.visibleFindContentDialog"
+    v-model="$store.state.visibleFindContentDialog"
     :show-close="false"
     :lock-scroll="false"
     custom-class="find-content-dialog"
@@ -16,11 +16,11 @@
       :fetch-suggestions="queryFindContent"
       placeholder="Find text in folder"
       :highlight-first-item="true"
-      :popper-append-to-body="false"
-      @keyup.native="onKeyup"
+      :teleported="false"
+      @keyup="onKeyup"
       @select="onSelect"
     >
-      <template slot-scope="{ item }">
+      <template #default="{ item }">
         <div class="label">
           {{ item.label }}
         </div>
@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { readAllNotes, readRecentlyOpenedNotes } from '@/utils/note'
 import { VIEW_MODE } from '@/constants'
 import Note from '@/assets/scripts/note/note'
@@ -53,7 +53,7 @@ interface DataType {
   isComposing: boolean
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       notePath: '',
@@ -75,14 +75,15 @@ export default Vue.extend({
       if (value) {
         this.$nextTick().then(() => {
           // @ts-ignore
-          this.$refs.noteInput.$refs.input.focus()
+          this.$refs.noteInput.focus()
         })
       }
     },
   },
 
   methods: {
-    queryFindContent(query: string, callback: (suggestion: Suggestion[]) => void) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    queryFindContent(query: string, callback: any) {
       let filteredNotes = []
       if (query) {
         filteredNotes = this.notes.filter((n: Note) => n.find(query).length > 0)
@@ -109,7 +110,8 @@ export default Vue.extend({
       this.isComposing = e.isComposing
     },
 
-    onSelect(item: Suggestion) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSelect(item: any) {
       // HACK: イベント処理順を keyup => select としたいためタイミングをずらしている
       setTimeout(() => {
         if (this.isComposing) {
@@ -168,6 +170,8 @@ export default Vue.extend({
 }
 
 .find-content-popper {
+  width: 100%;
+
   .el-autocomplete-suggestion__list {
     > li {
       line-height: normal;

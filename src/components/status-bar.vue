@@ -10,14 +10,14 @@
     </div>
     <div class="spacer" />
     <div v-if="lastModifiedAt" class="last-modified">
-      <i class="el-icon-refresh" />
+      <el-icon><refresh /></el-icon>
       <span>{{ lastModifiedAt }}</span>
     </div>
   </section>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
 
 interface DataType {
@@ -26,7 +26,7 @@ interface DataType {
   lastModifiedAt: string | null
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       paragraph: 0,
@@ -94,5 +94,14 @@ export default Vue.extend({
 .paragraph,
 .line {
   margin-right: 5px;
+}
+
+.last-modified {
+  display: flex;
+  align-items: center;
+
+  .el-icon {
+    margin-right: 3px;
+  }
 }
 </style>

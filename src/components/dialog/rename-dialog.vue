@@ -1,30 +1,32 @@
 <template>
   <el-dialog
+    v-model="$store.state.visibleRenameDialog"
     title="Rename"
-    :visible.sync="$store.state.visibleRenameDialog"
     :close-on-click-modal="false"
     width="400px"
     :before-close="closeDialog"
     @open="openDialog"
   >
-    <el-input ref="fileNameInput" v-model="fileName" placeholder="Please input" @keyup.enter.native="changeFileName">
-      <template slot="append"> .md </template>
+    <el-input ref="fileNameInput" v-model="fileName" placeholder="Please input" @keyup.enter="changeFileName">
+      <template #append> .md </template>
     </el-input>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="closeDialog">Cancel</el-button>
-      <el-button type="primary" :disabled="isDisabledChange" @click="changeFileName">Change</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="closeDialog">Cancel</el-button>
+        <el-button type="primary" :disabled="isDisabledChange" @click="changeFileName">Change</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 
 interface DataType {
   fileName: string
 }
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const data: DataType = {
       fileName: '',

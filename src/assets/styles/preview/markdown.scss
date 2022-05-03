@@ -36,13 +36,17 @@
         cursor: pointer;
 
         &:before {
-          content: '\e787';
-          font-family: 'element-icons';
-          font-style: normal;
+          display: inline-block;
+          content: '';
+          width: 16px;
+          height: 16px;
+          background-image: url(~@/images/icons/content_copy.svg);
+          background-size: 16px 16px;
+          background-repeat: no-repeat;
         }
 
         &:hover {
-          color: #999;
+          opacity: 0.6;
         }
       }
 

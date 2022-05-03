@@ -1,7 +1,7 @@
 <template>
   <div class="preference" :class="theme">
     <header>
-      <el-page-header @back="goBack" content="Preference"></el-page-header>
+      <el-page-header content="Preference" @back="goBack"></el-page-header>
     </header>
     <main>
       <section>
@@ -31,19 +31,19 @@
         <el-switch v-model="lineNumber"></el-switch>
       </section>
       <el-row type="flex" justify="end">
-        <el-button type="primary" @click="onSave" class="save-button">Save</el-button>
+        <el-button type="primary" class="save-button" @click="onSave">Save</el-button>
       </el-row>
     </main>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { THEME, INITIAL_NOTE, PAGE } from '@/constants'
 import { Preference } from '@/config/setting'
 import { getPreference } from '@/utils/local-storage'
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const preference: Preference = getPreference()
     return {
@@ -111,7 +111,7 @@ export default Vue.extend({
       line-height: 50px;
       color: #fff;
 
-      ::v-deep .el-page-header__content {
+      ::v-deep(.el-page-header__content) {
         color: #fff;
       }
     }
@@ -119,44 +119,34 @@ export default Vue.extend({
 
   main {
     height: calc(100% - 50px);
-    padding: 0 20px;
+    padding: 0 20px 20px;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 
   &.melt-light {
-    color: $light-color;
-    background-color: $light-bg-color;
+    color: var.$light-color;
+    background-color: var.$light-bg-color;
 
     .el-page-header {
-      background-color: $light-header-bg-color;
+      background-color: var.$light-header-bg-color;
     }
 
     .el-radio {
-      color: $light-color;
-    }
-
-    ::v-deep .el-input__inner {
-      color: $light-color;
-      background-color: $light-input-bg-color;
-      border-color: $light-input-border-color;
+      color: var.$light-color;
     }
   }
 
   &.melt-dark {
-    color: $dark-color;
-    background-color: $dark-bg-color;
+    color: var.$dark-color;
+    background-color: var.$dark-bg-color;
 
     .el-page-header {
-      background-color: $dark-header-bg-color;
+      background-color: var.$dark-header-bg-color;
     }
 
     .el-radio {
-      color: $dark-color;
-    }
-
-    ::v-deep .el-input__inner {
-      color: $dark-color;
-      background-color: $dark-input-bg-color;
-      border-color: $dark-input-border-color;
+      color: var.$dark-color;
     }
   }
 
