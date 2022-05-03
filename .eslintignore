@@ -1,2 +1,1 @@
-main.js
-tests/**/*.js
+tests/unit/jsdom-polyfill.js
