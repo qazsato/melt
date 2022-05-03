@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="theme">
+  <div class="app" :class="theme">
     <router-view />
   </div>
 </template>
@@ -58,7 +58,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-#app {
+.app {
+  height: 100%;
   &.melt-light {
     color-scheme: light;
     background: var.$light-bg-color;

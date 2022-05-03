@@ -14,10 +14,6 @@ body {
   height: 100%;
 }
 
-button {
-  outline: none;
-}
-
 // Element UIの dialog がアニメーションを止める設定がないため強制的に無効にする
 .el-overlay {
   animation: none !important;
