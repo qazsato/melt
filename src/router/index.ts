@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { PAGE } from '@/constants'
 import Main from '@/pages/main.vue'
 import Preference from '@/pages/preference.vue'
@@ -9,6 +9,6 @@ const routes: RouteRecordRaw[] = [
 ]
 
 export const router = createRouter({
-  history: createWebHistory(),
+  history: process.env.IS_ELECTRON ? createWebHashHistory() : createWebHistory(),
   routes,
 })
