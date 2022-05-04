@@ -203,9 +203,9 @@ export default defineComponent({
       } catch (error) {
         return // URLに変換できない場合何もしない
       }
-      const url = `${setting.api}/sites/meta?url=${text}&api_key=${API_KEY}`
+      const params = { url: text, api_key: API_KEY }
       axios
-        .get(url)
+        .get(`${setting.api}/sites/meta`, { params })
         .then((res) => {
           if (res.data.title) {
             editor?.insertLink(res.data.title, text)
