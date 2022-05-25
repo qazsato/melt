@@ -333,6 +333,16 @@ class MarkdownEditor extends Editor {
     return cnt
   }
 
+  getFocusTableCellText(): string | null {
+    const cellNumber = this.getFocusTableCellNumber()
+    if (cellNumber === null) {
+      return null
+    }
+    const pos = this.cm.getCursor()
+    const lineText = this.getLineText(pos.line)
+    return lineText.split('|')[cellNumber]
+  }
+
   /**
    * 該当セルにフォーカスを移動します。
    */
@@ -494,6 +504,7 @@ class MarkdownEditor extends Editor {
   optimizeTable(): void {
     const pos = this.cm.getCursor()
     const cellNum = this.getFocusTableCellNumber()
+    const cellText = this.getFocusTableCellText()
     const tableData = this.getTableData()
     tableData.forEach((d: TableData) => {
       const rows = d.rows
@@ -536,9 +547,15 @@ class MarkdownEditor extends Editor {
     })
     if (cellNum !== null) {
       // 入力中にも自動整形をおこなうので、整形後のフォーカス位置は整形前の位置のままにする
+      const lineText = this.getLineText(pos.line)
+      const currentCellText = getTableRow(lineText)[cellNum - 1]
+      let diff = 0
+      if (cellText && currentCellText) {
+        diff = cellText.trimEnd().length - currentCellText.length - 1
+      }
       this.cm.setCursor({
         line: pos.line,
-        ch: this.getLineText(pos.line).substring(0, pos.ch).trimEnd().length,
+        ch: lineText.trimEnd().substring(0, pos.ch - diff).length,
       })
     }
   }
