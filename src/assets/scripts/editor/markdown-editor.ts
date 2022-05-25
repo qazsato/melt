@@ -535,7 +535,11 @@ class MarkdownEditor extends Editor {
       })
     })
     if (cellNum !== null) {
-      this.focusTableCell(pos.line, cellNum)
+      // 入力中にも自動整形をおこなうので、整形後のフォーカス位置は整形前の位置のままにする
+      this.cm.setCursor({
+        line: pos.line,
+        ch: this.getLineText(pos.line).substring(0, pos.ch).trimEnd().length,
+      })
     }
   }
 
