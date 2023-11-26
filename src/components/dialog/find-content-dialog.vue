@@ -3,7 +3,7 @@
     v-model="$store.state.visibleFindContentDialog"
     :show-close="false"
     :lock-scroll="false"
-    custom-class="find-content-dialog"
+    class="find-content-dialog"
     width="400px"
     :before-close="closeDialog"
     @open="openDialog"
