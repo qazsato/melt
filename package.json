@@ -1,6 +1,6 @@
 {
   "name": "melt",
-  "version": "2.11.2",
+  "version": "2.11.3",
   "private": true,
   "author": "qazsato",
   "engines": {
@@ -23,7 +23,6 @@
     "axios": "1.6.2",
     "codemirror": "5.65.3",
     "dayjs": "1.11.10",
-    "dotenv": "16.3.1",
     "element-plus": "2.4.2",
     "glob": "8.0.1",
     "highlight.js": "11.9.0",
