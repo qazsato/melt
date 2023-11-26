@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+import 'dotenv/config'
 import { defineComponent } from 'vue'
 import setting from '@/config/setting'
 import axios from 'axios'
@@ -15,7 +16,7 @@ import { VIEW_MODE, ALLOW_DROP_FILE_TYPES } from '@/constants'
 import { isCodeBlock, getDefaultCodeBlock, isTableRow } from '@/utils/markdown'
 import 'codemirror/lib/codemirror.css'
 import '@/assets/styles/editor/markdown.scss'
-const API_KEY = process.env.VUE_APP_MELT_API_KEY
+const API_KEY = process.env.MELT_API_KEY
 
 // cf. https://github.com/codemirror/CodeMirror/issues/6805
 let editor: MarkdownEditor | null
