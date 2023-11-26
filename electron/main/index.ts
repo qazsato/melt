@@ -48,6 +48,7 @@ async function createWindow() {
     title: 'Melt',
     minWidth: 420,
     minHeight: 420,
+    // @ts-ignore
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
       preload,
@@ -61,6 +62,7 @@ async function createWindow() {
 
   if (process.env.VITE_DEV_SERVER_URL) {
     // electron-vite-vue#298
+    // @ts-ignore
     win.loadURL(url)
     // Open devTool if the app is not packaged
     win.webContents.openDevTools()

@@ -92,6 +92,7 @@ export default defineComponent({
         lineNumber: this.lineNumber,
       }
       this.$store.commit('updatePreference', preference)
+      // @ts-ignore
       this.$message({ type: 'success', message: 'Preference saved', showClose: true })
       this.$router.push({ name: PAGE.MAIN })
     },
