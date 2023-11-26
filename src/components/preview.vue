@@ -18,6 +18,7 @@ interface DataType {
 }
 
 export default defineComponent({
+  name: 'MeltPreview',
   data() {
     const data: DataType = {
       markdown: new Markdown(),

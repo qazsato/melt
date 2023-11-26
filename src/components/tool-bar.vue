@@ -68,7 +68,7 @@ export default defineComponent({
       (state: State) => state.viewMode,
       (value: string) => {
         this.viewMode = value
-      }
+      },
     )
   },
 

@@ -100,7 +100,7 @@ class MarkdownEditor extends Editor {
         tableData.rows.splice(
           target,
           0,
-          tableData.rows[0].map(() => '')
+          tableData.rows[0].map(() => ''),
         )
         this.setTableData(tableData)
         this.optimizeTable()

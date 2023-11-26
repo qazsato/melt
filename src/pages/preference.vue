@@ -44,6 +44,7 @@ import { Preference } from '@/config/setting'
 import { getPreference } from '@/utils/local-storage'
 
 export default defineComponent({
+  name: 'MeltPreference',
   data() {
     const preference: Preference = getPreference()
     return {
