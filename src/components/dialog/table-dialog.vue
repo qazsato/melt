@@ -45,7 +45,7 @@ export default defineComponent({
 
   methods: {
     openDialog() {
-      this.$nextTick().then(() => {
+      setTimeout(() => {
         // @ts-ignore
         this.$refs.tableRowInput.focus()
       })

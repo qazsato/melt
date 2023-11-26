@@ -70,7 +70,7 @@ export default defineComponent({
   watch: {
     visibleFindParagraphDialog(value) {
       if (value) {
-        this.$nextTick().then(() => {
+        setTimeout(() => {
           // @ts-ignore
           this.$refs.paragraphInput.focus()
         })

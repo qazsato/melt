@@ -60,7 +60,7 @@ export default defineComponent({
   methods: {
     draw() {
       this.markedText = this.markdown.render(this.content)
-      this.$nextTick().then(() => {
+      setTimeout(() => {
         const element = this.$refs.markdown as HTMLElement
         const cbElements = element.querySelectorAll('.clipboard')
         cbElements.forEach((e) => e.addEventListener('click', this.copyClipboard))

@@ -44,7 +44,7 @@ export default defineComponent({
   methods: {
     openDialog() {
       this.fileName = this.$store.state.note.title.split('.md')[0]
-      this.$nextTick().then(() => {
+      setTimeout(() => {
         // @ts-ignore
         this.$refs.fileNameInput.$refs.input.focus()
       })
