@@ -40,8 +40,6 @@
     "vuex": "4.0.2"
   },
   "devDependencies": {
-    "@babel/core": "7.17.5",
-    "@babel/preset-env": "7.16.11",
     "@types/codemirror": "5.60.5",
     "@types/glob": "8.1.0",
     "@types/jest": "27.5.0",
@@ -80,5 +78,5 @@
     "codemirror"
   ],
   "license": "MIT",
-  "productName": "Melt"
+  "productName": "MeltEditor"
 }
