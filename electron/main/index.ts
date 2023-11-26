@@ -48,8 +48,6 @@ async function createWindow() {
     title: 'Melt',
     minWidth: 420,
     minHeight: 420,
-    // @ts-ignore
-    icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
