@@ -4,18 +4,22 @@
   "private": true,
   "author": "qazsato",
   "engines": {
-    "node": "16.x"
+    "node": "20.x"
+  },
+  "debug": {
+    "env": {
+      "VITE_DEV_SERVER_URL": "http://127.0.0.1:3344/"
+    }
   },
   "scripts": {
-    "serve": "vue-cli-service electron:serve",
-    "build": "vue-cli-service electron:build",
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build && electron-builder",
+    "preview": "vite preview",
     "test": "npm run test:unit",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
-    "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "lint": "vue-cli-service lint"
   },
-  "main": "background.js",
+  "main": "dist-electron/main/index.js",
   "dependencies": {
     "@element-plus/icons-vue": "1.1.4",
     "@liradb2000/markdown-it-mermaid": "0.4.4",
@@ -39,38 +43,31 @@
     "@babel/core": "7.17.5",
     "@babel/preset-env": "7.16.11",
     "@types/codemirror": "5.60.5",
-    "@types/electron-devtools-installer": "2.2.2",
     "@types/jest": "27.5.0",
     "@types/markdown-it": "12.2.3",
     "@types/markdown-it-emoji": "2.0.2",
     "@typescript-eslint/eslint-plugin": "5.11.0",
     "@typescript-eslint/parser": "5.11.0",
-    "@vue/cli-plugin-eslint": "5.0.8",
-    "@vue/cli-plugin-router": "4.5.15",
-    "@vue/cli-plugin-typescript": "4.5.15",
-    "@vue/cli-plugin-unit-jest": "4.5.15",
-    "@vue/cli-plugin-vuex": "4.5.15",
-    "@vue/cli-service": "4.5.15",
+    "@vitejs/plugin-vue": "4.5.0",
     "@vue/compiler-sfc": "3.2.33",
     "@vue/eslint-config-prettier": "8.0.0",
     "@vue/eslint-config-typescript": "12.0.0",
     "@vue/test-utils": "2.4.2",
     "babel-jest": "27.5.1",
-    "electron": "18.2.0",
-    "electron-devtools-installer": "3.2.0",
+    "electron": "27.1.2",
+    "electron-builder": "24.9.1",
     "eslint": "8.54.0",
     "eslint-plugin-prettier": "5.0.1",
     "eslint-plugin-vue": "9.18.1",
     "prettier": "3.1.0",
     "sass": "1.51.0",
     "sass-loader": "10.2.1",
+    "tree-kill": "1.2.2",
     "typescript": "4.5.5",
-    "vue-cli-plugin-electron-builder": "2.1.1"
-  },
-  "overrides": {
-    "vue-cli-plugin-electron-builder": {
-      "electron-builder": "23.0.3"
-    }
+    "vite": "5.0.2",
+    "vite-plugin-electron": "0.15.4",
+    "vite-plugin-electron-renderer": "0.14.5",
+    "vue-tsc": "1.8.22"
   },
   "keywords": [
     "markdown",
