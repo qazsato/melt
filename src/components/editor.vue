@@ -71,9 +71,9 @@ export default defineComponent({
       if (value === VIEW_MODE.EDITOR) {
         // 変更済みの情報を上書きしないように、未変更の場合のみ設定する
         if (!this.$store.state.note.isChanged) {
-          this.$nextTick().then(() => editor?.setText(this.$store.state.note.content))
+          setTimeout(() => editor?.setText(this.$store.state.note.content))
         }
-        this.$nextTick().then(() => editor?.focus())
+        setTimeout(() => editor?.focus())
       }
     },
 
@@ -128,7 +128,7 @@ export default defineComponent({
       'Alt-Down': () => this.swapBelowLine(),
       'Ctrl-A': () => this.goLineStart(),
     })
-    this.$nextTick().then(() => editor?.setText(this.$store.state.note.content))
+    setTimeout(() => editor?.setText(this.$store.state.note.content))
   },
 
   methods: {

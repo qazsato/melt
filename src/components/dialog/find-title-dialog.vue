@@ -69,7 +69,7 @@ export default defineComponent({
   watch: {
     visibleFindTitleDialog(value) {
       if (value) {
-        this.$nextTick().then(() => {
+        setTimeout(() => {
           // @ts-ignore
           this.$refs.noteInput.focus()
         })

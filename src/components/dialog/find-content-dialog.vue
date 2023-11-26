@@ -73,7 +73,7 @@ export default defineComponent({
   watch: {
     visibleFindContentDialog(value) {
       if (value) {
-        this.$nextTick().then(() => {
+        setTimeout(() => {
           // @ts-ignore
           this.$refs.noteInput.focus()
         })
