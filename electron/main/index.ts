@@ -1,43 +1,86 @@
-'use strict'
-
-import { app, protocol, BrowserWindow, Menu, ipcMain, dialog, shell } from 'electron'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import { app, BrowserWindow, shell, ipcMain, Menu, dialog } from 'electron'
+import { release } from 'node:os'
+import { join } from 'node:path'
 import fs from 'fs'
-
-const isDevelopment = process.env.NODE_ENV !== 'production'
-
-// Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
 const windowState = {} // key: win.id, value: object
 
+// The built directory structure
+//
+// ├─┬ dist-electron
+// │ ├─┬ main
+// │ │ └── index.js    > Electron-Main
+// │ └─┬ preload
+// │   └── index.js    > Preload-Scripts
+// ├─┬ dist
+// │ └── index.html    > Electron-Renderer
+//
+process.env.DIST_ELECTRON = join(__dirname, '..')
+process.env.DIST = join(process.env.DIST_ELECTRON, '../dist')
+process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
+  ? join(process.env.DIST_ELECTRON, '../public')
+  : process.env.DIST
+
+// Disable GPU Acceleration for Windows 7
+if (release().startsWith('6.1')) app.disableHardwareAcceleration()
+
+// Set application name for Windows 10+ notifications
+if (process.platform === 'win32') app.setAppUserModelId(app.getName())
+
+if (!app.requestSingleInstanceLock()) {
+  app.quit()
+  process.exit(0)
+}
+
+// Remove electron security warnings
+// This warning only shows in development mode
+// Read more on https://www.electronjs.org/docs/latest/tutorial/security
+// process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
+
+let win: BrowserWindow | null = null
+// Here, you can also use other preload
+const preload = join(__dirname, '../preload/index.js')
+const url = process.env.VITE_DEV_SERVER_URL
+const indexHtml = join(process.env.DIST, 'index.html')
+
 async function createWindow() {
-  // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
+    title: 'Melt',
     minWidth: 420,
     minHeight: 420,
     webPreferences: {
+      preload,
+      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
+      // Consider using contextBridge.exposeInMainWorld
+      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
       nodeIntegration: true,
       contextIsolation: false,
     },
   })
 
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+  if (process.env.VITE_DEV_SERVER_URL) {
+    // electron-vite-vue#298
+    // @ts-ignore
+    win.loadURL(url)
+    // Open devTool if the app is not packaged
+    win.webContents.openDevTools()
   } else {
-    createProtocol('app')
-    // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    win.loadFile(indexHtml)
   }
-  win.maximize()
 
-  win.webContents.on('new-window', (event, url) => {
-    event.preventDefault()
-    shell.openExternal(url)
+  // Test actively push message to the Electron-Renderer
+  win.webContents.on('did-finish-load', () => {
+    win?.webContents.send('main-process-message', new Date().toLocaleString())
   })
+
+  // Make all links open with the browser, not with the application
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith('https:')) shell.openExternal(url)
+    return { action: 'deny' }
+  })
+  // win.webContents.on('will-navigate', (event, url) => { }) #344
+
+  win.maximize()
 
   win.on('close', (event) => {
     const win = BrowserWindow.getFocusedWindow()
@@ -67,6 +110,68 @@ async function createWindow() {
 
   createMenu()
 }
+
+app.whenReady().then(async () => {
+  createWindow()
+
+  app.on('before-quit', function (event) {
+    // 一つでも未保存のノートがある場合 confirm を表示する
+    // @ts-ignore
+    const unsaved = Object.values(windowState).some((d) => !d.isNoteSaved)
+    if (unsaved) {
+      const closable = showCloseConfirm()
+      if (!closable) {
+        event.preventDefault()
+      }
+    }
+  })
+
+  // For Widows and Linux
+  // https://www.electronjs.org/docs/tutorial/quick-start#quit-the-app-when-all-windows-are-closed-windows--linux
+  app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin') app.quit()
+  })
+
+  // For MacOS
+  // https://www.electronjs.org/docs/tutorial/quick-start#open-a-window-if-none-are-open-macos
+  app.on('activate', function () {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+})
+
+app.on('second-instance', () => {
+  if (win) {
+    // Focus on the main window if the user tried to open another
+    if (win.isMinimized()) win.restore()
+    win.focus()
+  }
+})
+
+app.on('activate', () => {
+  const allWindows = BrowserWindow.getAllWindows()
+  if (allWindows.length) {
+    allWindows[0].focus()
+  } else {
+    createWindow()
+  }
+})
+
+// New window example arg: new windows url
+ipcMain.handle('open-win', (_, arg) => {
+  const childWindow = new BrowserWindow({
+    webPreferences: {
+      preload,
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  })
+
+  if (process.env.VITE_DEV_SERVER_URL) {
+    childWindow.loadURL(`${url}#${arg}`)
+  } else {
+    childWindow.loadFile(indexHtml, { hash: arg })
+  }
+})
 
 function createMenu() {
   const template = [
@@ -231,43 +336,6 @@ function showCloseConfirm() {
   return selected === 0
 }
 
-app.whenReady().then(async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    try {
-      await installExtension(VUEJS_DEVTOOLS)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      console.error('Vue Devtools failed to install:', e.toString())
-    }
-  }
-  createWindow()
-
-  app.on('before-quit', function (event) {
-    // 一つでも未保存のノートがある場合 confirm を表示する
-    // @ts-ignore
-    const unsaved = Object.values(windowState).some((d) => !d.isNoteSaved)
-    if (unsaved) {
-      const closable = showCloseConfirm()
-      if (!closable) {
-        event.preventDefault()
-      }
-    }
-  })
-
-  // For Widows and Linux
-  // https://www.electronjs.org/docs/tutorial/quick-start#quit-the-app-when-all-windows-are-closed-windows--linux
-  app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit()
-  })
-
-  // For MacOS
-  // https://www.electronjs.org/docs/tutorial/quick-start#open-a-window-if-none-are-open-macos
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
-
 // 新規ノート保存
 ipcMain.handle('new-note-save', async (event, data, directory) => {
   const win = BrowserWindow.getFocusedWindow()
@@ -309,18 +377,3 @@ ipcMain.handle('is-note-changed', async (event, changed) => {
     isNoteSaved: !changed,
   })
 })
-
-// Exit cleanly on request from parent process in development mode.
-if (isDevelopment) {
-  if (process.platform === 'win32') {
-    process.on('message', (data) => {
-      if (data === 'graceful-exit') {
-        app.quit()
-      }
-    })
-  } else {
-    process.on('SIGTERM', () => {
-      app.quit()
-    })
-  }
-}

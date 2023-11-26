@@ -25,6 +25,7 @@ interface DataType {
 }
 
 export default defineComponent({
+  name: 'MeltEditor',
   props: {
     insertImage: {
       type: Object,

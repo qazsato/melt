@@ -1,76 +1,68 @@
 {
   "name": "melt",
-  "version": "2.10.3",
+  "version": "2.11.0",
   "private": true,
   "author": "qazsato",
   "engines": {
-    "node": "16.x"
+    "node": "20.x"
   },
   "scripts": {
-    "serve": "vue-cli-service electron:serve",
-    "build": "vue-cli-service electron:build",
-    "test": "npm run test:unit",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
-    "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build && electron-builder",
+    "preview": "vite preview",
+    "test": "jest",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
-  "main": "background.js",
+  "main": "dist-electron/main/index.js",
   "dependencies": {
-    "@element-plus/icons-vue": "1.1.4",
+    "@element-plus/icons-vue": "2.1.0",
     "@liradb2000/markdown-it-mermaid": "0.4.4",
-    "@sentry/tracing": "6.19.7",
-    "@sentry/vue": "6.19.7",
-    "axios": "0.27.2",
+    "@sentry/tracing": "7.81.1",
+    "@sentry/vue": "7.81.1",
+    "axios": "1.6.2",
     "codemirror": "5.65.3",
-    "dayjs": "1.11.1",
-    "dotenv": "16.0.0",
-    "element-plus": "2.1.11",
+    "dayjs": "1.11.10",
+    "dotenv": "16.3.1",
+    "element-plus": "2.4.2",
     "glob": "8.0.1",
-    "highlight.js": "11.5.1",
-    "markdown-it": "13.0.0",
+    "highlight.js": "11.9.0",
+    "markdown-it": "13.0.2",
     "markdown-it-emoji": "2.0.2",
     "markdown-it-task-checkbox": "1.0.6",
-    "vue": "3.2.33",
-    "vue-router": "4.0.14",
-    "vuex": "4.0.2"
+    "vue": "3.3.9",
+    "vue-router": "4.2.5",
+    "vuex": "4.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.17.5",
-    "@babel/preset-env": "7.16.11",
-    "@types/codemirror": "5.60.5",
-    "@types/electron-devtools-installer": "2.2.2",
-    "@types/jest": "27.5.0",
-    "@types/markdown-it": "12.2.3",
-    "@types/markdown-it-emoji": "2.0.2",
-    "@typescript-eslint/eslint-plugin": "5.11.0",
-    "@typescript-eslint/parser": "5.11.0",
-    "@vue/cli-plugin-eslint": "4.5.15",
-    "@vue/cli-plugin-router": "4.5.15",
-    "@vue/cli-plugin-typescript": "4.5.15",
-    "@vue/cli-plugin-unit-jest": "4.5.15",
-    "@vue/cli-plugin-vuex": "4.5.15",
-    "@vue/cli-service": "4.5.15",
-    "@vue/compiler-sfc": "3.2.33",
-    "@vue/eslint-config-prettier": "6.0.0",
-    "@vue/eslint-config-typescript": "7.0.0",
-    "@vue/test-utils": "1.3.0",
-    "babel-jest": "27.5.1",
-    "electron": "18.2.0",
-    "electron-devtools-installer": "3.2.0",
-    "eslint": "7.32.0",
-    "eslint-plugin-prettier": "4.0.0",
-    "eslint-plugin-vue": "7.17.0",
-    "prettier": "2.5.1",
-    "sass": "1.51.0",
-    "sass-loader": "10.2.1",
-    "typescript": "4.5.5",
-    "vue-cli-plugin-electron-builder": "2.1.1"
-  },
-  "overrides": {
-    "vue-cli-plugin-electron-builder": {
-      "electron-builder": "23.0.3"
-    }
+    "@types/codemirror": "5.60.15",
+    "@types/glob": "8.1.0",
+    "@types/jest": "29.5.10",
+    "@types/markdown-it": "13.0.7",
+    "@types/markdown-it-emoji": "2.0.4",
+    "@typescript-eslint/eslint-plugin": "6.12.0",
+    "@typescript-eslint/parser": "6.12.0",
+    "@vitejs/plugin-vue": "4.5.0",
+    "@vue/compiler-sfc": "3.3.9",
+    "@vue/eslint-config-prettier": "8.0.0",
+    "@vue/eslint-config-typescript": "12.0.0",
+    "electron": "27.1.2",
+    "electron-builder": "24.9.1",
+    "eslint": "8.54.0",
+    "eslint-plugin-prettier": "5.0.1",
+    "eslint-plugin-vue": "9.18.1",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "prettier": "3.1.0",
+    "sass": "1.69.5",
+    "sass-loader": "13.3.2",
+    "tree-kill": "1.2.2",
+    "ts-jest": "29.1.1",
+    "typescript": "5.3.2",
+    "vite": "5.0.2",
+    "vite-plugin-electron": "0.15.4",
+    "vite-plugin-electron-renderer": "0.14.5",
+    "vue-tsc": "1.8.22"
   },
   "keywords": [
     "markdown",
@@ -80,5 +72,9 @@
     "codemirror"
   ],
   "license": "MIT",
-  "productName": "Melt"
+  "debug": {
+    "env": {
+      "VITE_DEV_SERVER_URL": "http://127.0.0.1:3344/"
+    }
+  }
 }

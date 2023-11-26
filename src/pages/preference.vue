@@ -1,7 +1,7 @@
 <template>
   <div class="preference" :class="theme">
     <header>
-      <el-page-header content="Preference" @back="goBack"></el-page-header>
+      <el-page-header class="page-header" content="Preference" @back="goBack"></el-page-header>
     </header>
     <main>
       <section>
@@ -44,6 +44,7 @@ import { Preference } from '@/config/setting'
 import { getPreference } from '@/utils/local-storage'
 
 export default defineComponent({
+  name: 'MeltPreference',
   data() {
     const preference: Preference = getPreference()
     return {
@@ -91,6 +92,7 @@ export default defineComponent({
         lineNumber: this.lineNumber,
       }
       this.$store.commit('updatePreference', preference)
+      // @ts-ignore
       this.$message({ type: 'success', message: 'Preference saved', showClose: true })
       this.$router.push({ name: PAGE.MAIN })
     },
@@ -105,8 +107,10 @@ export default defineComponent({
 
   header {
     height: 50px;
+    display: flex;
+    align-items: center;
 
-    .el-page-header {
+    .page-header {
       padding: 0 15px;
       line-height: 50px;
       color: #fff;
@@ -128,7 +132,7 @@ export default defineComponent({
     color: var.$light-color;
     background-color: var.$light-bg-color;
 
-    .el-page-header {
+    header {
       background-color: var.$light-header-bg-color;
     }
 
@@ -141,7 +145,7 @@ export default defineComponent({
     color: var.$dark-color;
     background-color: var.$dark-bg-color;
 
-    .el-page-header {
+    header {
       background-color: var.$dark-header-bg-color;
     }
 

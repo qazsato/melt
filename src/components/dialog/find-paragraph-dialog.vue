@@ -3,7 +3,7 @@
     v-model="$store.state.visibleFindParagraphDialog"
     :show-close="false"
     :lock-scroll="false"
-    custom-class="find-paragraph-dialog"
+    class="find-paragraph-dialog"
     width="400px"
     :before-close="closeDialog"
     @open="openDialog"

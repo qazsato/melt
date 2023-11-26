@@ -58,6 +58,7 @@ interface DataType {
 }
 
 export default defineComponent({
+  name: 'MeltMain',
   components: {
     toolBar,
     editor,
