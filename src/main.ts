@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import { createApp } from 'vue'
 import { router } from './router'
 import { store } from './store'
@@ -23,7 +22,7 @@ Object.entries(ElementPlusIconsVue).forEach(([key, value]) => {
 
 Sentry.init({
   app,
-  dsn: process.env.SENTRY_DSN,
+  dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [
     new BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
