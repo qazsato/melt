@@ -3,6 +3,7 @@ import emoji from 'markdown-it-emoji'
 import checkbox from 'markdown-it-task-checkbox'
 import mermaid from '@liradb2000/markdown-it-mermaid'
 import highlight from 'highlight.js'
+import { alertPlugin } from 'markdown-it-github-alert'
 
 class Markdown {
   md: MarkdownIt
@@ -28,6 +29,7 @@ class Markdown {
     this.md.use(emoji)
     this.md.use(checkbox, { disabled: true })
     this.md.use(mermaid)
+    this.md.use(alertPlugin)
     this.changeLinkOpenRule()
   }
 

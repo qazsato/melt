@@ -28,6 +28,7 @@
     "highlight.js": "11.9.0",
     "markdown-it": "13.0.2",
     "markdown-it-emoji": "2.0.2",
+    "markdown-it-github-alert": "1.0.5",
     "markdown-it-task-checkbox": "1.0.6",
     "vue": "3.3.9",
     "vue-router": "4.2.5",
